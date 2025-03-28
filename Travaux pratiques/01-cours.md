@@ -42,7 +42,7 @@
 
 
 
-[4. Gestion des Permissions et de la Sécurité](#4-gestion-des-permissions-et-de-la-securite)
+[4. Gestion des Permissions et de la Sécurité](#4-gestion-des-permissions-et-de-la-sécurite)
 
 
 - Système de permissions sous Linux

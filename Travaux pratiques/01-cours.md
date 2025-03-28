@@ -1,6 +1,23 @@
 # **Cours Linux : Gestion des Utilisateurs, Permissions et Configuration**
 
 
+
+
+### Table des Matières
+- [1. Introduction à Linux](#1-introduction-à-linux)
+- [2. Système de Fichiers Linux](#2-système-de-fichiers-linux)
+- [3. Gestion des Utilisateurs et des Groupes](#3-gestion-des-utilisateurs-et-des-groupes)
+- [4. Gestion des Permissions et de la Sécurité](#4-gestion-des-permissions-et-de-la-sécurité)
+- [5. Les Fichiers de Configuration Shell](#5-les-fichiers-de-configuration-shell)
+- [6. Automatisation et Scripts Bash](#6-automatisation-et-scripts-bash)
+- [7. Sécurité des Systèmes Linux](#7-sécurité-des-systèmes-linux)
+- [8. Exercices Pratiques et Quiz](#8-exercices-pratiques-et-quiz)
+- [9. Conclusion](#9-conclusion)
+
+
+
+
+
 [1-introduction-à-linux](#1-introduction-à-linux)
 
 - Présentation générale de Linux
@@ -166,7 +183,7 @@ Ces commandes permettent de naviguer dans le système de fichiers, de manipuler 
 
 
 ---
-# **2. Système de Fichiers Linux**
+# 2. Système de Fichiers Linux
 ---
 
 ## 2.1. **Arborescence des répertoires Linux**
@@ -238,7 +255,7 @@ L'exploration du système de fichiers Linux se fait principalement via le termin
 
 
 ---
-# **3. Gestion des Utilisateurs et des Groupes**
+# 3. Gestion des Utilisateurs et des Groupes
 ---
 
 # 3.1. **Création et gestion des utilisateurs**

@@ -9,7 +9,7 @@
 
 
 
-# **2. Système de Fichiers Linux**
+# 2. Système de Fichiers Linux
 
 - Arborescence des répertoires Linux
   - `/home`, `/etc`, `/var`, `/tmp`, `/bin`, `/usr`, etc.

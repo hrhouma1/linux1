@@ -150,12 +150,14 @@ Le système vous posera une série de questions :
 - **`adduser`** : Utilisez cette commande lorsque vous préférez un processus interactif et souhaitez configurer plusieurs détails du compte utilisateur en une seule étape.
 
 ---
-## 4. Conclusion
+# 4. Conclusion
 ---
 
 La différence entre `useradd` et `adduser` est principalement liée à l'interaction et à la facilité d'utilisation. Les administrateurs qui préfèrent un contrôle total et moins d'interaction opteront pour `useradd`, tandis que ceux qui apprécient un processus guidé trouveront `adduser` plus adapté. Selon vos besoins spécifiques, vous pouvez choisir l'une ou l'autre de ces commandes pour gérer efficacement les utilisateurs sur votre système Linux.
 
-# Annexe 02 - mot de passe
+---
+# 5. Annexe 01 - mot de passe
+---
 
 Lorsque vous utilisez la commande `useradd`, par défaut, elle ne demande pas de créer un mot de passe pour l'utilisateur. Pour ajouter un mot de passe immédiatement après avoir créé un utilisateur, vous pouvez utiliser la commande `passwd`. Voici comment procéder :
 
@@ -183,7 +185,9 @@ echo "motdepasse" | passwd --stdin nom_utilisateur
 
 Notez que l'option `--stdin` fonctionne sur certaines distributions Linux, comme Red Hat ou CentOS. Si cette option n'est pas disponible, vous devrez utiliser la méthode précédente pour définir les mots de passe manuellement.
 
-# Annexe 03 - changer le mot de passe
+---
+# Annexe 02 - changer le mot de passe
+---
 
 - Pour changer le mot de passe de l'utilisateur `luc`, vous pouvez utiliser la commande suivante :
 
@@ -200,7 +204,9 @@ Voici comment cela se déroule :
 
 Une fois ces étapes terminées, le mot de passe de l'utilisateur `luc` sera mis à jour.
 
-# Annexe 04 -  **Questions de Réflexion**
+---
+# Annexe 03 -  **Questions de Réflexion**
+---
 
 ### **Objectif**: 
 - Mieux comprendre la gestion des permissions dans Linux et l'impact de ces configurations sur la sécurité globale du système.

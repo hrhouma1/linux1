@@ -750,4 +750,194 @@ unalias nom_alias
 5. **Utiliser des commentaires :**
    - Commentez vos fichiers de configuration pour savoir à quoi sert chaque modification. Cela facilite la maintenance.
 
--
+
+
+
+
+
+
+
+# **7. Sécurité des Systèmes Linux**
+
+## 7.1. **Introduction : Importance de la Sécurité sous Linux**
+
+Linux est réputé pour sa sécurité robuste. Cependant, la sécurisation d'un système Linux ne se limite pas à ses configurations par défaut. Elle nécessite une gestion appropriée des permissions, des utilisateurs, des fichiers critiques, des accès administratifs et des journaux d’audit.
+
+
+
+## 7.2. **Bonnes pratiques pour sécuriser les fichiers critiques**
+
+La protection des fichiers critiques est une étape essentielle pour maintenir un système Linux sécurisé.
+
+### **1. Restreindre les permissions d'accès**
+- Les fichiers sensibles tels que `/etc/passwd` et `/etc/shadow` doivent avoir des permissions limitées.
+  - **/etc/passwd** : Contient les informations des utilisateurs (lisible par tous mais modifiable uniquement par root).
+  - **/etc/shadow** : Contient les mots de passe chiffrés (accessible uniquement par root).
+
+#### **Exemples de permissions sécurisées :**
+```bash
+ls -l /etc/passwd     # -rw-r--r--
+ls -l /etc/shadow     # -rw------- (Accessible uniquement par root)
+```
+
+### **2. Utiliser le Sticky Bit sur les répertoires partagés**
+Empêcher les utilisateurs non privilégiés de supprimer les fichiers d’autres utilisateurs dans des répertoires communs.
+```bash
+chmod +t /dossier_partage
+```
+
+### **3. Configurer correctement les fichiers `.bashrc` et `.profile`**
+- Éviter d’y inscrire des commandes exécutées automatiquement avec des droits élevés.
+- Restreindre les permissions d’accès en lecture et en écriture par d’autres utilisateurs.
+```bash
+chmod 644 ~/.bashrc
+chmod 644 ~/.profile
+```
+
+
+
+## 7.3. **Gestion des droits d'administration (sudo)**
+
+L'utilisation de `sudo` permet de déléguer des privilèges spécifiques aux utilisateurs sans leur donner un accès complet au compte root.
+
+### **1. Installation de `sudo` (si nécessaire)**
+```bash
+apt-get install sudo     # Pour les distributions basées sur Debian/Ubuntu
+```
+
+### **2. Ajouter un utilisateur au groupe sudo**
+```bash
+usermod -aG sudo nom_utilisateur
+```
+
+### **3. Modification du fichier de configuration sudoers**
+Les règles de `sudo` sont définies dans le fichier **`/etc/sudoers`**. Pour éditer ce fichier en toute sécurité, utilisez :
+```bash
+sudo visudo
+```
+
+### **4. Exemple de configuration sudoers**
+```bash
+# Permettre à alice d'exécuter toutes les commandes comme root
+alice ALL=(ALL) ALL
+
+# Permettre à bob d'utiliser des commandes spécifiques uniquement
+bob ALL=(ALL) /usr/bin/apt-get, /usr/bin/systemctl
+```
+
+### **5. Bonnes pratiques pour `sudo`**
+- **Limiter l'utilisation de sudo :** Seuls les utilisateurs qui en ont réellement besoin devraient avoir un accès `sudo`.
+- **Configurer des alias de commande :** Pour limiter les actions possibles via `sudo`.
+- **Examiner régulièrement les utilisateurs autorisés à utiliser `sudo` :**
+  ```bash
+  grep '^sudo:' /etc/group
+  ```
+
+
+
+## 7.4. **Stratégies de gestion des accès**
+
+### **1. Restreindre l'accès SSH**
+- Désactiver les connexions SSH root en modifiant le fichier **`/etc/ssh/sshd_config`** :
+  ```bash
+  PermitRootLogin no
+  ```
+- Utiliser l’authentification par clé publique au lieu de l’authentification par mot de passe :
+  ```bash
+  PasswordAuthentication no
+  ```
+
+### **2. Implémenter des politiques d'accès stricte**
+- Configurer des permissions minimales nécessaires (`chmod`, `chown`).
+- Utiliser des listes de contrôle d'accès (ACL) pour des permissions spécifiques :
+  ```bash
+  setfacl -m u:alice:rwx fichier.txt
+  getfacl fichier.txt
+  ```
+
+
+
+## 7.5. **Gestion des journaux d'audit**
+
+Les journaux sont essentiels pour comprendre l'état de votre système, détecter des activités suspectes et diagnostiquer des problèmes.
+
+### **1. `journalctl` : Consultation des journaux système**
+La commande `journalctl` permet d'afficher et de filtrer les journaux du système générés par **`systemd`**.
+
+#### **Exemples courants :**
+- Afficher tous les journaux :
+  ```bash
+  sudo journalctl
+  ```
+- Afficher les logs du démarrage précédent :
+  ```bash
+  sudo journalctl -b -1
+  ```
+- Filtrer par service (ex. sshd) :
+  ```bash
+  sudo journalctl -u sshd
+  ```
+- Filtrer par date :
+  ```bash
+  sudo journalctl --since "2025-03-27 10:00:00"
+  ```
+
+
+
+### **2. `/var/log` : Répertoire des logs classiques**
+Les journaux du système sont également stockés dans le répertoire `/var/log/`.
+
+#### **Principaux fichiers de log :**
+- `/var/log/auth.log` : Journalisation des authentifications et des tentatives d'accès (SSH, sudo, etc.)
+- `/var/log/syslog` : Journalisation générale du système.
+- `/var/log/kern.log` : Messages relatifs au noyau.
+- `/var/log/dpkg.log` : Journal des installations de paquets sur Debian/Ubuntu.
+
+#### **Vérifier un fichier de log :**
+```bash
+sudo cat /var/log/auth.log
+```
+ou en temps réel :
+```bash
+sudo tail -f /var/log/auth.log
+```
+
+
+
+### **3. Rotation des journaux (`logrotate`)**
+Pour éviter l'accumulation excessive de fichiers journaux, le système Linux utilise un outil appelé **`logrotate`** qui archive automatiquement les logs anciens.
+
+#### **Vérification de la configuration de `logrotate` :**
+```bash
+cat /etc/logrotate.conf
+```
+Les fichiers de configuration supplémentaires peuvent se trouver dans :
+```
+/etc/logrotate.d/
+```
+
+
+
+## 7.6. **Bonnes pratiques pour la sécurité**
+
+1. **Limiter les accès `sudo` :**
+   - Utiliser le fichier `sudoers` pour contrôler qui peut exécuter quelles commandes.
+
+2. **Vérifier régulièrement les journaux d'audit :**
+   - Utiliser `journalctl` et les fichiers de `/var/log/` pour détecter des activités suspectes.
+
+3. **Configurer un système de rotation de journaux efficace :**
+   - Garantir que les fichiers de logs ne remplissent pas inutilement l'espace disque.
+
+4. **Restreindre l'accès aux fichiers critiques :**
+   - Limiter les permissions aux utilisateurs de confiance uniquement.
+
+5. **Désactiver les connexions root par SSH :**
+   - Préférer l’utilisation de comptes utilisateur avec `sudo`.
+
+6. **Surveiller les fichiers modifiés récemment :**
+   ```bash
+   sudo find / -type f -mtime -1
+   ```
+   Cela permet de détecter d'éventuelles modifications suspectes.
+

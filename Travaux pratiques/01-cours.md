@@ -2,7 +2,7 @@
 
 
 
-- [1. Introduction à Linux](#1-introduction-à-linux)
+[1. Introduction à Linux](#1-introduction-à-linux)
 
 
 
@@ -394,10 +394,10 @@ Les utilisateurs peuvent personnaliser leur environnement via des fichiers de co
 
 
 ---
-# **5. Gestion des Permissions et de la Sécurité**
+# **4. Gestion des Permissions et de la Sécurité**
 ---
 
-## 5.1. **Système de permissions sous Linux**
+## 4.1. **Système de permissions sous Linux**
 
 La gestion des permissions sous Linux est essentielle pour garantir la sécurité du système et le contrôle des accès aux fichiers et répertoires. Les permissions définissent qui peut lire, écrire ou exécuter un fichier ou un répertoire.
 
@@ -415,7 +415,7 @@ Les permissions sont attribuées à trois types d'utilisateurs :
 
 
 
-## 5.2. **Commandes de gestion des permissions**
+## 4.2. **Commandes de gestion des permissions**
 
 ### **1. Commande `chmod` (Changer les permissions)**
 La commande `chmod` permet de modifier les permissions d'un fichier ou d'un répertoire.
@@ -470,7 +470,7 @@ sudo chgrp developers fichier.txt
 
 
 
-## 5.3. **Les permissions numériques et symboliques**
+## 4.3. **Les permissions numériques et symboliques**
 
 Les permissions peuvent être définies de deux manières : numérique (octal) ou symbolique.
 
@@ -507,7 +507,7 @@ Cela correspond à :
 
 
 
-## 5.4.**Permissions avancées**
+## 4.4.**Permissions avancées**
 
 Certaines permissions spéciales permettent d'ajouter des fonctionnalités avancées de sécurité.
 
@@ -573,10 +573,10 @@ find / -perm /6000 -type f 2>/dev/null
 
 
 ---
-# **6. Les Fichiers de Configuration Shell**
+# **5. Les Fichiers de Configuration Shell**
 ---
 
-## 6.1. **Introduction : Utilité et rôle des fichiers de configuration**
+## 5.1. **Introduction : Utilité et rôle des fichiers de configuration**
 
 Les fichiers de configuration du shell sont essentiels pour personnaliser l’environnement de travail sous Linux. Ils permettent de définir des variables d'environnement, des alias, d'exécuter des scripts d'initialisation et de configurer le comportement global ou utilisateur du shell. 
 
@@ -584,7 +584,7 @@ Ces fichiers sont généralement situés dans le répertoire personnel de chaque
 
 
 
-## 6.2. **.bashrc : Initialisation de l'environnement utilisateur**
+## 5.2. **.bashrc : Initialisation de l'environnement utilisateur**
 
 ### **Qu'est-ce que `.bashrc` ?**
 Le fichier `.bashrc` est un script qui est exécuté à chaque fois qu'un nouveau terminal interactif est ouvert. Il est couramment utilisé pour définir des alias, des fonctions personnalisées, des variables d'environnement et des messages d'accueil.
@@ -618,7 +618,7 @@ function bienvenue() {
 
 
 
-## 6.3. **.profile : Configuration d'environnement pour les sessions interactives**
+## 5.3. **.profile : Configuration d'environnement pour les sessions interactives**
 
 ### **Qu'est-ce que `.profile` ?**
 Le fichier `.profile` est exécuté par le shell de connexion lors de l'ouverture d'une session interactive. Contrairement à `.bashrc`, il est utilisé pour les configurations qui doivent s'appliquer lors de la connexion à un système (par exemple via SSH).
@@ -645,7 +645,7 @@ export LANG=fr_FR.UTF-8
 - Pour définir des chemins personnalisés accessibles à l’ensemble des sessions utilisateur.
 
 
-## 6.4. **.bash_profile : Script d'initialisation de session**
+## 5.4. **.bash_profile : Script d'initialisation de session**
 
 ### **Qu'est-ce que `.bash_profile` ?**
 Le fichier `.bash_profile` est un script d’initialisation exécuté uniquement lors de l'ouverture d'une nouvelle session par un shell de connexion (connexion SSH, par exemple). Il n'est pas exécuté lors de l'ouverture d'un terminal graphique sur un environnement de bureau.
@@ -672,7 +672,7 @@ export PATH="$HOME/.local/bin:$PATH"
 
 
 
-## 6.5. **/etc/profile : Paramètres globaux pour tous les utilisateurs**
+## 5.5. **/etc/profile : Paramètres globaux pour tous les utilisateurs**
 
 ### **Qu'est-ce que `/etc/profile` ?**
 Le fichier `/etc/profile` est un script d'initialisation exécuté globalement pour tous les utilisateurs lors de la connexion par un shell de connexion.
@@ -698,7 +698,7 @@ export EDITOR=vim
 
 
 
-## 6.6. **Variables d'environnement et alias**
+## 5.6. **Variables d'environnement et alias**
 
 ### **1. Variables d'environnement**
 Les variables d'environnement sont des paires clé-valeur qui influencent le comportement du système et des applications.
@@ -746,7 +746,7 @@ unalias nom_alias
 
 
 
-## 6.7. **Bonnes pratiques pour la gestion des fichiers de configuration**
+## 5.7. **Bonnes pratiques pour la gestion des fichiers de configuration**
 
 1. **Séparer les configurations utilisateur et système :**
    - Les fichiers situés dans `/etc/` sont destinés aux configurations globales.
@@ -776,15 +776,15 @@ unalias nom_alias
 
 
 
-# **7. Sécurité des Systèmes Linux**
+# **6. Sécurité des Systèmes Linux**
 
-## 7.1. **Introduction : Importance de la Sécurité sous Linux**
+## 6.1. **Introduction : Importance de la Sécurité sous Linux**
 
 Linux est réputé pour sa sécurité robuste. Cependant, la sécurisation d'un système Linux ne se limite pas à ses configurations par défaut. Elle nécessite une gestion appropriée des permissions, des utilisateurs, des fichiers critiques, des accès administratifs et des journaux d’audit.
 
 
 
-## 7.2. **Bonnes pratiques pour sécuriser les fichiers critiques**
+## 6.2. **Bonnes pratiques pour sécuriser les fichiers critiques**
 
 La protection des fichiers critiques est une étape essentielle pour maintenir un système Linux sécurisé.
 
@@ -815,7 +815,7 @@ chmod 644 ~/.profile
 
 
 
-## 7.3. **Gestion des droits d'administration (sudo)**
+## 6.3. **Gestion des droits d'administration (sudo)**
 
 L'utilisation de `sudo` permet de déléguer des privilèges spécifiques aux utilisateurs sans leur donner un accès complet au compte root.
 
@@ -854,7 +854,7 @@ bob ALL=(ALL) /usr/bin/apt-get, /usr/bin/systemctl
 
 
 
-## 7.4. **Stratégies de gestion des accès**
+## 6.4. **Stratégies de gestion des accès**
 
 ### **1. Restreindre l'accès SSH**
 - Désactiver les connexions SSH root en modifiant le fichier **`/etc/ssh/sshd_config`** :
@@ -876,7 +876,7 @@ bob ALL=(ALL) /usr/bin/apt-get, /usr/bin/systemctl
 
 
 
-## 7.5. **Gestion des journaux d'audit**
+## 6.5. **Gestion des journaux d'audit**
 
 Les journaux sont essentiels pour comprendre l'état de votre système, détecter des activités suspectes et diagnostiquer des problèmes.
 
@@ -937,7 +937,7 @@ Les fichiers de configuration supplémentaires peuvent se trouver dans :
 
 
 
-## 7.6. **Bonnes pratiques pour la sécurité**
+## 6.6. **Bonnes pratiques pour la sécurité**
 
 1. **Limiter les accès `sudo` :**
    - Utiliser le fichier `sudoers` pour contrôler qui peut exécuter quelles commandes.

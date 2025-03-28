@@ -2,23 +2,9 @@
 
 
 
-
-### Table des Matières
 - [1. Introduction à Linux](#1-introduction-à-linux)
-- [2. Système de Fichiers Linux](#2-système-de-fichiers-linux)
-- [3. Gestion des Utilisateurs et des Groupes](#3-gestion-des-utilisateurs-et-des-groupes)
-- [4. Gestion des Permissions et de la Sécurité](#4-gestion-des-permissions-et-de-la-sécurité)
-- [5. Les Fichiers de Configuration Shell](#5-les-fichiers-de-configuration-shell)
-- [6. Automatisation et Scripts Bash](#6-automatisation-et-scripts-bash)
-- [7. Sécurité des Systèmes Linux](#7-sécurité-des-systèmes-linux)
-- [8. Exercices Pratiques et Quiz](#8-exercices-pratiques-et-quiz)
-- [9. Conclusion](#9-conclusion)
 
 
-
-
-
-[1-introduction-à-linux](#1-introduction-à-linux)
 
 - Présentation générale de Linux
 - Avantages d'utiliser Linux pour l'administration système
@@ -26,7 +12,9 @@
 
 
 
-# 2. Système de Fichiers Linux
+[2. Système de Fichiers Linux](#2-système-de-fichiers-linux)
+
+
 
 - Arborescence des répertoires Linux
   - `/home`, `/etc`, `/var`, `/tmp`, `/bin`, `/usr`, etc.
@@ -36,7 +24,9 @@
 
 
 
-# **3. Gestion des Utilisateurs et des Groupes**
+[3. Gestion des Utilisateurs et des Groupes](#3-gestion-des-utilisateurs-et-des-groupes)
+
+
 - Création et gestion des utilisateurs
   - `useradd`, `adduser`, `usermod`, `deluser`, `userdel`
 - Gestion des groupes
@@ -52,7 +42,9 @@
 
 
 
-# **4. Gestion des Permissions et de la Sécurité**
+[4. Gestion des Permissions et de la Sécurité](#4-gestion-des-permissions-et-de-la-sécurité)
+
+
 - Système de permissions sous Linux
   - Propriétaire, groupe, autres utilisateurs
   - Lecture, écriture, exécution
@@ -66,7 +58,9 @@
 
 
 
-# **5. Les Fichiers de Configuration Shell**
+[5. Les Fichiers de Configuration Shell](#5-les-fichiers-de-configuration-shell)
+
+
 - Utilité et rôle des fichiers de configuration
   - `.bashrc` : initialisation de l'environnement utilisateur
   - `.profile` : configuration d'environnement pour les sessions interactives
@@ -78,7 +72,8 @@
 
 
 
-# **6. Automatisation et Scripts Bash**
+[6. Automatisation et Scripts Bash](#6-automatisation-et-scripts-bash)
+
 - Introduction aux scripts Bash
 - Syntaxe de base : variables, conditions, boucles
 - Exemples de scripts pour la gestion des utilisateurs et des permissions
@@ -86,7 +81,10 @@
 
 
 
-# **7. Sécurité des Systèmes Linux**
+[7. Sécurité des Systèmes Linux](#7-sécurité-des-systèmes-linux)
+
+
+
 - Bonnes pratiques pour sécuriser les fichiers critiques
 - Gestion des droits d'administration (`sudo`)
 - Stratégies de gestion des accès
@@ -95,14 +93,17 @@
 
 
 
-# **8. Exercices Pratiques et Quiz**
+[8. Exercices Pratiques et Quiz](#8-exercices-pratiques-et-quiz)
+
+
 - Exercices guidés pour chaque chapitre
 - Quiz pour évaluer les connaissances acquises
 - Études de cas concrets
 
 
 
-# **9. Conclusion**
+[9. Conclusion](#9-conclusion)
+
 - Récapitulatif des concepts abordés
 - Conseils pour l'administration avancée
 

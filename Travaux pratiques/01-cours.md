@@ -395,7 +395,7 @@ Les utilisateurs peuvent personnaliser leur environnement via des fichiers de co
 
 
 ---
-# **4. Gestion des Permissions et de la Sécurité**
+# 4. Gestion des Permissions et de la Sécurité
 ---
 
 ## 4.1. **Système de permissions sous Linux**

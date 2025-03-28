@@ -1,12 +1,30 @@
-# **Gestion des Permissions**
 
-#### **1. Connexion en tant que Superutilisateur**
+---
+# **1. Introduction à la Gestion des Permissions**  
+---
+
+La gestion des permissions est un aspect essentiel de l'administration des systèmes Linux. Elle permet de contrôler qui peut accéder, modifier ou exécuter des fichiers et des répertoires. Une mauvaise configuration des permissions peut entraîner des failles de sécurité majeures, compromettant ainsi la confidentialité, l'intégrité et la disponibilité des données.
+
+Dans cette section, nous allons explorer les différentes étapes nécessaires pour créer des utilisateurs, configurer des fichiers et des répertoires partagés, et appliquer des permissions adaptées pour garantir un accès contrôlé. Nous verrons également comment vérifier ces permissions pour nous assurer qu'elles sont correctement appliquées.  
+
+Les exercices présentés permettront de comprendre comment les commandes `chown`, `chmod`, et `su` peuvent être utilisées pour gérer efficacement les accès, ainsi que les risques potentiels associés à une mauvaise configuration.  
+
+Enfin, nous discuterons des meilleures pratiques pour sécuriser les fichiers critiques, tout en garantissant un accès approprié aux utilisateurs légitimes.  
+
+
+
+
+---
+# 2.**Gestion des Permissions**
+---
+
+## **2.1. Connexion en tant que Superutilisateur**
 ```bash
 su
 # Entrez le mot de passe du superutilisateur
 ```
 
-#### **2. Création des Utilisateurs**
+## **2.2. Création des Utilisateurs**
 ```bash
 # Assurez-vous que les utilisateurs existent ou créez-les
 useradd -m albert
@@ -15,7 +33,7 @@ useradd -m claude
 useradd -m danielle
 ```
 
-#### **3. Création du Dossier et des Fichiers**
+## **2.3. Création du Dossier et des Fichiers**
 ```bash
 # Créer le dossier shared_data et les sous-dossiers/fichiers nécessaires
 mkdir -p /home/shared_data
@@ -27,7 +45,7 @@ touch /home/shared_data/dossier1/script1.sh
 touch /home/shared_data/dossier1/script2.sh
 ```
 
-#### **4. Attribution des Propriétaires et des Permissions**
+## **2.4. Attribution des Propriétaires et des Permissions**
 ```bash
 # Configuration initiale des permissions et propriétaires
 chown albert:albert /home/shared_data/file1.txt
@@ -49,13 +67,13 @@ chown -R danielle:danielle /home/shared_data
 chmod -R 777 /home/shared_data
 ```
 
-#### **5. Vérification des Répertoires Home des Utilisateurs**
+## **2.5. Vérification des Répertoires Home des Utilisateurs**
 ```bash
 # Vérifiez que les répertoires des utilisateurs sont correctement configurés
 ls -l /home
 ```
 
-#### **6. Tableau de Tests de Permission et Vérification**
+## **2.6. Tableau de Tests de Permission et Vérification**
 Voici un tableau qui décrit les actions que chaque utilisateur essaiera de réaliser et les résultats attendus basés sur les permissions définies :
 
 | **Action/Test**                                            | **Utilisateur** | **Commande**                                           | **Résultat Attendu**                      |
@@ -70,7 +88,7 @@ Voici un tableau qui décrit les actions que chaque utilisateur essaiera de réa
 | Exécuter `script1.sh` dans `dossier1`                      | Claude          | `bash /home/shared_data/dossier1/script1.sh`           | Échec (Permission refusée)                |
 | Exécuter toutes les actions sur tous les fichiers/dossiers | Danielle        | `echo "Danielle" >> /home/shared_data/file1.txt`       | Succès (accès total)                      |
 
-#### **7. Réalisation des Tests**
+## **2.7. Réalisation des Tests**
 ```bash
 # Exécuter les tests pour vérifier les permissions
 su albert -c 'cat /home/shared_data/file1.txt'
@@ -84,13 +102,15 @@ su danielle -c 'echo "Danielle" >> /home/shared_data/file1.txt'
 
 
 
+---
+# 3 - Annexe 01 - useradd vs adduser 
+---
 
-# Annexe 01 - useradd vs adduser 
-### Création d'Utilisateurs avec `useradd` et `adduser`
+## 3.1. Création d'Utilisateurs avec `useradd` et `adduser`
 
 La gestion des utilisateurs est une tâche fondamentale en administration système sous Linux. Deux commandes principales sont couramment utilisées pour créer des utilisateurs : `useradd` et `adduser`. Bien qu'elles aient des noms similaires, elles fonctionnent différemment.
 
-#### `useradd` : La Commande Basique
+## 3.2. `useradd` : La Commande Basique
 
 La commande `useradd` est un utilitaire standard disponible sur toutes les distributions Linux. Elle permet de créer un nouvel utilisateur sans interaction humaine, ce qui la rend idéale pour les scripts d'automatisation. Toutefois, `useradd` ne demande pas de mot de passe ni d'informations supplémentaires par défaut. Voici un exemple de son utilisation :
 
@@ -106,7 +126,7 @@ Après avoir créé l'utilisateur, vous devez définir un mot de passe manuellem
 passwd albert
 ```
 
-#### `adduser` : La Version Conviviale
+## 3.3. `adduser` : La Version Conviviale
 
 Sur certaines distributions Linux, comme Debian et Ubuntu, `adduser` est une commande plus conviviale, qui est en réalité un script Perl enveloppant `useradd`. Cette commande guide l'administrateur à travers un processus interactif où il peut configurer plusieurs aspects du compte utilisateur, y compris le mot de passe, le nom complet, et d'autres informations facultatives.
 
@@ -124,12 +144,15 @@ Le système vous posera une série de questions :
 3. **Numéro de chambre, Téléphone de travail, Téléphone personnel, Autres informations** : Ces champs sont facultatifs et peuvent être laissés vides en appuyant sur `Entrée`.
 4. **Confirmation** : Vous devrez confirmer les informations avant que l'utilisateur ne soit créé.
 
-#### Quand Utiliser `useradd` ou `adduser` ?
+## 3.4. Quand Utiliser `useradd` ou `adduser` ?
 
 - **`useradd`** : Utilisez cette commande lorsque vous avez besoin de créer des utilisateurs via un script ou lorsque vous ne souhaitez pas être invité à entrer des informations supplémentaires.
 - **`adduser`** : Utilisez cette commande lorsque vous préférez un processus interactif et souhaitez configurer plusieurs détails du compte utilisateur en une seule étape.
 
-#### Conclusion
+---
+## 4. Conclusion
+---
+
 La différence entre `useradd` et `adduser` est principalement liée à l'interaction et à la facilité d'utilisation. Les administrateurs qui préfèrent un contrôle total et moins d'interaction opteront pour `useradd`, tandis que ceux qui apprécient un processus guidé trouveront `adduser` plus adapté. Selon vos besoins spécifiques, vous pouvez choisir l'une ou l'autre de ces commandes pour gérer efficacement les utilisateurs sur votre système Linux.
 
 # Annexe 02 - mot de passe

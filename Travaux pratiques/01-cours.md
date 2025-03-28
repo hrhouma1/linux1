@@ -1,7 +1,7 @@
 # **Cours Linux : Gestion des Utilisateurs, Permissions et Configuration**
 
 
-[Aller à l'introduction](#1-introduction-à-linux)
+[#1-introduction-à-linux](#1-introduction-à-linux)
 
 - Présentation générale de Linux
 - Avantages d'utiliser Linux pour l'administration système

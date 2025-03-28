@@ -371,3 +371,183 @@ Les utilisateurs peuvent personnaliser leur environnement via des fichiers de co
    Ajouter des alias et des variables pour personnaliser l'environnement.
 
 
+
+
+
+---
+# **5. Gestion des Permissions et de la Sécurité**
+---
+
+## 5.1. **Système de permissions sous Linux**
+
+La gestion des permissions sous Linux est essentielle pour garantir la sécurité du système et le contrôle des accès aux fichiers et répertoires. Les permissions définissent qui peut lire, écrire ou exécuter un fichier ou un répertoire.
+
+### **1. Les trois types de permissions**
+Les permissions sous Linux sont divisées en trois catégories :
+- **Lecture (r)** : Permet de lire le contenu d'un fichier ou de lister les fichiers d'un répertoire.
+- **Écriture (w)** : Permet de modifier ou de supprimer un fichier, ou d'ajouter/supprimer des fichiers dans un répertoire.
+- **Exécution (x)** : Permet d'exécuter un fichier binaire ou un script, ou d'accéder à un répertoire.
+
+### **2. Les trois types d’utilisateurs**
+Les permissions sont attribuées à trois types d'utilisateurs :
+- **Propriétaire (user)** : L'utilisateur qui a créé le fichier ou le répertoire.
+- **Groupe (group)** : Les membres du groupe associé au fichier.
+- **Autres (others)** : Tous les autres utilisateurs qui ne sont ni le propriétaire ni membres du groupe.
+
+
+
+## 5.2. **Commandes de gestion des permissions**
+
+### **1. Commande `chmod` (Changer les permissions)**
+La commande `chmod` permet de modifier les permissions d'un fichier ou d'un répertoire.
+#### **Syntaxe :**
+```bash
+chmod [options] mode fichier
+```
+#### **Exemples :**
+- Ajouter la permission d'exécution pour le propriétaire :
+  ```bash
+  chmod u+x script.sh
+  ```
+- Supprimer la permission d'écriture pour le groupe :
+  ```bash
+  chmod g-w fichier.txt
+  ```
+- Accorder toutes les permissions au propriétaire :
+  ```bash
+  chmod u+rwx fichier.txt
+  ```
+
+
+
+### **2. Commande `chown` (Changer le propriétaire)**
+La commande `chown` permet de changer le propriétaire et/ou le groupe d'un fichier.
+#### **Syntaxe :**
+```bash
+chown [propriétaire][:groupe] fichier
+```
+#### **Exemples :**
+- Changer le propriétaire :
+  ```bash
+  sudo chown alice fichier.txt
+  ```
+- Changer le propriétaire et le groupe :
+  ```bash
+  sudo chown alice:developers fichier.txt
+  ```
+
+
+
+### **3. Commande `chgrp` (Changer le groupe)**
+La commande `chgrp` permet de changer uniquement le groupe d'un fichier.
+#### **Syntaxe :**
+```bash
+chgrp [groupe] fichier
+```
+#### **Exemple :**
+```bash
+sudo chgrp developers fichier.txt
+```
+
+
+
+## 5.3. **Les permissions numériques et symboliques**
+
+Les permissions peuvent être définies de deux manières : numérique (octal) ou symbolique.
+
+### **1. Représentation symbolique**
+La représentation symbolique utilise des lettres pour chaque permission :
+- **r** : Lecture (4)
+- **w** : Écriture (2)
+- **x** : Exécution (1)
+- **-** : Pas de permission (0)
+
+#### **Exemple :**
+```bash
+chmod u=rwx,g=rx,o=r fichier.txt
+```
+Cela donne les permissions **rwxr-xr--**.
+
+
+
+### **2. Représentation numérique (octale)**
+Chaque ensemble de trois permissions est représenté par un nombre :
+- **4** : Lecture
+- **2** : Écriture
+- **1** : Exécution
+- **0** : Aucune permission
+
+#### **Exemple :**
+```bash
+chmod 754 fichier.txt
+```
+Cela correspond à :
+- **7 (rwx)** : Propriétaire
+- **5 (r-x)** : Groupe
+- **4 (r--)** : Autres
+
+
+
+## 5.4.**Permissions avancées**
+
+Certaines permissions spéciales permettent d'ajouter des fonctionnalités avancées de sécurité.
+
+### **1. Sticky Bit**
+Le sticky bit empêche les utilisateurs de supprimer des fichiers qu'ils ne possèdent pas dans un répertoire partagé.
+#### **Exemple :**
+```bash
+chmod +t /dossier
+```
+Les permissions apparaissent avec un **"t"** à la fin :
+```
+drwxrwxrwt
+```
+
+
+
+### **2. Setuid (SUID)**
+Le bit SUID permet à un utilisateur d'exécuter un fichier avec les privilèges du propriétaire.
+#### **Exemple :**
+```bash
+chmod u+s programme
+```
+Les permissions apparaissent avec un **"s"** au lieu de **"x"** :
+```
+-rwsr-xr-x
+```
+
+
+
+### **3. Setgid (SGID)**
+Le bit SGID permet aux fichiers créés dans un répertoire de conserver le groupe du répertoire parent.
+#### **Exemple :**
+```bash
+chmod g+s /dossier
+```
+Les permissions apparaissent avec un **"s"** dans les permissions de groupe :
+```
+drwxr-sr-x
+```
+
+
+
+## **Cas pratiques et bonnes pratiques de sécurité**
+
+### **1. Vérifier les permissions d'un fichier**
+Pour voir les permissions d'un fichier ou d'un répertoire, utilisez :
+```bash
+ls -l fichier.txt
+```
+
+### **2. Vérifier les fichiers avec des permissions SUID/SGID**
+Pour lister les fichiers avec SUID ou SGID activés :
+```bash
+find / -perm /6000 -type f 2>/dev/null
+```
+
+### **3. Bonnes pratiques de sécurité**
+- Limitez les permissions des fichiers critiques pour éviter les accès non autorisés.
+- Utilisez le sticky bit pour les répertoires partagés comme `/tmp`.
+- Vérifiez régulièrement les fichiers avec des bits SUID/SGID pour éviter les vulnérabilités.
+- Privilégiez des permissions restreintes par défaut et accordez des droits supplémentaires uniquement si nécessaire.
+

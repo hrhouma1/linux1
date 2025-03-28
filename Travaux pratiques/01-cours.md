@@ -71,8 +71,10 @@
 - Bonnes pratiques pour la gestion des fichiers de configuration
 
 
+[6. Sécurité des Systèmes Linux](#6-sécurité-des-systèmes-linux)
 
-[6. Automatisation et Scripts Bash](#6-automatisation-et-scripts-bash)
+
+
 
 - Introduction aux scripts Bash
 - Syntaxe de base : variables, conditions, boucles
@@ -81,8 +83,7 @@
 
 
 
-[7. Sécurité des Systèmes Linux](#7-sécurité-des-systèmes-linux)
-
+[7. Automatisation et Scripts Bash](#6-automatisation-et-scripts-bash)
 
 
 - Bonnes pratiques pour sécuriser les fichiers critiques

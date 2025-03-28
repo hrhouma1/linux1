@@ -1,7 +1,8 @@
 # **Cours Linux : Gestion des Utilisateurs, Permissions et Configuration**
 
 
-# **1. Introduction à Linux**
+[Aller à l'introduction](#1-introduction-à-linux)
+
 - Présentation générale de Linux
 - Avantages d'utiliser Linux pour l'administration système
 - Concepts de base : noyau, shell, commandes
@@ -91,7 +92,7 @@
 
 
 ----
-# **1. Introduction à Linux**
+# 1. Introduction à Linux
 ---
 
 ## 1.1. **Présentation générale de Linux**

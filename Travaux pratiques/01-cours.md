@@ -233,3 +233,141 @@ L'exploration du système de fichiers Linux se fait principalement via le termin
 
 
 
+
+
+
+---
+# **3. Gestion des Utilisateurs et des Groupes**
+---
+
+# 3.1. **Création et gestion des utilisateurs**
+
+La gestion des utilisateurs dans Linux est essentielle pour administrer un système de manière sécurisée et organisée. Voici les commandes les plus courantes pour la gestion des utilisateurs :
+
+### **1. Création d'utilisateurs**
+- `useradd` : Crée un nouvel utilisateur sans configurer automatiquement le répertoire personnel.
+  - Exemple : `sudo useradd alice`
+  - Pour créer un répertoire personnel : `sudo useradd -m alice`
+- `adduser` : Outil plus convivial pour ajouter un utilisateur avec un répertoire personnel.
+  - Exemple : `sudo adduser bob`
+  - Ce script interactif demande un mot de passe et des informations supplémentaires.
+
+### **2. Modification d’utilisateurs**
+- `usermod` : Modifie les propriétés d’un utilisateur existant.
+  - Ajouter un utilisateur à un groupe : `sudo usermod -aG developers alice`
+  - Changer le répertoire personnel : `sudo usermod -d /nouveau/chemin alice`
+  - Renommer un utilisateur : `sudo usermod -l nouveau_nom ancien_nom`
+
+### **3. Suppression d’utilisateurs**
+- `userdel` : Supprime un utilisateur.
+  - Exemple : `sudo userdel alice`
+  - Pour supprimer le répertoire personnel en même temps : `sudo userdel -r alice`
+- `deluser` : Interface conviviale pour supprimer un utilisateur.
+  - Exemple : `sudo deluser bob`
+
+
+
+## 3.2. **Gestion des groupes**
+
+Les groupes sont utilisés pour organiser les utilisateurs ayant des privilèges similaires. Voici les principales commandes pour gérer les groupes :
+
+### **1. Création et suppression de groupes**
+- `groupadd` : Crée un groupe.
+  - Exemple : `sudo groupadd developers`
+- `groupdel` : Supprime un groupe.
+  - Exemple : `sudo groupdel developers`
+
+### **2. Ajout d’un utilisateur à un groupe**
+- Pour ajouter un utilisateur à un groupe existant :
+  - `sudo usermod -aG developers alice`
+- Pour vérifier les groupes d'un utilisateur :
+  - `groups alice`
+  - `id alice`
+
+
+
+## 3.3. **Vérification des utilisateurs existants**
+
+Le fichier **`/etc/passwd`** contient des informations sur tous les utilisateurs du système.
+
+### **Visualiser les utilisateurs existants**
+Pour afficher la liste des utilisateurs, utilisez :
+```bash
+cat /etc/passwd
+```
+Chaque ligne représente un utilisateur et contient les informations suivantes, séparées par des deux-points (`:`) :
+1. Nom d'utilisateur
+2. Mot de passe (x signifie que le mot de passe est chiffré dans `/etc/shadow`)
+3. UID (User ID)
+4. GID (Group ID)
+5. Commentaire ou nom complet
+6. Répertoire personnel
+7. Shell par défaut
+
+
+
+## 3.4. **Gestion des mots de passe**
+
+La gestion des mots de passe est essentielle pour assurer la sécurité du système.
+
+### **1. Modifier le mot de passe d'un utilisateur**
+- Utiliser la commande `passwd` :
+  ```bash
+  sudo passwd alice
+  ```
+  Elle demande d'entrer le nouveau mot de passe deux fois.
+
+### **2. Politique de mots de passe sécurisée**
+Pour configurer une politique de mots de passe forte, modifiez le fichier **`/etc/login.defs`** :
+```bash
+PASS_MAX_DAYS 90   # Expiration maximale (90 jours)
+PASS_MIN_DAYS 0    # Délai minimal entre deux changements
+PASS_WARN_AGE 7    # Avertissement d'expiration (7 jours avant)
+```
+
+
+
+## 3.5. **Les fichiers de configuration utilisateur**
+
+Les utilisateurs peuvent personnaliser leur environnement via des fichiers de configuration spécifiques.
+
+### **Principaux fichiers de configuration :**
+- **`.bashrc`** : Chargé lors de l'ouverture d'un terminal interactif. Contient des alias et des variables.
+- **`.profile`** : Chargé lors de la connexion (environnement non interactif).
+- **`.bash_profile`** : Chargé lors de la connexion par un shell de connexion.
+- **`/etc/profile`** : Chargé globalement pour tous les utilisateurs à la connexion.
+- **`/etc/bash.bashrc`** : Fichier global pour tous les shells interactifs.
+
+### **Différences entre ces fichiers :**
+- **`.bashrc`** : Adapté pour les commandes interactives et les alias.
+- **`.profile`** et **`.bash_profile`** : Utilisés pour configurer l'environnement (variables PATH, par exemple).
+- **`/etc/profile`** et **`/etc/bash.bashrc`** : Affectent tous les utilisateurs.
+
+
+
+## 3.6. **Cas pratiques**
+
+1. **Créer un utilisateur et l'ajouter à un groupe spécifique :**
+   ```bash
+   sudo adduser alice
+   sudo groupadd developers
+   sudo usermod -aG developers alice
+   ```
+
+2. **Modifier le mot de passe d'un utilisateur :**
+   ```bash
+   sudo passwd alice
+   ```
+
+3. **Vérifier les utilisateurs dans le système :**
+   ```bash
+   cat /etc/passwd
+   ```
+
+4. **Configurer un environnement utilisateur :**
+   ```bash
+   nano /home/alice/.bashrc
+   ```
+   Ajouter des alias et des variables pour personnaliser l'environnement.
+
+

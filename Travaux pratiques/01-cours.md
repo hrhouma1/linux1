@@ -776,8 +776,10 @@ unalias nom_alias
 
 
 
-
+---
 # 6. Sécurité des Systèmes Linux
+---
+
 
 ## 6.1. **Introduction : Importance de la Sécurité sous Linux**
 

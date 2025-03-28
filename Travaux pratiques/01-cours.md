@@ -551,3 +551,203 @@ find / -perm /6000 -type f 2>/dev/null
 - Vérifiez régulièrement les fichiers avec des bits SUID/SGID pour éviter les vulnérabilités.
 - Privilégiez des permissions restreintes par défaut et accordez des droits supplémentaires uniquement si nécessaire.
 
+
+
+---
+# **6. Les Fichiers de Configuration Shell**
+---
+
+## 6.1. **Introduction : Utilité et rôle des fichiers de configuration**
+
+Les fichiers de configuration du shell sont essentiels pour personnaliser l’environnement de travail sous Linux. Ils permettent de définir des variables d'environnement, des alias, d'exécuter des scripts d'initialisation et de configurer le comportement global ou utilisateur du shell. 
+
+Ces fichiers sont généralement situés dans le répertoire personnel de chaque utilisateur (`/home/nom_utilisateur`) ou dans des répertoires globaux accessibles à tous les utilisateurs (`/etc/`).
+
+
+
+## 6.2. **.bashrc : Initialisation de l'environnement utilisateur**
+
+### **Qu'est-ce que `.bashrc` ?**
+Le fichier `.bashrc` est un script qui est exécuté à chaque fois qu'un nouveau terminal interactif est ouvert. Il est couramment utilisé pour définir des alias, des fonctions personnalisées, des variables d'environnement et des messages d'accueil.
+
+### **Où se trouve `.bashrc` ?**
+Chaque utilisateur possède un fichier `.bashrc` situé dans son répertoire personnel :  
+```
+/home/nom_utilisateur/.bashrc
+```
+
+### **Exemple de `.bashrc` :**
+```bash
+# Définir des alias courants
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+
+# Ajouter un répertoire au PATH
+export PATH=$PATH:/usr/local/bin
+
+# Fonction personnalisée
+function bienvenue() {
+    echo "Bienvenue, $USER !"
+}
+```
+
+### **Quand utiliser `.bashrc` ?**
+- Pour configurer des alias ou des raccourcis de commandes.
+- Pour modifier le `$PATH`.
+- Pour définir des fonctions personnalisées.
+
+
+
+## 6.3. **.profile : Configuration d'environnement pour les sessions interactives**
+
+### **Qu'est-ce que `.profile` ?**
+Le fichier `.profile` est exécuté par le shell de connexion lors de l'ouverture d'une session interactive. Contrairement à `.bashrc`, il est utilisé pour les configurations qui doivent s'appliquer lors de la connexion à un système (par exemple via SSH).
+
+### **Où se trouve `.profile` ?**
+Généralement dans le répertoire personnel de l'utilisateur :  
+```
+/home/nom_utilisateur/.profile
+```
+
+### **Exemple de `.profile` :**
+```bash
+# Modifier le PATH
+PATH="$HOME/bin:$PATH"
+export PATH
+
+# Définir des variables d'environnement globales
+export EDITOR=nano
+export LANG=fr_FR.UTF-8
+```
+
+### **Quand utiliser `.profile` ?**
+- Pour configurer des variables d'environnement globales.
+- Pour définir des chemins personnalisés accessibles à l’ensemble des sessions utilisateur.
+
+
+## 6.4. **.bash_profile : Script d'initialisation de session**
+
+### **Qu'est-ce que `.bash_profile` ?**
+Le fichier `.bash_profile` est un script d’initialisation exécuté uniquement lors de l'ouverture d'une nouvelle session par un shell de connexion (connexion SSH, par exemple). Il n'est pas exécuté lors de l'ouverture d'un terminal graphique sur un environnement de bureau.
+
+### **Où se trouve `.bash_profile` ?**
+```
+/home/nom_utilisateur/.bash_profile
+```
+
+### **Exemple de `.bash_profile` :**
+```bash
+# Exécuter .bashrc si présent
+if [ -f ~/.bashrc ]; then
+    . ~/.bashrc
+fi
+
+# Variables d'environnement spécifiques
+export PATH="$HOME/.local/bin:$PATH"
+```
+
+### **Quand utiliser `.bash_profile` ?**
+- Lorsqu’on souhaite personnaliser l’environnement utilisateur pour les connexions distantes (SSH).
+- Pour importer les configurations du fichier `.bashrc`.
+
+
+
+## 6.5. **/etc/profile : Paramètres globaux pour tous les utilisateurs**
+
+### **Qu'est-ce que `/etc/profile` ?**
+Le fichier `/etc/profile` est un script d'initialisation exécuté globalement pour tous les utilisateurs lors de la connexion par un shell de connexion.
+
+### **Où se trouve `/etc/profile` ?**
+```
+/etc/profile
+```
+
+### **Exemple de `/etc/profile` :**
+```bash
+# Définir des chemins globaux
+PATH="/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin"
+export PATH
+
+# Paramétrer l’éditeur par défaut pour tous les utilisateurs
+export EDITOR=vim
+```
+
+### **Quand utiliser `/etc/profile` ?**
+- Pour configurer des variables d'environnement globales accessibles à tous les utilisateurs.
+- Pour définir des comportements par défaut lors de l'ouverture d'une session par un shell de connexion.
+
+
+
+## 6.6. **Variables d'environnement et alias**
+
+### **1. Variables d'environnement**
+Les variables d'environnement sont des paires clé-valeur qui influencent le comportement du système et des applications.
+
+#### **Définir une variable d'environnement :**
+```bash
+export NOM_VARIABLE="valeur"
+```
+
+#### **Exemple :**
+```bash
+export JAVA_HOME="/usr/lib/jvm/java-11-openjdk"
+export PATH="$JAVA_HOME/bin:$PATH"
+```
+
+#### **Voir les variables d'environnement actuelles :**
+```bash
+printenv
+```
+ou
+```bash
+env
+```
+
+
+
+### **2. Alias**
+Les alias permettent de créer des raccourcis pour des commandes courantes.
+
+#### **Définir un alias :**
+```bash
+alias nom_alias='commande'
+```
+
+#### **Exemple :**
+```bash
+alias ll='ls -alF'
+alias rm='rm -i'  # Demande une confirmation avant suppression
+```
+
+#### **Supprimer un alias temporairement :**
+```bash
+unalias nom_alias
+```
+
+
+
+## 6.7. **Bonnes pratiques pour la gestion des fichiers de configuration**
+
+1. **Séparer les configurations utilisateur et système :**
+   - Les fichiers situés dans `/etc/` sont destinés aux configurations globales.
+   - Les fichiers situés dans `/home/nom_utilisateur/` sont destinés aux configurations spécifiques à l'utilisateur.
+
+2. **Utiliser `.bashrc` pour les alias et fonctions :**
+   - `.bashrc` est chargé automatiquement à chaque fois qu'un terminal interactif est ouvert. Placez-y vos alias, fonctions et personnalisation de prompt.
+
+3. **Importer `.bashrc` dans `.bash_profile` :**
+   - Si vous voulez que vos alias et fonctions soient disponibles en connexion SSH, ajoutez ceci à votre `.bash_profile` :
+     ```bash
+     if [ -f ~/.bashrc ]; then
+         . ~/.bashrc
+     fi
+     ```
+
+4. **Ne modifiez pas directement `/etc/profile` :**
+   - Si des modifications globales sont nécessaires, ajoutez-les plutôt dans `/etc/profile.d/` en créant un nouveau fichier `.sh`.
+
+5. **Utiliser des commentaires :**
+   - Commentez vos fichiers de configuration pour savoir à quoi sert chaque modification. Cela facilite la maintenance.
+
+-

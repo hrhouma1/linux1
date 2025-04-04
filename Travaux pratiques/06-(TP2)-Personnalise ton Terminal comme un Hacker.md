@@ -53,6 +53,7 @@ sudo ls /root
 
 
 <br/>
+
 # Étape 2 – Affiche un message de bienvenue en ASCII Art
 
 ### Installe `figlet` et `toilet` :

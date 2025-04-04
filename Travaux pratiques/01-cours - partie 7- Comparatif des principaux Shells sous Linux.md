@@ -1,8 +1,7 @@
 # Comparatif des principaux Shells sous Linux
 
----
 
-## 1. `sh` – Bourne Shell
+# 1. `sh` – Bourne Shell
 
 ### Chemin : `/bin/sh`
 
@@ -22,9 +21,9 @@ Utilisation typique :
 - Scripts système très basiques.
 - Exécution dans des environnements minimalistes.
 
----
 
-## 2. `bash` – Bourne Again SHell
+
+# 2. `bash` – Bourne Again SHell
 
 ### Chemin : `/bin/bash`
 
@@ -45,9 +44,9 @@ Utilisation typique :
 - Shell par défaut des utilisateurs.
 - Écriture de scripts Bash complexes.
 
----
 
-## 3. `dash` – Debian Almquist Shell
+
+# 3. `dash` – Debian Almquist Shell
 
 ### Chemin : `/bin/dash`
 
@@ -67,9 +66,9 @@ Utilisation typique :
 - Scripts de démarrage système.
 - Environnements embarqués ou légers.
 
----
 
-## 4. `zsh` – Z Shell
+
+# 4. `zsh` – Z Shell
 
 ### Chemin : `/usr/bin/zsh`
 
@@ -90,9 +89,9 @@ Utilisation typique :
 - Utilisation interactive avancée.
 - Environnements de développement personnalisés.
 
----
 
-## 5. `fish` – Friendly Interactive Shell
+
+# 5. `fish` – Friendly Interactive Shell
 
 ### Chemin : `/usr/bin/fish`
 
@@ -112,7 +111,7 @@ Utilisation typique :
 - Utilisation interactive par les débutants ou les développeurs recherchant un environnement agréable.
 - Pas recommandé pour écrire des scripts système.
 
----
+
 
 # Résumé comparatif
 

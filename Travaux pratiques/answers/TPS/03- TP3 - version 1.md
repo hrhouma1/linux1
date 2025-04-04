@@ -1,6 +1,9 @@
 
+# Introduction:
+
 *"Personnalise ton Terminal comme un Hacker !"* est un **script pédagogique Linux qui donne l’impression que le système est compromis** ("system hacked"), **sans danger réel**
 
+<br/>
 
 # 1 -  Objectif pédagogique :
 
@@ -10,6 +13,7 @@ Faire croire (visuellement) à une compromission du terminal pour :
 - Sensibiliser à la sécurité et aux comportements à éviter
 
 
+<br/>
 
 # 2 - Nom du script : `prank_hacked_terminal.sh`
 
@@ -70,8 +74,9 @@ echo "L'effet sera visible au prochain lancement de terminal ou connexion."
 - Il est **réversible** grâce à la sauvegarde automatique (`.bashrc.bak_hacked_YYYYMMDD_HHMMSS`).
 
 
+<br/>
 
-##  Instructions :
+# 3 -  Instructions :
 
 1. Crée le script :
 ```bash
@@ -92,6 +97,7 @@ chmod +x prank_hacked_terminal.sh
 5. Ouvre un **nouveau terminal** pour voir l’effet.
 
 
+<br/>
 
 # 4 - Pour annuler la blague :
 

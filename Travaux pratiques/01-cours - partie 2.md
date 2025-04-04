@@ -126,10 +126,10 @@ groups etudiant
 
 # 10. Bonnes pratiques
 
-- ❌ Évitez de vous connecter directement en root.
-- ✅ Préférez `sudo` pour tracer les commandes exécutées.
-- ⚠️ Ne donnez pas l’accès `sudo` à tous les utilisateurs.
-- ✅ Toujours éditer le fichier `sudoers` avec `visudo`.
+- Évitez de vous connecter directement en root (❌).
+- Préférez `sudo` pour tracer les commandes exécutées (✅).
+- Ne donnez pas l’accès `sudo` à tous les utilisateurs (⚠️).
+- Toujours éditer le fichier `sudoers` avec `visudo` (✅).
 
 
 
@@ -158,8 +158,9 @@ groups etudiant
 
 
 
-
-# 📎 Annexe – Options détaillées de `sudo -s` et `sudo -i`
+---
+# 📎 Annexe 1 – Options détaillées de `sudo -s` et `sudo -i`
+---
 
 ## 1. `sudo -s` : Shell root avec environnement utilisateur
 

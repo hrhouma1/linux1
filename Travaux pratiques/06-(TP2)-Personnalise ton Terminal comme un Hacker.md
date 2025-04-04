@@ -76,7 +76,13 @@ Ou encore plus stylisé avec `toilet` :
 echo 'toilet -f mono12 -F metal "Hello Hacker!"' >> ~/.bashrc
 ```
 
-Pour **annuler** ou **supprimer** la ligne ci-haut que tu as ajoutée dans ton `~/.bashrc`, exécutez la commande suivante :
+### À faire plus tard 
+
+- Pour **annuler** ou **supprimer** la ligne ci-haut que tu as ajoutée dans ton `~/.bashrc`, exécutez la commande suivante :
+
+```bash
+sed -i '/figlet "Bienvenue !"/d' ~/.bashrc
+```
 
 ```bash
 sed -i '/toilet -f mono12 -F metal "Hello Hacker!"/d' ~/.bashrc

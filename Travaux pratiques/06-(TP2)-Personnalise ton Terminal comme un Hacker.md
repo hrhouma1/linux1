@@ -76,9 +76,95 @@ Ou encore plus stylisé avec `toilet` :
 echo 'toilet -f mono12 -F metal "Hello Hacker!"' >> ~/.bashrc
 ```
 
-### À faire plus tard 
 
-- Pour **annuler** ou **supprimer** la ligne ci-haut que tu as ajoutée dans ton `~/.bashrc`, exécutez la commande suivante :
+
+### 2.3. Déconnexion et reconnexion :
+
+
+
+
+Déconnecte-toi puis reconnecte-toi pour voir le résultat !
+
+```bash
+exit
+su
+```
+
+
+Reconnecte-toi en tant que `superfun` :
+
+```bash
+su - superfun
+```
+
+<br/>
+
+
+
+### 2.4. Supprimer le message d'accueil du `.bashrc` (À faire plus tard)
+
+Avant de supprimer le message d'accueil, il est **très important de savoir** sous quel utilisateur vous devez effectuer l'opération.
+
+> **Question essentielle : dois-je le faire en tant que `root` ou en tant que `superfun` ?**  
+> ⚠️ C’est une décision très importante : si vous utilisez le mauvais utilisateur, **la suppression ne fonctionnera pas** !
+
+
+
+#### 2.4.1. Vérifier l'utilisateur courant
+
+Voici deux façons de vérifier quel utilisateur est actif :
+
+```bash
+su
+whoami
+exit
+```
+
+ou
+
+```bash
+su - superfun
+whoami
+exit
+```
+
+> La commande `whoami` vous dira si vous êtes bien connecté en tant que `superfun` ou `root`.
+
+
+
+#### 2.4.2. Suppression des lignes ajoutées dans le `.bashrc`
+
+Pour supprimer les messages d’accueil du terminal (affichés à chaque ouverture), exécutez les commandes suivantes **en tant que l'utilisateur concerné** (probablement `superfun`) :
+
+```bash
+sed -i '/figlet "Bienvenue !"/d' ~/.bashrc
+```
+
+```bash
+sed -i '/toilet -f mono12 -F metal "Hello Hacker!"/d' ~/.bashrc
+```
+
+> Ces commandes :
+- recherchent les lignes exactes mentionnées
+- les suppriment du fichier `.bashrc` (`-i` pour modifier le fichier en place)
+
+
+
+#### 2.4.3. 🔄 Recharger le fichier `.bashrc`
+
+Après la suppression, rechargez le fichier pour appliquer les changements immédiatement :
+
+```bash
+source ~/.bashrc
+```
+
+
+
+
+
+#### 2.4.4. Résumé
+
+> Pour **annuler** ou **supprimer** la ligne ci-haut que tu as ajoutée dans ton `~/.bashrc`, exécutez la commande suivante :
 
 ```bash
 sed -i '/figlet "Bienvenue !"/d' ~/.bashrc
@@ -103,26 +189,7 @@ source ~/.bashrc
 
 
 
-### 2.3. Déconnexion et reconnexion :
 
-
-
-
-Déconnecte-toi puis reconnecte-toi pour voir le résultat !
-
-```bash
-exit
-su
-```
-
-
-Reconnecte-toi en tant que `superfun` :
-
-```bash
-su - superfun
-```
-
-<br/>
 
 # Étape 3 – Change la couleur du prompt
 

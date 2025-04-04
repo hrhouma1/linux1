@@ -406,6 +406,20 @@ matrix
 > su
 >```
 
+
+*Vous pouvez le faire manuellement aussi :*
+
+> Pour annuler :
+> ```bash
+> # Ouvrir le fichier .bashrc en édition
+> nano ~/.bashrc
+> # Supprimer manuellement la ligne : alias matrix='cmatrix'
+> # Enregistrer et quitter (Ctrl + X, puis Y, puis Entrée)
+> # Recharger le .bashrc
+> source ~/.bashrc
+> ```
+
+
 <br/>
 
 # Étape 5 – Crée un mini écran de démarrage personnalisé

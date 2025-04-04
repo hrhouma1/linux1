@@ -1,9 +1,13 @@
 
-Parfait. Voici **le script ultime de simulation de système compromis**, conçu pour **faire vraiment peur**, **impressionner fortement les étudiants**, tout en **étant 100% sans danger**.
 
----
+# Introduction:
 
-## 💡 Objectif
+- *"Personnalise ton Terminal comme un Hacker !"* est un **script pédagogique Linux qui donne l’impression que le système est compromis** ("system hacked"), **sans danger réel**
+- *Ce script a plus d'effets visuels*
+
+
+
+## Objectif
 Créer un effet **visuel extrême**, très réaliste, qui donne l’illusion que :
 - Le système est en train de s’autodétruire
 - Des données sont volées
@@ -12,9 +16,10 @@ Créer un effet **visuel extrême**, très réaliste, qui donne l’illusion que
 
 **⚠️ Sans rien modifier pour de vrai.** C’est purement **visuel et temporaire**, intégré dans `.bashrc` comme une **expérience pédagogique sur la sécurité et les fichiers d’environnement**.
 
----
 
-## 📁 Fichier : `simulate_hacked_terminal.sh`
+<br/>
+
+# 1 - Fichier : `simulate_hacked_terminal.sh`
 
 ```bash
 #!/bin/bash
@@ -77,9 +82,8 @@ echo "Simulation visuelle ajoutée dans ~/.bashrc"
 echo "Elle s’exécutera à chaque ouverture de terminal (jusqu'à suppression)"
 ```
 
----
 
-## ✅ Utilisation :
+# 2 - Utilisation :
 
 1. Crée le fichier :
 ```bash
@@ -103,9 +107,9 @@ chmod +x simulate_hacked_terminal.sh
 source ~/.bashrc
 ```
 
----
 
-## 🔧 Désactivation (restauration) :
+
+## 3 - Désactivation (restauration) :
 
 Si un(e) étudiant(e) panique, voici comment désactiver :
 
@@ -114,20 +118,12 @@ mv ~/.bashrc.bak_hacked_* ~/.bashrc
 source ~/.bashrc
 ```
 
----
 
-## 🔬 Intérêt pédagogique :
+# 4 -  Intérêt pédagogique :
 
 - Montrer que **tout ce qui s’exécute au démarrage du terminal peut être modifié**
 - Sensibiliser à la **protection des fichiers d’environnement**
 - Démontrer un **"social engineering visuel"**
 - Amener une discussion sur les **scripts malveillants**
 
----
 
-Souhaite-tu aussi que je :
-- Intègre ça comme **Étape Bonus du TP Thinkific** avec capture d’écran ?
-- Ajoute une **fonction pour l’activer ou désactiver dynamiquement depuis un menu ?**
-- Te crée une **version HTML Bootstrap documentée** de ce TP ?
-
-Je peux aussi ajouter une **variante avec son (si mpg123 est installé)** pour amplifier l’effet.

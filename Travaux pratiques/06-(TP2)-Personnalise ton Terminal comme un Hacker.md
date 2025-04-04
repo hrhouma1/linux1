@@ -57,14 +57,14 @@ sudo ls /root
 
 # Étape 2 – Affiche un message de bienvenue en ASCII Art
 
-### Installe `figlet` et `toilet` :
+### 2.1. Installe `figlet` et `toilet` :
 
 ```bash
 sudo apt update
 sudo apt install figlet toilet -y
 ```
 
-### Ajoute un message d’accueil dans `.bashrc` :
+### 2.2. Ajoute un message d’accueil dans `.bashrc` :
 
 ```bash
 echo 'figlet "Bienvenue !"' >> ~/.bashrc
@@ -75,6 +75,32 @@ Ou encore plus stylisé avec `toilet` :
 ```bash
 echo 'toilet -f mono12 -F metal "Hello Hacker!"' >> ~/.bashrc
 ```
+
+Pour **annuler** ou **supprimer** la ligne ci-haut que tu as ajoutée dans ton `~/.bashrc`, exécutez la commande suivante :
+
+```bash
+sed -i '/toilet -f mono12 -F metal "Hello Hacker!"/d' ~/.bashrc
+```
+
+> Cette commande :
+- cherche la ligne contenant exactement `toilet -f mono12 -F metal "Hello Hacker!"`
+- et la **supprime** du fichier `.bashrc` (`-i` modifie le fichier directement).
+
+Ensuite, pour recharger ton .bashrc sans redémarrer :
+
+```bash
+source ~/.bashrc
+```
+
+
+
+
+
+
+### 2.3. Déconnexion et reconnexion :
+
+
+
 
 Déconnecte-toi puis reconnecte-toi pour voir le résultat !
 

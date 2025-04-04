@@ -1021,3 +1021,293 @@ chmod +x linux_hacker_terminal_master.sh
 ./linux_hacker_terminal_master.sh
 ```
 
+
+
+
+
+
+
+<br/>
+<br/>
+
+
+
+
+---
+# Annexe 5 - Message d'accueil simple en arabe
+----
+
+### 5.1. Message simple en arabe
+
+Ajoute cette ligne à la fin de ton fichier `.bashrc` :
+
+```bash
+echo "مرحباً بك في جهازك، يا بطل لينكس!"
+```
+
+
+
+### 5.2. Avec `figlet` (ASCII Art)
+
+Malheureusement, `figlet` ne supporte pas bien l'arabe (car c’est du texte bidirectionnel et avec ligatures).  
+Mais tu peux créer un style hybride en ASCII en arabe/latin :
+
+```bash
+echo 'figlet "مرحباً بك"' >> ~/.bashrc
+```
+
+> Cela affichera le texte en ASCII, mais mal formé pour l’arabe. Ce n’est donc **pas recommandé**.
+
+
+
+### 5.3. Meilleure alternative : utiliser `echo -e` avec couleurs
+
+```bash
+echo -e "\e[1;33mمرحباً بك في عالم لينكس!\e[0m" >> ~/.bashrc
+```
+
+> Ce message s’affichera en jaune (code `\e[1;33m`) à chaque ouverture de terminal.
+
+
+
+### 5.4. Message complet en arabe et français
+
+Tu peux aussi combiner deux messages :
+
+```bash
+echo -e "\e[1;32mBienvenue - مرحباً بك، $(whoami) !\e[0m" >> ~/.bashrc
+```
+
+
+
+### 5.5. Résultat attendu
+
+Lorsque tu ouvriras un nouveau terminal ou que tu taperas :
+
+```bash
+source ~/.bashrc
+```
+
+Tu verras :
+
+```text
+Bienvenue - مرحباً بك، superfun !
+```
+
+en vert.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Annexe 6 - Message d'accueil simple en arabe avec l'heure
+----
+
+### 6.1. Message simple en arabe
+
+Ajoute cette ligne à la fin de ton fichier `.bashrc` :
+
+```bash
+echo "مرحباً بك في جهازك، يا بطل لينكس!"
+```
+
+
+
+### 6.2. Avec `figlet` (ASCII Art)
+
+Malheureusement, `figlet` ne supporte pas bien l'arabe (car c’est du texte bidirectionnel et avec ligatures).  
+Mais tu peux créer un style hybride en ASCII en arabe/latin :
+
+```bash
+echo 'figlet "مرحباً بك"' >> ~/.bashrc
+```
+
+> Cela affichera le texte en ASCII, mais mal formé pour l’arabe. Ce n’est donc **pas recommandé**.
+
+
+
+### 6.3. Meilleure alternative : utiliser `echo -e` avec couleurs
+
+```bash
+echo -e "\e[1;33mمرحباً بك في عالم لينكس!\e[0m" >> ~/.bashrc
+```
+
+> Ce message s’affichera en jaune à chaque ouverture de terminal.
+
+
+### 6.4. Message complet en arabe avec l'utilisateur et l'heure
+
+Tu peux ajouter un message plus personnalisé, incluant le nom de l’utilisateur et l’heure actuelle en arabe :
+
+```bash
+echo -e "\e[1;32mمرحباً بك يا $(whoami)!\e[0m" >> ~/.bashrc
+echo -e "\e[1;34mالوقت الحالي هو: $(LC_TIME=ar_AE.UTF-8 date +\"%A %d %B %Y - %H:%M:%S\")\e[0m" >> ~/.bashrc
+```
+
+
+
+### 6.5. Explication
+
+- `$(whoami)` affiche le nom de l’utilisateur actuel.
+- `date +...` affiche la date et l’heure.
+- `LC_TIME=ar_AE.UTF-8` force l’affichage en arabe (ex : الاثنين 08 أبريل 2025 - 14:33:10).
+- Les couleurs sont :
+  - Vert pour le message principal (`\e[1;32m`)
+  - Bleu pour la date (`\e[1;34m`)
+- `\e[0m` réinitialise la couleur.
+
+
+
+### 6.6. Résultat attendu
+
+Quand tu taperas :
+
+```bash
+source ~/.bashrc
+```
+
+Ou que tu ouvriras un nouveau terminal, tu verras :
+
+```text
+مرحباً بك يا superfun!
+الوقت الحالي هو: الثلاثاء 09 أبريل 2025 - 14:35:42
+
+
+
+
+
+
+
+
+
+<br/>
+<br/>
+
+----
+# Annexe 7 – Message d’accueil artistique avec `fortune`, `cowsay` et affichage en arabe
+----
+
+
+### 7.1. Objectif
+
+Créer un message d’accueil original et artistique en arabe, incluant :
+
+- Un message de bienvenue en couleur
+- L’heure et la date actuelles en arabe
+- Un encadré `cowsay` avec un proverbe ou une phrase amusante
+- Optionnel : utilisation de `fortune` avec phrases traduites en arabe
+
+
+
+### 7.2. Installer les programmes nécessaires
+
+```bash
+sudo apt update
+sudo apt install fortune cowsay -y
+```
+
+
+
+### 7.3. Ajouter ce bloc dans le fichier `.bashrc`
+
+Ajoute les lignes suivantes à la **fin de ton fichier `~/.bashrc`** :
+
+```bash
+echo -e "\e[1;33m============================\e[0m"
+echo -e "\e[1;32mمرحباً بك يا $(whoami)!\e[0m"
+echo -e "\e[1;34mالوقت الحالي هو: $(LC_TIME=ar_AE.UTF-8 date +\"%A %d %B %Y - %H:%M:%S\")\e[0m"
+echo -e "\e[1;33m============================\e[0m"
+echo ""
+echo " $(cowsay -f tux 'أهلاً بك في محطة لينكس الخاصة بك. كن مبدعاً واستمتع!')"
+```
+
+
+
+### 7.4. Explication
+
+- Encadrement stylisé en jaune (`===`)
+- Message en vert : nom de l'utilisateur
+- Heure et date en arabe : locale `ar_AE.UTF-8`
+- `cowsay` affiche un message fun en arabe, dans une bulle texte avec un pingouin (`-f tux`)
+- Pas besoin de `fortune` si tu ajoutes tes propres phrases
+
+
+
+### 7.5. Exemple de sortie dans le terminal
+
+```text
+============================
+مرحباً بك يا superfun!
+الوقت الحالي هو: الثلاثاء 09 أبريل 2025 - 14:35:42
+============================
+
+ -------------------------------
+أهلاً بك في محطة لينكس الخاصة بك. كن مبدعاً واستمتع!
+           \   
+            \  
+             (o< 
+             //\
+             V_/_  
+```
+
+
+
+### 7.6. Option : Créer tes propres fortunes en arabe
+
+1. Crée un fichier texte avec des proverbes arabes :
+
+```bash
+nano ~/.fortunes_ar.txt
+```
+
+Exemple de contenu :
+
+```
+من جد وجد، ومن زرع حصد.
+الوقت كالسيف إن لم تقطعه قطعك.
+التكرار يعلم الشطار.
+%
+```
+
+> Utilise `%` pour séparer chaque phrase.
+
+2. Compile-le avec `strfile` :
+
+```bash
+sudo apt install fortune-mod -y
+strfile ~/.fortunes_ar.txt
+```
+
+3. Utilise-le dans `.bashrc` :
+
+```bash
+fortune ~/.fortunes_ar.txt | cowsay -f tux
+```
+
+
+
+### 7.7. Résultat personnalisé
+
+Tu peux remplacer cette ligne dans `.bashrc` :
+
+```bash
+echo " $(cowsay -f tux 'أهلاً بك في محطة لينكس الخاصة بك. كن مبدعاً واستمتع!')"
+```
+
+par :
+
+```bash
+fortune ~/.fortunes_ar.txt | cowsay -f tux
+```
+
+Ainsi, à chaque nouvelle session, un **proverbe arabe différent** s’affichera dans ton terminal !
+

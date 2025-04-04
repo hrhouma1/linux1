@@ -399,6 +399,13 @@ matrix
 ```
 
 
+> Pour annuler :
+> ```bash
+> sed -i "/alias matrix='cmatrix'/d" ~/.bashrc # Supprimer la ligne alias matrix du .bashrc
+> source ~/.bashrc # Recharger le .bashrc
+> su
+```
+
 <br/>
 
 # Étape 5 – Crée un mini écran de démarrage personnalisé

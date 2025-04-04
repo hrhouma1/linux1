@@ -1,4 +1,3 @@
-04-(TP2)-Gestion-des-permissions.md
 # TP Linux — "Personnalise ton Terminal comme un Hacker !"
 
 
@@ -127,9 +126,9 @@ sudo apt install mpg123 -y
 echo 'mpg123 ~/musique.mp3 &' >> ~/.bashrc
 ```
 
----
 
-## 🔍 Étape 7 – Questions de réflexion
+
+# Étape 7 – Questions de réflexion
 
 1. Quelle est la différence entre `.bashrc`, `.bash_profile` et `.profile` ?
 2. Pourquoi est-il déconseillé de mettre trop de commandes lourdes dans `.bashrc` ?
@@ -137,7 +136,7 @@ echo 'mpg123 ~/musique.mp3 &' >> ~/.bashrc
 4. Que signifie le `\[\e[1;36m\]` utilisé dans le `PS1` ?
 5. Quelle commande permet de réinitialiser `.bashrc` à sa version par défaut ?
 
----
+
 
 ## ✅ À faire valider
 

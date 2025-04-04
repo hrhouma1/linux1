@@ -17,8 +17,14 @@
 ```bash
 sudo adduser superfun
 su - superfun
+sudo apt update
+sudo install curl
 ```
 
+```bash
+sudo apt update
+sudo install curl
+```
 *Malheureusement, cela ne fonctionne pas, car l'utilisateur superfun ne fait pas partie de la liste des sudoers.*
 
 Il faut ajouter l'utilisateur `superfun` à la liste des **sudoers** (donc lui donner les droits d'administration), juste après la création de l'utilisateur :

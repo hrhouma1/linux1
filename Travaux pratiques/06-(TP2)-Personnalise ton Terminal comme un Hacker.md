@@ -78,6 +78,17 @@ echo 'toilet -f mono12 -F metal "Hello Hacker!"' >> ~/.bashrc
 
 Déconnecte-toi puis reconnecte-toi pour voir le résultat !
 
+```bash
+exit
+su
+```
+
+
+Reconnecte-toi en tant que `superfun` :
+
+```bash
+su - superfun
+```
 
 <br/>
 

@@ -17,11 +17,12 @@
 ```bash
 sudo adduser superfun
 su - superfun
-sudo apt update
-sudo install curl
 ```
 
+*Essayez les commandes suivantes :*
+
 ```bash
+whoami
 sudo apt update
 sudo install curl
 ```

@@ -1178,12 +1178,10 @@ source ~/.bashrc
 Ou que tu ouvriras un nouveau terminal, tu verras :
 
 ```text
+
 مرحباً بك يا superfun!
 الوقت الحالي هو: الثلاثاء 09 أبريل 2025 - 14:35:42
-
-
-
-
+```
 
 
 

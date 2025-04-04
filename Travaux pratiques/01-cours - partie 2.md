@@ -154,3 +154,90 @@ groups etudiant
 - Consultez la documentation `man su`, `man sudo`, `man sudoers`.
 - Expérimentez la configuration de `sudo` dans des environnements isolés (ex: VM ou conteneurs).
 
+
+
+
+
+
+# 📎 Annexe – Options détaillées de `sudo -s` et `sudo -i`
+
+## 1. `sudo -s` : Shell root avec environnement utilisateur
+
+###  Description :
+- Ouvre un shell avec les privilèges de `root`.
+- **Conserve** l’environnement de l’utilisateur actuel (`$HOME`, `$PATH`, etc.).
+- Pratique pour garder ses variables tout en ayant les droits root.
+
+### Syntaxe générale :
+```bash
+sudo -s [OPTION] [--] [commande]
+```
+
+### Options utiles avec `sudo -s` :
+
+| Option       | Description |
+|--------------|-------------|
+| `-s`         | Lance un shell root (en gardant l’environnement utilisateur). |
+| `-u utilisateur` | Exécute le shell en tant qu’un autre utilisateur que root. |
+| `-E`         | Préserve l’environnement complet (équivalent à `env_keep`). |
+| `-k`         | Force la demande de mot de passe (ne pas réutiliser l’authentification). |
+| `-K`         | Supprime le timestamp de session sudo (révoque l'accès temporaire). |
+| `-H`         | Définit `$HOME` à celui de l’utilisateur cible (`root` par défaut). |
+| `--login`    | Synonyme de `-i`. (Rarement utilisé avec `-s`) |
+| `--`         | Sépare les options sudo des options passées à la commande appelée. |
+
+###  Exemple :
+```bash
+sudo -s
+sudo -s -E
+sudo -s -u postgres
+```
+
+
+
+## 2. `sudo -i` : Shell root avec environnement root (login shell)
+
+###  Description :
+- Ouvre un **shell de connexion root**, comme `su -`.
+- Charge le fichier `.profile`, `.bashrc` ou `.bash_profile` du root.
+- Change le `$HOME` vers `/root`, le prompt, etc.
+
+###  Syntaxe générale :
+```bash
+sudo -i [OPTION] [--] [commande]
+```
+
+###  Options utiles avec `sudo -i` :
+
+| Option       | Description |
+|--------------|-------------|
+| `-i`         | Lance un shell interactif de connexion (`login shell`) comme si on se connectait directement en root. |
+| `-u utilisateur` | Exécute le shell de connexion comme un autre utilisateur. |
+| `-E`         | Préserve certaines variables d’environnement. |
+| `-H`         | Définit `$HOME` à celui de l’utilisateur cible. |
+| `-k`         | Réinitialise le timestamp sudo (demande à nouveau le mot de passe). |
+| `-K`         | Invalide totalement l’accès sudo jusqu’à nouvelle authentification. |
+| `--`         | Permet d’exécuter une commande complexe après sudo. |
+
+###  Exemple :
+```bash
+sudo -i
+sudo -i -u postgres
+sudo -i -- ls /root
+```
+
+
+
+## 3. Différences résumées entre `-s` et `-i`
+
+| Aspect                 | `sudo -s`                          | `sudo -i`                             |
+|------------------------|------------------------------------|----------------------------------------|
+| Type de shell          | Shell root non interactif complet | Shell de login root                    |
+| Chargement des fichiers| Aucun (`.bashrc` utilisateur)     | Charge `.profile`, `.bashrc` de root   |
+| Environnement (`$HOME`)| Conservé                         | Changé vers `/root`                    |
+| Usage typique          | Pour faire quelques commandes     | Pour un vrai changement de session     |
+
+
+
+>  **Conseil** : Pour expérimenter, créez deux scripts dans `/root/` et `/home/etudiant/`, puis observez lequel est chargé avec `sudo -s` vs `sudo -i`.
+

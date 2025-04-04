@@ -168,17 +168,13 @@ source ~/.bashrc
 > ```bash
 > sed -i '/figlet "Bienvenue !"/d' ~/.bashrc
 > ```
-
 > ```bash
 > sed -i '/toilet -f mono12 -F metal "Hello Hacker!"/d' ~/.bashrc
 > ```
-
 > Cette commande :
 > - cherche la ligne contenant exactement `toilet -f mono12 -F metal "Hello Hacker!"`
 > - et la **supprime** du fichier `.bashrc` (`-i` modifie le fichier directement).
-
 > Ensuite, pour recharger ton .bashrc sans redémarrer :
-
 > ```bash
 > source ~/.bashrc
 > ```

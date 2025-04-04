@@ -18,6 +18,39 @@ sudo adduser superfun
 su - superfun
 ```
 
+*Malheureusement, cela ne fonctionne pas, car l'utilisateur superfun ne fait pas partie de la liste des sudoers.*
+
+Il faut ajouter l'utilisateur `superfun` à la liste des **sudoers** (donc lui donner les droits d'administration), juste après la création de l'utilisateur :
+
+
+## Étape 1.1 – Donne les droits sudo à ton utilisateur fun
+
+```bash
+# Ajoute superfun au groupe sudo (sur Debian/Ubuntu)
+sudo usermod -aG sudo superfun
+```
+
+*Cela ajoute `superfun` au groupe `sudo`, ce qui lui permet d'exécuter des commandes avec les privilèges d'administrateur.*
+
+
+
+## Étape 1.2 – Pour vérifier :
+
+Connecte-toi en tant que `superfun` :
+
+```bash
+su - superfun
+```
+
+Puis teste une commande avec `sudo` :
+
+```bash
+sudo ls /root
+```
+
+*Si tout fonctionne, il te demande le mot de passe de `superfun`, puis exécute la commande.*
+
+
 
 
 # Étape 2 – Affiche un message de bienvenue en ASCII Art

@@ -255,6 +255,120 @@ export PS1='\u@\h:\w\$ '
 
 
 
+## 3.5.  Problème remarqué (changement temporaire) :
+
+
+- Malheureusement, si j'exécute su , je reviens au prompt personnalisé.
+
+
+> La commande  
+> ```bash  
+> export PS1='\u@\h:\w\$ '  
+> ```  
+> **change le prompt temporairement**, **seulement pour la session en cours**.
+
+
+
+### 3.5.1. **Pourquoi ?**
+Parce que :
+- Cette commande modifie la variable `PS1` **dans le shell actif uniquement**.
+- Dès que tu fermes ton terminal ou ouvres une nouvelle session, **le `.bashrc` est relu**, et si tu n’as pas défini `PS1` dans ce fichier, le système remet ce qu’il a comme valeur par défaut (parfois issue de `/etc/bash.bashrc` ou `/etc/profile` selon ta distro).
+
+
+
+### 3.5.2. **Solution permanente**
+
+Si nous voudrons que ce prompt simple soit **appliqué à chaque ouverture de terminal**, tu dois **l’ajouter dans ton `.bashrc`** **à la fin** (et non pas en utilisant `echo >>`, pour éviter les doublons).
+
+Voici comment faire proprement :
+
+```bash
+# Ouvre le .bashrc dans un éditeur
+nano ~/.bashrc
+```
+
+1. Va à la fin du fichier.
+2. Ajoute cette ligne :
+
+```bash
+export PS1='\u@\h:\w\$ '
+```
+
+3. Sauvegarde (Ctrl + O), puis quitte (Ctrl + X).
+4. Recharge ton fichier :
+
+```bash
+source ~/.bashrc
+```
+
+
+
+### 3.5.3. Résultat :
+
+Tu auras un prompt simple comme :
+
+```bash
+su
+superfun@debian:~$
+```
+… à chaque fois que tu ouvres un terminal.
+
+```bash
+su
+```
+
+### 3.5.4. Une autre méthode pour les paresseux avec sed sans changer manuellement (optionnel):
+
+*Je vous propose une autre méthode optionnelle mais plus rapide qui montre  **comment ajouter ou remplacer proprement** le prompt `PS1='\u@\h:\w\$ '` de façon **permanente** dans le fichier `~/.bashrc` en utilisant `sed`.*
+
+
+
+#### 3.5.4.1. **Supprimer toutes les personnalisations PS1 existantes**
+
+```bash
+sed -i '/^export PS1=/d' ~/.bashrc
+```
+
+> Cette commande :
+- supprime toutes les lignes qui commencent par `export PS1=`
+- évite les conflits avec d'anciennes personnalisations
+
+
+
+#### 3.5.4.2. **Ajouter un nouveau `PS1` simple à la fin du fichier**
+
+```bash
+echo 'export PS1="\u@\h:\w\$ "' >> ~/.bashrc
+```
+
+
+
+#### 3.5.4.3. **Recharger le fichier pour appliquer le nouveau prompt immédiatement**
+
+```bash
+source ~/.bashrc
+```
+
+
+
+#### 3.5.4.4.  Résumé complet en une ligne (si tu veux faire tout d’un coup) :
+
+```bash
+sed -i '/^export PS1=/d' ~/.bashrc && echo 'export PS1="\u@\h:\w\$ "' >> ~/.bashrc && source ~/.bashrc
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

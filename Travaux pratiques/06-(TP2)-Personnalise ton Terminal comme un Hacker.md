@@ -533,6 +533,79 @@ chmod +x reset_bashrc.sh
 ./reset_bashrc.sh
 ```
 
+
+
+
+
+
+<br/> 
+
+---
+# Annexe 2 - Réinitialiser et Nettoyer Son .bashrc : Supprimer les Messages Personnalisés et Restaurer un Prompt Sobre
+----
+
+
+
+###  2.1. **Objectif du script :**
+- Sauvegarder automatiquement l'ancien `.bashrc`
+- Supprimer toutes les personnalisations suivantes :
+  - `figlet "Bienvenue !"`
+  - `toilet -f mono12 -F metal "Hello Hacker!"`
+  - toutes les lignes `export PS1=...`
+- Ajouter un prompt standard simple
+- Recharger `.bashrc`
+
+
+
+### 2.2. **Script : `reset_bashrc.sh`**
+
+```bash
+#!/bin/bash
+
+# Sauvegarde du .bashrc actuel
+cp ~/.bashrc ~/.bashrc.bak_$(date +%Y%m%d_%H%M%S)
+echo "📦 Sauvegarde de ~/.bashrc créée : ~/.bashrc.bak_$(date +%Y%m%d_%H%M%S)"
+
+# Suppression des personnalisations
+sed -i '/figlet "Bienvenue !"/d' ~/.bashrc
+sed -i '/toilet -f mono12 -F metal "Hello Hacker!"/d' ~/.bashrc
+sed -i '/^export PS1=/d' ~/.bashrc
+
+# Ajout d'un prompt sobre et permanent
+echo 'export PS1="\u@\h:\w\$ "' >> ~/.bashrc
+echo "✅ Prompt simple ajouté."
+
+# Recharge immédiat du fichier bashrc
+echo "🔁 Rechargement de ~/.bashrc..."
+source ~/.bashrc
+
+echo "✅ Réinitialisation terminée. Le prompt est maintenant sobre et les messages d'accueil ont été retirés."
+```
+
+
+
+### 2.3. **Instructions pour l’utiliser :**
+
+1. Crée le script :
+
+```bash
+nano reset_bashrc.sh
+```
+
+2. Colle le contenu ci-dessus.
+3. Enregistre (`Ctrl + O`, puis `Entrée`), quitte (`Ctrl + X`).
+4. Rends-le exécutable :
+
+```bash
+chmod +x reset_bashrc.sh
+```
+
+5. Exécute-le :
+
+```bash
+./reset_bashrc.sh
+```
+
 ---
 
 Souhaite-tu que ce script fasse aussi une **sauvegarde automatique** du `.bashrc` avant modification ? (genre `~/.bashrc.bak`) – c’est une bonne pratique.

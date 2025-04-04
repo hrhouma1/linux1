@@ -188,6 +188,10 @@ source ~/.bashrc
 
 # Étape 3 – Change la couleur du prompt
 
+*Avant tous, avant tous , avant tous, svp toujours vérifier votre utilisateur pcq ous aller agir sur lui et changer son bashrc
+
+## 3.1. Changer la couleur du prompt
+
 Modifie la variable `PS1` dans `.bashrc` :
 
 ```bash
@@ -203,6 +207,56 @@ source ~/.bashrc
 ```
 
 <br/>
+
+
+*Félicitations !, tu as ajouté cette ligne à ton `~/.bashrc` :*
+
+```bash
+echo 'export PS1="\[\e[1;36m\][\u@\h \W]\$\[\e[0m\] "' >> ~/.bashrc
+```
+
+Elle modifie l’apparence de ton **invite de commande (prompt)** en couleur cyan.
+
+
+
+## 3.2. Pour **annuler** cette modification, utilise :
+
+```bash
+sed -i '/export PS1="\\\[\\e\[1;36m\\\]\\\[\\u@\\h \\W\\\]\\\\\$\\\[\\e\[0m\\\] "/d' ~/.bashrc
+```
+
+> Cette commande supprime précisément la ligne ajoutée. Les `\` doivent être **échappés** deux fois dans `sed`.
+
+
+
+## 3.3.  Recharge ensuite ton `.bashrc` :
+
+```bash
+source ~/.bashrc
+```
+
+## 3.4.  Recharge ensuite ton `.bashrc` :
+
+### Si Tu veux revenir à l’invite par défaut sans redémarrer ? Tu peux aussi exécuter directement :
+
+```bash
+export PS1='\u@\h:\w\$ '
+```
+
+> Cela remet l'invite à une forme plus classique comme : `user@host:/chemin$`
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Étape 4 – Crée un alias rigolo
 

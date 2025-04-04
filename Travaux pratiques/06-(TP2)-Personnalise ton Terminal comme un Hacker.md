@@ -608,6 +608,400 @@ chmod +x reset_bashrc.sh
 
 ---
 
-Souhaite-tu que ce script fasse aussi une **sauvegarde automatique** du `.bashrc` avant modification ? (genre `~/.bashrc.bak`) – c’est une bonne pratique.
+Souhaite-tu que ce script fasse aussi une **sauvegarde automatique** du `.bashrc` avant modification ?  – c’est une bonne pratique.
 
+
+
+---
+# Annexe 3 - Sauvegarde automatique complète du `.bashrc` avant modification  (`~/.bashrc.bak`)
+----
+
+
+## 3.1. Fichier : `reset_bashrc.sh`
+
+### Objectifs du script :
+- Sauvegarder automatiquement le fichier `.bashrc` avec horodatage
+- Supprimer toutes les lignes liées à :
+  - `figlet "Bienvenue !"`
+  - `toilet -f mono12 -F metal "Hello Hacker!"`
+  - Toute ligne personnalisant le `PS1`
+- Ajouter un prompt standard permanent (`\u@\h:\w\$`)
+- Recharger le fichier `.bashrc` immédiatement
+- Guider l’utilisateur pas à pas dans un style professionnel et pédagogique
+
+
+
+### 3.2. Script à coller :
+
+```bash
+#!/bin/bash
+
+# ========================================
+# Script de réinitialisation du fichier .bashrc
+# Auteur : Professeur Linux
+# Objectif : Nettoyer les personnalisations et restaurer un prompt sobre
+# ========================================
+
+# Définir l’horodatage pour la sauvegarde
+TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+BACKUP_FILE="$HOME/.bashrc.bak_$TIMESTAMP"
+
+# Sauvegarde du fichier .bashrc
+cp ~/.bashrc "$BACKUP_FILE"
+echo "Sauvegarde du fichier .bashrc effectuée : $BACKUP_FILE"
+
+# Suppression des personnalisations connues
+sed -i '/figlet "Bienvenue !"/d' ~/.bashrc
+sed -i '/toilet -f mono12 -F metal "Hello Hacker!"/d' ~/.bashrc
+sed -i '/^export PS1=/d' ~/.bashrc
+
+# Ajout d’un prompt standard et propre
+echo 'export PS1="\u@\h:\w\$ "' >> ~/.bashrc
+echo "Prompt sobre ajouté à la fin du .bashrc."
+
+# Rechargement du fichier pour appliquer les changements immédiatement
+echo "Rechargement du fichier ~/.bashrc..."
+source ~/.bashrc
+
+# Message final
+echo "Réinitialisation terminée avec succès."
+echo "Votre terminal est maintenant propre et fonctionnel avec un prompt standard."
+```
+
+
+
+### 3.3. Instructions d’utilisation :
+
+1. Crée le fichier :
+```bash
+nano reset_bashrc.sh
+```
+
+2. Colle le contenu du script ci-dessus.
+3. Enregistre avec `Ctrl + O`, puis quitte avec `Ctrl + X`.
+4. Rends le fichier exécutable :
+```bash
+chmod +x reset_bashrc.sh
+```
+
+5. Exécute le script :
+```bash
+./reset_bashrc.sh
+```
+
+### 3.4. Version améliorée -  Nouveau script : `reset_bashrc.sh` (avec sélection interactive du prompt)
+
+```bash
+#!/bin/bash
+
+# ========================================
+# Script de réinitialisation du fichier .bashrc
+# Auteur : Professeur Linux
+# Objectif : Nettoyer les personnalisations et restaurer un prompt sobre ou personnalisé
+# ========================================
+
+# Couleurs pour l'affichage
+VERT="\e[32m"
+JAUNE="\e[33m"
+BLEU="\e[34m"
+ROUGE="\e[31m"
+NORMAL="\e[0m"
+
+# Définir l’horodatage pour la sauvegarde
+TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+BACKUP_FILE="$HOME/.bashrc.bak_$TIMESTAMP"
+
+# Sauvegarde du fichier .bashrc
+cp ~/.bashrc "$BACKUP_FILE"
+echo -e "${JAUNE}Sauvegarde du fichier .bashrc effectuée : $BACKUP_FILE${NORMAL}"
+
+# Suppression des personnalisations connues
+sed -i '/figlet "Bienvenue !"/d' ~/.bashrc
+sed -i '/toilet -f mono12 -F metal "Hello Hacker!"/d' ~/.bashrc
+sed -i '/^export PS1=/d' ~/.bashrc
+
+# Choix du prompt
+echo ""
+echo -e "${BLEU}Choisissez un style de prompt à appliquer :${NORMAL}"
+echo "1. Sobre        → \u@\h:\w\$"
+echo "2. Coloré       → [user@host dir] (cyan)"
+echo "3. Geek         → Heure + chemin (multiligne)"
+echo "4. Minimaliste  → \$"
+echo "5. Rouge vif    → \u@\h:\w (rouge)"
+echo ""
+
+read -p "Votre choix [1-5] : " choix_prompt
+
+# Définition du prompt choisi
+case $choix_prompt in
+    1) PS1_FINAL='export PS1="\u@\h:\w\$ "' ;;
+    2) PS1_FINAL='export PS1="\[\e[1;36m\][\u@\h \W]\$\[\e[0m\] "' ;;
+    3) PS1_FINAL='export PS1="\[\e[0;32m\]\A \[\e[1;34m\]\w\n\u@\h \$ \[\e[0m\]"' ;;
+    4) PS1_FINAL='export PS1="\$ "' ;;
+    5) PS1_FINAL='export PS1="\[\e[1;31m\]\u@\h:\w \$\[\e[0m\]"' ;;
+    *) echo -e "${ROUGE}Choix invalide. Le prompt sobre par défaut sera appliqué.${NORMAL}"
+       PS1_FINAL='export PS1="\u@\h:\w\$ "' ;;
+esac
+
+# Ajout du nouveau prompt dans .bashrc
+echo "$PS1_FINAL" >> ~/.bashrc
+echo -e "${VERT}Prompt personnalisé appliqué.${NORMAL}"
+
+# Rechargement du .bashrc
+echo -e "${JAUNE}Rechargement du fichier ~/.bashrc...${NORMAL}"
+source ~/.bashrc
+
+# Message final
+echo -e "${VERT}Réinitialisation complète. Votre nouveau prompt est en place.${NORMAL}"
+```
+
+
+
+#### 3.4.1. Résumé des fonctionnalités ajoutées :
+- Sauvegarde automatique horodatée
+- Nettoyage ciblé des personnalisations (`figlet`, `toilet`, `PS1`)
+- Menu interactif avec **5 styles de prompt**
+- Application immédiate (`source ~/.bashrc`)
+- Messages pédagogiques et clairs
+
+
+
+#### 3.4.2. Utilisation :
+
+Même étapes que précédemment :
+1. Crée le fichier :
+```bash
+nano reset_bashrc.sh
+```
+2. Colle le script ci-dessus.
+3. Enregistre (Ctrl + O) puis quitte (Ctrl + X).
+4. Rends le script exécutable :
+```bash
+chmod +x reset_bashrc.sh
+```
+5. Lance-le :
+```bash
+./reset_bashrc.sh
+```
+
+
+
+<br/>
+
+---
+# Annexe 4 - Script Linux ultra complet et professionnel (optionnel, je ne vous encourage pas de le faire pour le moment)
+----
+
+*Je vous propose un **script Linux ultra complet et professionnel mais très avancé**, intégrant plus de **25 options**. L'objectif est de vous donner une idée sur ce que nous pouvons faire avec les scripts shell*
+
+- Gestion complète du `.bashrc`
+- Personnalisation du terminal
+- Gestion d'utilisateurs
+- Messages ASCII, sons, alias, prompt, protection, etc.
+- Réinitialisation et sauvegardes
+- Ton propre de professeur expérimenté, sans emojis
+
+
+
+## Fichier : `linux_hacker_terminal_master.sh`
+
+```bash
+#!/bin/bash
+
+# ===============================================
+# TP Linux - Personnalise ton terminal comme un Hacker Pro
+# Auteur : Professeur Linux (50 ans d'expérience)
+# Objectif : Gestion utilisateur, personnalisation .bashrc, sécurité et fun
+# ===============================================
+
+# COULEURS POUR L'AFFICHAGE
+VERT="\e[32m"
+ROUGE="\e[31m"
+JAUNE="\e[33m"
+BLEU="\e[34m"
+NORMAL="\e[0m"
+
+# STYLES DE PROMPT
+PROMPT1='export PS1="\u@\h:\w\$ "'
+PROMPT2='export PS1="\[\e[1;36m\][\u@\h \W]\$\[\e[0m\] "'
+PROMPT3='export PS1="\[\e[0;32m\]\A \[\e[1;34m\]\w\n\u@\h \$ \[\e[0m\]"'
+PROMPT4='export PS1="\$ "'
+PROMPT5='export PS1="\[\e[35m\](\d \t) \u@\h:\w \$\[\e[0m\]"'
+PROMPT6='export PS1="\[\e[1;33m\][\u@\h: \W]>>\[\e[0m\] "'
+PROMPT7='export PS1="\[\e[1;31m\]\u@\h:\w \$\[\e[0m\]"'
+
+# INTRODUCTION
+clear
+echo -e "${BLEU}Bienvenue dans le TP de personnalisation du terminal.${NORMAL}"
+echo -e "Ce programme vous accompagne pas à pas pour transformer votre terminal en environnement puissant, esthétique et sécurisé."
+echo ""
+
+# VÉRIFICATION DE L'UTILISATEUR COURANT
+if [ "$(id -u)" -eq 0 ]; then
+    echo -e "Vous êtes connecté en tant que ${VERT}root${NORMAL}."
+else
+    echo -e "Vous êtes connecté en tant que ${JAUNE}utilisateur standard${NORMAL} : $(whoami)"
+fi
+
+# CRÉATION D’UN UTILISATEUR
+read -p "Souhaitez-vous créer un nouvel utilisateur ? (o/n) : " rep
+if [[ "$rep" =~ ^[Oo]$ ]]; then
+    read -p "Nom du nouvel utilisateur : " new_user
+    if id "$new_user" &>/dev/null; then
+        echo "L'utilisateur existe déjà."
+    else
+        useradd -m "$new_user"
+        passwd "$new_user"
+        echo "Utilisateur créé avec succès."
+    fi
+
+    read -p "Souhaitez-vous l'ajouter au groupe sudo ? (o/n) : " rep_sudo
+    if [[ "$rep_sudo" =~ ^[Oo]$ ]]; then
+        usermod -aG sudo "$new_user"
+        echo "Utilisateur ajouté au groupe sudo."
+    fi
+fi
+
+# INSTALLATION DES OUTILS SI NÉCESSAIRE
+apt update
+apt install -y figlet toilet cmatrix fortune cowsay mpg123
+
+# MENU PRINCIPAL
+while true; do
+    echo -e "\n${BLEU}===== MENU PRINCIPAL =====${NORMAL}"
+    echo "1. Ajouter message d’accueil avec figlet"
+    echo "2. Ajouter message avec toilet (style metal)"
+    echo "3. Modifier le prompt (7 styles disponibles)"
+    echo "4. Ajouter alias utiles et fun (matrix, ll, gs...)"
+    echo "5. Ajouter écran de démarrage personnalisé"
+    echo "6. Ajouter un son au démarrage"
+    echo "7. Protéger le .bashrc (lecture seule)"
+    echo "8. Supprimer tous les éléments personnalisés"
+    echo "9. Réinitialiser le .bashrc proprement"
+    echo "10. Afficher l’utilisateur courant"
+    echo "11. Sauvegarder le .bashrc actuel"
+    echo "12. Restaurer prompt simple temporairement"
+    echo "13. Afficher chemin exact du .bashrc"
+    echo "14. Créer un alias temporaire (session uniquement)"
+    echo "15. Ajouter date/heure dynamique dans prompt"
+    echo "16. Ajouter affichage automatique de fortune"
+    echo "17. Lister tous les alias actuels"
+    echo "18. Supprimer tous les alias personnalisés"
+    echo "19. Tester cmatrix directement"
+    echo "20. Supprimer la protection de .bashrc"
+    echo "21. Quitter"
+    echo -n "Choisissez une option [1-21] : "
+    read choix
+
+    case $choix in
+        1) echo 'figlet "Bienvenue !"' >> ~/.bashrc && echo "Message figlet ajouté." ;;
+        2) echo 'toilet -f mono12 -F metal "Hello Hacker!"' >> ~/.bashrc && echo "Message toilet ajouté." ;;
+        3)
+            echo "Choisissez un style de prompt :"
+            echo "1. Sobre"
+            echo "2. Cyan [user@host dir]"
+            echo "3. Geek (heure + chemin)"
+            echo "4. Minimaliste"
+            echo "5. Avec date/heure complète"
+            echo "6. Jaune encadré"
+            echo "7. Rouge standard"
+            read -p "Votre choix [1-7] : " pstyle
+            sed -i '/^export PS1=/d' ~/.bashrc
+            case $pstyle in
+                1) echo "$PROMPT1" >> ~/.bashrc ;;
+                2) echo "$PROMPT2" >> ~/.bashrc ;;
+                3) echo "$PROMPT3" >> ~/.bashrc ;;
+                4) echo "$PROMPT4" >> ~/.bashrc ;;
+                5) echo "$PROMPT5" >> ~/.bashrc ;;
+                6) echo "$PROMPT6" >> ~/.bashrc ;;
+                7) echo "$PROMPT7" >> ~/.bashrc ;;
+                *) echo "Choix invalide." ;;
+            esac
+            echo "Prompt modifié."
+            ;;
+        4)
+            echo "alias matrix='cmatrix'" >> ~/.bashrc
+            echo "alias ll='ls -lah'" >> ~/.bashrc
+            echo "alias gs='git status'" >> ~/.bashrc
+            echo "Alias ajoutés."
+            ;;
+        5)
+            cat <<EOT >> ~/.bashrc
+
+echo "Bienvenue \$USER - Terminal lancé le \$(date)"
+fortune | cowsay
+EOT
+            echo "Écran personnalisé ajouté."
+            ;;
+        6)
+            read -p "Chemin du fichier mp3 : " mp3
+            echo "mpg123 \"$mp3\" &" >> ~/.bashrc
+            echo "Son ajouté au démarrage."
+            ;;
+        7)
+            chmod 400 ~/.bashrc
+            echo ".bashrc protégé en lecture seule."
+            ;;
+        8)
+            sed -i '/figlet/d;/toilet/d;/fortune/d;/cowsay/d;/^export PS1=/d;/matrix/d;/mpg123/d;/Bienvenue \$USER/d;/alias ll/d;/alias gs/d' ~/.bashrc
+            echo "Éléments personnalisés supprimés."
+            ;;
+        9)
+            cp ~/.bashrc ~/.bashrc.bak_$(date +%Y%m%d_%H%M%S)
+            sed -i '/figlet/d;/toilet/d;/fortune/d;/cowsay/d;/^export PS1=/d;/matrix/d;/mpg123/d;/alias/d' ~/.bashrc
+            echo "$PROMPT1" >> ~/.bashrc
+            echo ".bashrc réinitialisé."
+            ;;
+        10) whoami ;;
+        11)
+            cp ~/.bashrc ~/.bashrc.bak_$(date +%Y%m%d_%H%M%S)
+            echo "Sauvegarde créée."
+            ;;
+        12) eval "$PROMPT1" && echo "Prompt temporairement défini." ;;
+        13) echo "Chemin du .bashrc : $HOME/.bashrc" ;;
+        14)
+            read -p "Nom de l'alias : " aname
+            read -p "Commande de l'alias : " acmd
+            alias $aname="$acmd"
+            echo "Alias temporaire '$aname' ajouté."
+            ;;
+        15)
+            echo 'export PS1="\[\e[0;32m\]\d \t \[\e[0m\]\u@\h:\w\$ "' >> ~/.bashrc
+            echo "Prompt avec date/heure ajouté."
+            ;;
+        16)
+            echo 'fortune | cowsay' >> ~/.bashrc
+            echo "Fortune ajouté au démarrage."
+            ;;
+        17) alias ;;
+        18) sed -i '/^alias/d' ~/.bashrc && echo "Alias supprimés." ;;
+        19) cmatrix ;;
+        20) chmod 644 ~/.bashrc && echo "Protection supprimée." ;;
+        21) echo "Fin du script. À bientôt." ; exit 0 ;;
+        *) echo "Choix invalide." ;;
+    esac
+
+    read -p "Appuyez sur Entrée pour continuer..."
+done
+```
+
+
+
+## Instructions
+
+1. Enregistre ce script dans un fichier :
+```bash
+nano linux_hacker_terminal_master.sh
+```
+
+2. Colle tout le contenu ci-dessus.
+3. Rends-le exécutable :
+```bash
+chmod +x linux_hacker_terminal_master.sh
+```
+
+4. Lance-le :
+```bash
+./linux_hacker_terminal_master.sh
+```
 

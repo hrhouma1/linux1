@@ -17,7 +17,18 @@ env | grep proxy
 <br/>
 <br/>
 
+si ceci ne fonctionne pas, essayez :
 
+
+```bash
+export http_proxy="http://10.1.0.5:8080"
+export https_proxy="http://10.1.0.5:8080"
+export ftp_proxy="http://10.1.0.5:8080"
+echo $http_proxy
+echo $https_proxy
+echo $ftp_proxy
+env | grep proxy 
+```
 
 
 <br/>

@@ -33,8 +33,14 @@ Il faut ajouter l'utilisateur `superfun` à la liste des **sudoers** (donc lui d
 
 ## Étape 1.1 – Donne les droits sudo à ton utilisateur fun
 
+*Changez l'utilisateur à root*
 ```bash
-# Ajoute superfun au groupe sudo (sur Debian/Ubuntu)
+su
+```
+
+*Ajoute superfun au groupe sudo (sur Debian/Ubuntu)*
+
+```bash
 sudo usermod -aG sudo superfun
 ```
 

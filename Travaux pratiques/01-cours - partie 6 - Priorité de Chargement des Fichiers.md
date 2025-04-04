@@ -103,3 +103,175 @@ echo "LU : .bashrc" >> ~/.bashrc
 - `.bashrc` est toujours indépendant, il ne se déclenche que dans un terminal
 - Pour les shells de login, `.bash_profile` est prioritaire
 
+
+
+
+
+
+
+
+
+
+
+
+# Pratique 1 : Comprendre `.bashrc`, `.bash_profile`, `.profile` par la pratique
+
+
+## Pratique 1.1. Objectif
+
+- Comprendre ce qu’est un **shell de login** et un **shell non-login**
+- Expérimenter le comportement réel de `.bashrc`, `.bash_profile` et `.profile`
+- Observer quel fichier est utilisé selon le type d’ouverture (terminal, SSH, sudo, etc.)
+
+
+
+## Pratique 1.2.  Rappel ultra simplifié
+
+| Situation (la vraie vie)                  | Ce que Linux voit            | Quel fichier est lu             |
+|-------------------------------------------|-------------------------------|----------------------------------|
+| Tu ouvres un terminal (Ctrl+Alt+T)        | Shell **non-login**          | `.bashrc` uniquement ✅           |
+| Tu te connectes avec `ssh`                | Shell **de login**           | `.bash_profile` ou `.profile` ✅ |
+| Tu fais `sudo -i`                         | Shell **de login root**      | `/root/.bash_profile` ✅         |
+| Tu fais `sudo -s`                         | Shell **non-login root**     | Ton `.bashrc` est utilisé ✅     |
+
+
+
+## Pratique 1.3. Préparation des fichiers de test
+
+Tape ces commandes pour injecter une phrase dans chaque fichier :
+
+```bash
+echo "LU : .bashrc" >> ~/.bashrc
+echo "LU : .bash_profile" >> ~/.bash_profile
+echo "LU : .profile" >> ~/.profile
+```
+
+ Ces phrases s’afficheront si le fichier est lu.
+
+
+
+## Pratique 1.4. Tester avec un terminal normal
+
+### Étapes :
+
+1. Ferme tous tes terminaux.
+2. Ouvre un nouveau terminal (ex: Ctrl+Alt+T ou via menu).
+3. Observe.
+
+### Résultat attendu :
+
+```
+LU : .bashrc
+```
+
+**Explication** : seul `.bashrc` est exécuté dans un terminal normal.
+
+
+
+## Pratique 1.5. Tester avec sudo -i
+
+### Étapes :
+
+1. Tape la commande :
+```bash
+sudo -i
+```
+
+2. Regarde ce qui s’affiche.
+
+### Résultat attendu :
+
+```
+LU : .bash_profile
+```
+
+**Explication** : sudo -i ouvre un **shell de login root**, donc lit `.bash_profile`.  
+`.profile` est ignoré car `.bash_profile` existe.
+
+
+
+## Pratique 1.6. Supprimer `.bash_profile` et retester
+
+### Étapes :
+
+1. Supprime `.bash_profile` :
+```bash
+rm ~/.bash_profile
+```
+
+2. Tape ensuite :
+```bash
+sudo -i
+```
+
+3. Regarde ce qui s’affiche.
+
+### Résultat attendu :
+
+```
+LU : .profile
+```
+
+ **Explication** : comme `.bash_profile` n’existe plus, Linux lit `.profile`.
+
+
+
+## Pratique 1.7.  Tester avec sudo -s
+
+```bash
+sudo -s
+```
+
+### Résultat attendu :
+
+```
+LU : .bashrc
+```
+
+**Explication** : sudo -s garde ton environnement utilisateur. C’est comme si tu restais dans ton terminal → `.bashrc` est exécuté.
+
+
+
+## Pratique 1.8.  Nettoyage des fichiers après le TP
+
+```bash
+sed -i '/LU :/d' ~/.bashrc
+sed -i '/LU :/d' ~/.bash_profile
+sed -i '/LU :/d' ~/.profile
+```
+
+
+
+## 📎 ANNEXE – Définition vulgarisée des shells
+
+### 🟢 Shell de login = Connexion à une session
+
+- Tu te **connectes** à une machine (via SSH ou `sudo -i` ou `su -`)
+- Linux te dit : “Bienvenue, je te charge ton environnement complet”
+- Il lit : `.bash_profile`, ou `.profile` si le premier n’existe pas
+
+🧠 Exemple : Tu arrives à l’école → on t’ouvre les portes, on te donne ton sac, ton emploi du temps
+
+
+
+### 🔵 Shell non-login = Tu ouvres juste un terminal
+
+- Tu es **déjà connecté**, tu ouvres juste un **terminal** dans ton bureau
+- Linux te dit : “OK, tu es déjà loggé, je te donne juste ton terminal”
+- Il lit : `.bashrc`
+
+🧠 Exemple : Tu ouvres ton ordinateur déjà allumé → pas besoin de refaire toute la session, juste ton bureau
+
+
+
+# Résumé final
+
+| Action              | Shell de login ? | Fichier lu            | Remarques |
+|---------------------|------------------|------------------------|-----------|
+| Terminal (Ctrl+Alt+T)| ❌ Non-login      | `.bashrc`              | Pas de session rechargée |
+| `ssh user@host`     | ✅ Oui            | `.bash_profile` ou `.profile` | Chargement complet |
+| `sudo -s`           | ❌ Non-login      | `.bashrc` de l’utilisateur | Environnement utilisateur |
+| `sudo -i`           | ✅ Oui            | `.bash_profile` de root | Changement complet vers root |
+
+
+

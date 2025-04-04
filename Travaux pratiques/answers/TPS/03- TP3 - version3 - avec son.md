@@ -1,13 +1,26 @@
-Voici la **version améliorée** de ton script de simulation de terminal "piraté", avec une **variante sonore** ajoutée grâce à `mpg123`. Cette version :
+# 1 - Introduction :
 
-- Installe `mpg123` automatiquement si nécessaire
-- Joue un son dramatique ou perturbant au lancement du terminal (tu peux utiliser un `.mp3` de ton choix)
-- Combine texte, effets, couleurs, délais, et son pour **faire vraiment peur**
-- Est toujours **100 % inoffensive**
+*"Personnalise ton Terminal comme un Hacker !"* est un **script pédagogique Linux** conçu pour **donner l’illusion que le système est compromis** (**"system hacked"**), **sans aucun danger réel**.
 
----
+Il simule :
+- une connexion distante,
+- une suppression de fichiers critiques,
+- une corruption du système,
+- et même l'exécution d'une commande destructrice (`rm -rf /`),  
+tout cela via un simple affichage dans le terminal.
 
-## 📁 Script final : `simulate_hacked_terminal_with_sound.sh`
+Pour **renforcer l’immersion**, le script **joue automatiquement un son dramatique** au lancement du terminal, grâce à l’outil `mpg123`, simulant l’alerte sonore d’un système en détresse.
+
+L’objectif de ce script est double :
+1. **Impressionner visuellement** les étudiants en leur montrant ce que peut faire un simple fichier `.bashrc`.
+2. **Renforcer la compréhension** des fichiers de configuration shell et les sensibiliser aux bonnes pratiques de sécurité.
+
+> Ce TP est totalement inoffensif, mais visuellement puissant. Il offre une démonstration réaliste des conséquences d’un fichier `.bashrc` mal protégé.
+
+
+<br/> 
+
+#  2 - Script final : `simulate_hacked_terminal_with_sound.sh`
 
 ```bash
 #!/bin/bash
@@ -81,9 +94,10 @@ echo "Simulation avec son ajoutée dans ~/.bashrc"
 echo "Effet visible au prochain lancement de terminal (ou avec : source ~/.bashrc)"
 ```
 
----
 
-## ✅ Instructions d’utilisation :
+<br/> 
+
+# 3 - Instructions d’utilisation :
 
 1. Crée le script :
 ```bash
@@ -107,9 +121,10 @@ chmod +x simulate_hacked_terminal_with_sound.sh
 source ~/.bashrc
 ```
 
----
 
-## 🔁 Pour désactiver la simulation :
+<br/> 
+
+# 4 - Pour désactiver la simulation :
 
 Tu peux restaurer le `.bashrc` propre avec :
 ```bash
@@ -117,9 +132,3 @@ mv ~/.bashrc.bak_hacked_* ~/.bashrc
 source ~/.bashrc
 ```
 
----
-
-Souhaite-tu que je :
-- Intègre ce script dans ton **TP Thinkific HTML Bootstrap** ?
-- Prépare un **script menu interactif** pour activer / désactiver la simulation ?
-- T’ajoute d’autres variantes encore plus immersives (clignotements, sons multiples, commandes zombies) ?

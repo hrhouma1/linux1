@@ -10,7 +10,7 @@
 - Manipuler les permissions et comprendre les effets sur les fichiers de configuration
 
 
-
+<br/>
 # Étape 1 – Crée un utilisateur fun et connecte-toi
 
 ```bash
@@ -52,7 +52,7 @@ sudo ls /root
 
 
 
-
+<br/>
 # Étape 2 – Affiche un message de bienvenue en ASCII Art
 
 ### Installe `figlet` et `toilet` :
@@ -77,7 +77,7 @@ echo 'toilet -f mono12 -F metal "Hello Hacker!"' >> ~/.bashrc
 Déconnecte-toi puis reconnecte-toi pour voir le résultat !
 
 
-
+<br/>
 # Étape 3 – Change la couleur du prompt
 
 Modifie la variable `PS1` dans `.bashrc` :
@@ -94,8 +94,7 @@ Recharge :
 source ~/.bashrc
 ```
 
-
-
+<br/>
 # Étape 4 – Crée un alias rigolo
 
 Ajoute dans `.bashrc` :
@@ -117,7 +116,7 @@ matrix
 ```
 
 
-
+<br/>
 # Étape 5 – Crée un mini écran de démarrage personnalisé
 
 Édite `.bashrc` et ajoute :
@@ -137,7 +136,7 @@ sudo apt install fortune cowsay -y
 ```
 
 
-
+<br/>
 # Étape 6 – Protection contre la modification par d'autres utilisateurs
 
 Rends `.bashrc` en lecture seule :
@@ -160,7 +159,7 @@ echo 'mpg123 ~/musique.mp3 &' >> ~/.bashrc
 ```
 
 
-
+<br/>
 # Étape 7 – Questions de réflexion
 
 1. Quelle est la différence entre `.bashrc`, `.bash_profile` et `.profile` ?

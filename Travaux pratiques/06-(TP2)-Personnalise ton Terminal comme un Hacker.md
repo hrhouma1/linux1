@@ -184,6 +184,7 @@ source ~/.bashrc
 
 
 
+<br/>
 
 
 # Étape 3 – Change la couleur du prompt

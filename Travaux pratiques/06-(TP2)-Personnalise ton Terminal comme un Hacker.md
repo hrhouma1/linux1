@@ -349,3 +349,77 @@ echo 'mpg123 ~/musique.mp3 &' >> ~/.bashrc
 - Un effet visuel (ASCII / matrix / cowsay) fonctionne
 - Le fichier `.bashrc` est protégé
 - Les questions sont complétées dans un fichier `questions.txt`
+
+
+<br/>
+
+---
+# Annexe 1 - script complet de réinitialisation du `.bashrc`
+----
+
+
+*Ce script supprime proprement les personnalisations que nous avons ajoutées, notamment :*
+
+- `figlet "Bienvenue !"`
+- `toilet -f mono12 -F metal "Hello Hacker!"`
+- `export PS1=...` (couleur cyan)
+- Puis recharge le `.bashrc`
+
+
+
+### Annexe 1.1 - **Script : reset_bashrc.sh**
+
+```bash
+#!/bin/bash
+
+echo "🔧 Réinitialisation du fichier ~/.bashrc..."
+
+# Supprimer la ligne figlet
+sed -i '/figlet "Bienvenue !"/d' ~/.bashrc
+
+# Supprimer la ligne toilet
+sed -i '/toilet -f mono12 -F metal "Hello Hacker!"/d' ~/.bashrc
+
+# Supprimer les modifications de PS1 couleur cyan
+sed -i '/export PS1="\\\[\\e\[1;36m\\\]\\\[\\u@\\h \\W\\\]\\\\\$\\\[\\e\[0m\\\] "/d' ~/.bashrc
+
+# Optionnel : supprimer toute autre ligne PS1 personnalisée
+sed -i '/^export PS1=/d' ~/.bashrc
+
+# Recharger le bashrc
+echo "🔁 Rechargement du .bashrc..."
+source ~/.bashrc
+
+echo "✅ Réinitialisation terminée. Ouvre un nouveau terminal pour confirmer que tout est revenu à la normale."
+```
+
+
+
+### Annexe 1.2 - **Comment l’utiliser :**
+
+1. Ouvre un terminal.
+2. Crée le fichier :
+
+```bash
+nano reset_bashrc.sh
+```
+
+3. Colle le script ci-dessus.
+4. Sauvegarde (Ctrl + O, Entrée), puis quitte (Ctrl + X).
+5. Donne les droits d'exécution :
+
+```bash
+chmod +x reset_bashrc.sh
+```
+
+6. Lance le script :
+
+```bash
+./reset_bashrc.sh
+```
+
+---
+
+Souhaite-tu que ce script fasse aussi une **sauvegarde automatique** du `.bashrc` avant modification ? (genre `~/.bashrc.bak`) – c’est une bonne pratique.
+
+

@@ -404,7 +404,7 @@ matrix
 > sed -i "/alias matrix='cmatrix'/d" ~/.bashrc # Supprimer la ligne alias matrix du .bashrc
 > source ~/.bashrc # Recharger le .bashrc
 > su
-```
+>```
 
 <br/>
 

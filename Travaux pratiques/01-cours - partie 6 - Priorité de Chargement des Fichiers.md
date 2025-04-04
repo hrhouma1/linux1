@@ -1,5 +1,8 @@
 # Document de Priorité de Chargement des Fichiers : `.bash_profile`, `.profile`, `.bashrc`
 
+<br/>
+<br/>
+
 
 # 1 - Objectif
 
@@ -37,6 +40,8 @@ Linux exécute seulement :
 > 🔎 C’est pour ça qu’on ne voit pas les exports définis dans `.bash_profile` quand on ouvre juste un terminal.
 
 
+<br/>
+<br/>
 
 # 2. Exemples de vraie vie
 
@@ -52,6 +57,9 @@ Linux exécute seulement :
 - Tu ouvres un terminal → `.bashrc` est lu
 
 
+<br/>
+<br/>
+
 # 3. Résumé des priorités
 
 | Type de shell               | Fichier chargé en priorité                | Fichier ignoré                   |
@@ -60,6 +68,8 @@ Linux exécute seulement :
 | Terminal (`bash`)           | `.bashrc`                                 | `.bash_profile` et `.profile` ne sont pas lus |
 
 
+<br/>
+<br/>
 
 # 4. Astuce recommandée pour tous
 
@@ -75,6 +85,9 @@ fi
  Cela permet d'avoir **un comportement cohérent** : `.bashrc` sera toujours exécuté, même après une connexion SSH ou un `sudo -i`.
 
 
+
+<br/>
+<br/>
 
 # 5. Expérience rapide à faire
 
@@ -96,6 +109,8 @@ echo "LU : .bashrc" >> ~/.bashrc
 ```
 
 
+<br/>
+<br/>
 
 # 6. Conclusion 
 
@@ -113,9 +128,12 @@ echo "LU : .bashrc" >> ~/.bashrc
 
 
 
+<br/>
+<br/>
 
 # Pratique 1 : Comprendre `.bashrc`, `.bash_profile`, `.profile` par la pratique
 
+<br/>
 
 ## Pratique 1.1. Objectif
 
@@ -242,7 +260,13 @@ sed -i '/LU :/d' ~/.profile
 
 
 
+<br/>
+<br/>
+
 ## 📎 ANNEXE – Définition vulgarisée des shells
+
+<br/>
+<br/>
 
 ### 🟢 Shell de login = Connexion à une session
 
@@ -253,6 +277,8 @@ sed -i '/LU :/d' ~/.profile
 🧠 Exemple : Tu arrives à l’école → on t’ouvre les portes, on te donne ton sac, ton emploi du temps
 
 
+<br/>
+<br/>
 
 ### 🔵 Shell non-login = Tu ouvres juste un terminal
 
@@ -263,6 +289,8 @@ sed -i '/LU :/d' ~/.profile
 🧠 Exemple : Tu ouvres ton ordinateur déjà allumé → pas besoin de refaire toute la session, juste ton bureau
 
 
+<br/>
+<br/>
 
 # Résumé final
 

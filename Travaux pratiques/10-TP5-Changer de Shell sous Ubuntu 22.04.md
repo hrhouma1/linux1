@@ -1,5 +1,7 @@
 # Changer de Shell sous Ubuntu 22.04 (Pratique)
 
+<br/>
+<br/>
 
 # Étape 1 : Vérifier les shells disponibles
 
@@ -19,6 +21,8 @@ Cela retourne généralement une liste comme :
 ```
 
 
+<br/>
+<br/>
 
 # Étape 2 : Vérifier le shell actuel
 
@@ -28,6 +32,8 @@ echo $SHELL
 
 > Cela affichera par exemple : `/bin/bash` ou `/usr/bin/zsh`
 
+<br/>
+<br/>
 
 # Étape 3 : Changer de shell avec `chsh`
 
@@ -45,6 +51,9 @@ chsh -s /usr/bin/zsh
 
 > ⚠️ Il faut entrer le chemin complet (trouvé dans `/etc/shells`).
 
+
+<br/>
+<br/>
 
 # Étape 4 : Se déconnecter / reconnecter
 

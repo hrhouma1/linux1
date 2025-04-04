@@ -606,11 +606,6 @@ chmod +x reset_bashrc.sh
 ./reset_bashrc.sh
 ```
 
----
-
-Souhaite-tu que ce script fasse aussi une **sauvegarde automatique** du `.bashrc` avant modification ?  – c’est une bonne pratique.
-
-
 
 ---
 # Annexe 3 - Sauvegarde automatique complète du `.bashrc` avant modification  (`~/.bashrc.bak`)

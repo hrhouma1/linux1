@@ -1,14 +1,8 @@
-Super ! Voici une **fiche de révision + TP guidé**, pensée **pour des débutants complets**.  
-Le ton est **ultra pédagogique**, étape par étape, avec **explications simples**, **rappels visuels**, et **exercices à faire soi-même**.
+# Fiche de Révision + TP : Comprendre `.bashrc`, `.profile`, `.bash_profile` 
 
----
 
-```markdown
-# 🧾 Fiche de Révision + TP : Comprendre `.bashrc`, `.profile`, `.bash_profile` (100% débutants)
 
----
-
-## 🎯 Objectif pédagogique
+# Objectif pédagogique
 
 - Comprendre quand Linux lit les fichiers `.bashrc`, `.profile`, `.bash_profile`
 - Savoir les tester avec des exemples concrets
@@ -16,9 +10,9 @@ Le ton est **ultra pédagogique**, étape par étape, avec **explications simple
 - Comprendre ce que fait `sudo -s` et `sudo -i`
 - Retenir ce qu’il faut modifier selon ce qu’on veut faire
 
----
 
-## 📌 Partie 1 : Comprendre les fichiers
+
+# Partie 1 : Comprendre les fichiers
 
 | Fichier            | Quand est-il utilisé ?                          | Ce qu’il configure            |
 |--------------------|--------------------------------------------------|-------------------------------|
@@ -26,15 +20,15 @@ Le ton est **ultra pédagogique**, étape par étape, avec **explications simple
 | `.bash_profile`    | Quand on **se connecte** (SSH, `sudo -i`, etc.) | Variables globales, PATH, etc. |
 | `.profile`         | Pareil que `.bash_profile`, mais pour tous les shells (sh, dash...) | À la connexion |
 
----
 
-## 🧪 Partie 2 : Expériences guidées (TP simple)
 
-🛠️ **But** : Écrire du texte dans chaque fichier pour voir **quand** il est utilisé.
+# Partie 2 : Expériences guidées (TP simple)
 
----
+ **But** : Écrire du texte dans chaque fichier pour voir **quand** il est utilisé.
 
-### 🧪 Étape 1 : Préparer les tests
+
+
+###  Étape 1 : Préparer les tests
 
 **Connectez-vous avec votre utilisateur (par exemple : `etudiant`)**  
 Puis tapez ceci :
@@ -44,20 +38,20 @@ echo 'JE SUIS DANS .bashrc' >> ~/.bashrc
 echo 'JE SUIS DANS .bash_profile' >> ~/.bash_profile
 ```
 
-> 🔎 Ces lignes vont écrire une phrase dans vos fichiers, pour qu’on les voie ensuite.
+>  Ces lignes vont écrire une phrase dans vos fichiers, pour qu’on les voie ensuite.
 
----
 
-### 🧪 Étape 2 : Fermer et rouvrir un terminal
+
+###  Étape 2 : Fermer et rouvrir un terminal
 
 Fermez complètement votre terminal et rouvrez-le.
 
 👉 **Attendu** : Vous verrez s’afficher `JE SUIS DANS .bashrc`  
 ✅ Cela prouve que `.bashrc` est lu à l’ouverture d’un terminal **normal**.
 
----
 
-### 🧪 Étape 3 : Se connecter avec sudo -i
+
+###  Étape 3 : Se connecter avec sudo -i
 
 Tapez ensuite :
 
@@ -79,9 +73,9 @@ sudo -i
 
 ✅ Vous verrez alors la phrase ! → Preuve que `.bash_profile` est lu quand on fait `sudo -i`.
 
----
 
-### 🧪 Étape 4 : Tester `sudo -s`
+
+###  Étape 4 : Tester `sudo -s`
 
 Tapez :
 
@@ -93,9 +87,9 @@ sudo -s
 
 ✅ Cela montre que `sudo -s` garde l’environnement **de l’utilisateur courant**.
 
----
 
-## 🎨 Partie 3 : Résumé visuel pour vos mémoires
+
+##  Partie 3 : Résumé visuel pour vos mémoires
 
 | Action                      | Fichier utilisé        | Chargé par           | Exemple |
 |-----------------------------|------------------------|-----------------------|---------|
@@ -104,9 +98,9 @@ sudo -s
 | `sudo -i`                   | `/root/.bash_profile`  | Shell root complet    | sudo -i |
 | `sudo -s`                   | `.bashrc` de l’utilisateur | Shell simple root | sudo -s |
 
----
 
-## 🎁 Partie 4 : Ce qu’on peut mettre dans ces fichiers
+
+##  Partie 4 : Ce qu’on peut mettre dans ces fichiers
 
 ### Exemple dans `.bashrc` :
 ```bash
@@ -119,9 +113,9 @@ export PATH="$PATH:/opt/monprogramme"
 export LANG=fr_FR.UTF-8
 ```
 
----
 
-## 🧼 Partie 5 : Nettoyer les fichiers après le TP
+
+##  Partie 5 : Nettoyer les fichiers après le TP
 
 ```bash
 # Nettoyer les fichiers test
@@ -130,7 +124,6 @@ sed -i '/JE SUIS DANS/d' ~/.bash_profile
 sudo sed -i '/JE SUIS DANS/d' /root/.bash_profile
 ```
 
----
 
 ## ✅ Partie 6 : À retenir par cœur
 
@@ -139,9 +132,9 @@ sudo sed -i '/JE SUIS DANS/d' /root/.bash_profile
 🟢 `sudo -s` = root avec environnement **de l’utilisateur courant**  
 🟢 `sudo -i` = root avec **environnement root complet**
 
----
 
-## ✍️ Exercice à rendre
+
+## ✍️ Exercice 
 
 1. Créez un fichier `.bashrc` avec un message personnalisé.
 2. Créez un fichier `.bash_profile` avec un message différent.
@@ -158,8 +151,3 @@ sudo sed -i '/JE SUIS DANS/d' /root/.bash_profile
 | sudo -s       |                      |                  |
 | sudo -i       |                      |                  |
 
----
-
-```
-
-Souhaites-tu que je te livre ce contenu aussi en `.md` ou `.pdf` ? Je peux également t’intégrer ça dans une fiche HTML si tu veux le rendre plus joli pour Thinkific.

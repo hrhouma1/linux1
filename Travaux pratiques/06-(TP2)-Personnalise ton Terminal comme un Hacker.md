@@ -165,24 +165,23 @@ source ~/.bashrc
 #### 2.4.4. Résumé
 
 > Pour **annuler** ou **supprimer** la ligne ci-haut que tu as ajoutée dans ton `~/.bashrc`, exécutez la commande suivante :
+> ```bash
+> sed -i '/figlet "Bienvenue !"/d' ~/.bashrc
+> ```
 
-```bash
-sed -i '/figlet "Bienvenue !"/d' ~/.bashrc
-```
-
-```bash
-sed -i '/toilet -f mono12 -F metal "Hello Hacker!"/d' ~/.bashrc
-```
+> ```bash
+> sed -i '/toilet -f mono12 -F metal "Hello Hacker!"/d' ~/.bashrc
+> ```
 
 > Cette commande :
-- cherche la ligne contenant exactement `toilet -f mono12 -F metal "Hello Hacker!"`
-- et la **supprime** du fichier `.bashrc` (`-i` modifie le fichier directement).
+> - cherche la ligne contenant exactement `toilet -f mono12 -F metal "Hello Hacker!"`
+> - et la **supprime** du fichier `.bashrc` (`-i` modifie le fichier directement).
 
-Ensuite, pour recharger ton .bashrc sans redémarrer :
+> Ensuite, pour recharger ton .bashrc sans redémarrer :
 
-```bash
-source ~/.bashrc
-```
+> ```bash
+> source ~/.bashrc
+> ```
 
 
 

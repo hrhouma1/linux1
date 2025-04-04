@@ -188,7 +188,12 @@ source ~/.bashrc
 
 # Étape 3 – Change la couleur du prompt
 
-*Avant tous, avant tous , avant tous, svp toujours vérifier votre utilisateur pcq ous aller agir sur lui et changer son bashrc
+
+
+🔴 **ATTENTION, ATTENTION, ATTENTION** 🔴  
+⚠️ **Avant tout**, **vérifiez toujours quel utilisateur est actif** ❗  
+👤 Vous allez modifier des fichiers critiques comme `.bashrc`, donc **assurez-vous de ne pas agir sur le mauvais utilisateur** ⚠️
+
 
 ## 3.1. Changer la couleur du prompt
 
@@ -255,7 +260,7 @@ export PS1='\u@\h:\w\$ '
 
 
 
-
+<br/>
 
 
 # Étape 4 – Crée un alias rigolo

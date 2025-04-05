@@ -27,10 +27,10 @@ su
 ## **2.2. Création des Utilisateurs**
 ```bash
 # Assurez-vous que les utilisateurs existent ou créez-les
-useradd -m albert
-useradd -m bernard
-useradd -m claude
-useradd -m danielle
+adduser albert
+adduser bernard
+adduser claude
+adduser danielle
 ```
 
 ## **2.3. Création du Dossier et des Fichiers**

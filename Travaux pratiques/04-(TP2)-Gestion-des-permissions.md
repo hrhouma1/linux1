@@ -102,6 +102,93 @@ su danielle -c 'echo "Danielle" >> /home/shared_data/file1.txt'
 
 
 
+
+
+
+
+
+
+
+## **2.8. Exercice - Ajouter des Permissions d’Exécution avec `chmod` (notation symbolique)
+
+
+Dans cet exercice, vous allez explorer les permissions d’exécution et la manière de les accorder aux utilisateurs, aux groupes et à tous les autres en utilisant la notation symbolique de `chmod`.
+
+### Objectifs pédagogiques
+
+- Comprendre la notation symbolique (`u`, `g`, `o`, `a`) avec `chmod`
+- Ajouter dynamiquement la permission d'exécution sans modifier les autres droits
+- Vérifier les effets avec `ls -l`
+
+
+
+### Étapes à suivre
+
+#### 2.8.1. Création d’un fichier script simple
+```bash
+touch mon_script.sh
+echo -e "#!/bin/bash\necho 'Script lancé !'" > mon_script.sh
+```
+
+#### 2.8.2. Affichage des permissions actuelles
+```bash
+ls -l mon_script.sh
+```
+Vérifiez que le fichier n’est pas exécutable.
+
+#### 2.8.3. Ajout de la permission d'exécution pour l’utilisateur (propriétaire)
+```bash
+chmod u+x mon_script.sh
+ls -l mon_script.sh
+```
+Ensuite, essayez d’exécuter le script avec :
+```bash
+./mon_script.sh
+```
+
+#### 2.8.4. Ajout de la permission d'exécution pour le groupe
+```bash
+chmod g+x mon_script.sh
+ls -l mon_script.sh
+```
+
+#### 2.8.5. Ajout de la permission d'exécution pour tous les utilisateurs (a = all)
+```bash
+chmod a+x mon_script.sh
+ls -l mon_script.sh
+```
+
+#### 2.8.6. Suppression de toutes les permissions d’exécution
+```bash
+chmod a-x mon_script.sh
+ls -l mon_script.sh
+```
+
+
+
+##### 2.8.7 Résumé des commandes utilisées
+
+| Commande               | Action                                                       |
+|------------------------|--------------------------------------------------------------|
+| `chmod u+x fichier`    | Ajoute la permission d'exécution pour l'utilisateur          |
+| `chmod g+x fichier`    | Ajoute la permission d'exécution pour le groupe              |
+| `chmod o+x fichier`    | Ajoute la permission d'exécution pour les autres utilisateurs |
+| `chmod a+x fichier`    | Ajoute la permission d'exécution pour tout le monde          |
+| `chmod a-x fichier`    | Retire la permission d'exécution pour tout le monde          |
+
+
+
+#### 2.8.8. Questions de réflexion
+
+1. Pourquoi utilise-t-on parfois `u+x` au lieu de `chmod 744` ?
+2. Est-il possible d'ajouter une permission sans toucher aux autres ? Expliquez.
+3. Quelle est la différence entre `chmod a+x` et `chmod 755` ?
+
+
+
+
+
+
 ---
 # 3 - Annexe 01 - useradd vs adduser 
 ---

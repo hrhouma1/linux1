@@ -365,7 +365,10 @@ sudo ls /root
 💡 Résultat attendu :  
 > Le droit sudo est désormais **permanent** car hérité via le groupe.
 
-
+Test :
+```bash
+groups testsudo
+```
 
 ### 7. Comparer `sudo`, `sudo -s`, `sudo -i`
 

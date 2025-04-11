@@ -105,6 +105,8 @@ Ainsi, même dans un shell de login, `.bashrc` sera exécuté également.
 
 
 
+<br/>
+<br/>
 
 # Partie 2
 

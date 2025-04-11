@@ -9,13 +9,13 @@
 Une **variable** est un conteneur qui permet de stocker une **valeur**.  
 Sous Linux (et en shell Bash), elle peut contenir du texte, un nombre ou même le résultat d’une commande.
 
-### 🔹 Syntaxe :
+### Syntaxe :
 
 ```bash
 nom_variable=valeur
 ```
 
-> ⚠️ **Aucun espace autour du signe `=` !**
+>  **Aucun espace autour du signe `=` !**
 
 ###  Exemple :
 
@@ -88,7 +88,7 @@ unset JAVA_HOME
 
 
 
-# 🧱 5. Variables utiles et classiques
+# 5. Variables utiles et classiques
 
 | Variable         | Rôle                                |
 |------------------|-------------------------------------|
@@ -101,7 +101,7 @@ unset JAVA_HOME
 
 
 
-# 📦 6. Exemple complet
+# 6. Exemple complet
 
 ```bash
 # Déclaration locale
@@ -124,4 +124,4 @@ unset prenom
 Les variables sont essentielles pour automatiser, configurer et personnaliser votre environnement Linux.  
 Les **variables d’environnement** permettent de propager des configurations à tous les processus de votre session.
 
-> 🔁 Conseil : utilisez `.bashrc` pour définir vos variables de façon permanente.
+> Conseil : utilisez `.bashrc` pour définir vos variables de façon permanente.

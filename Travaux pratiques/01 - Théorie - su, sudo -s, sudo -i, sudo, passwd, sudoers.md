@@ -134,6 +134,7 @@ groups etudiant
 
 
 <br/> 
+<br/> 
 
 # 11. TP à faire
 
@@ -279,7 +280,6 @@ testsudo ALL=(ALL) NOPASSWD:ALL
 ```
 
 
-
 > - Vous **verrez clairement** que la ligne est toujours présente après redémarrage.
 > - Et pourtant, si l'environnement ne conserve pas la permission, `sudo` **ne fonctionne plus**.
 > - Vous pouvez **facilement réactiver ou désactiver** le bloc en le commentant avec `#`.
@@ -343,7 +343,8 @@ Cela montre que :
 
 
 
-
+<br/>
+<br/>
 
 
 ### 6. Ajout permanent via le groupe `sudo`

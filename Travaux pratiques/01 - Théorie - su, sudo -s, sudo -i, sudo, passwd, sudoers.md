@@ -265,31 +265,18 @@ testsudo ALL=(ALL) NOPASSWD:ALL
 
 > 3. Ajoutez un **bloc temporaire** comme ceci :
 
->   ```bash
->   ##############################
->   # --- Bloc temporaire SUDO pour test --- #
->   ##############################
+```bash
+# User privilege specification
+root    ALL=(ALL:ALL) ALL
 
->   testsudo ALL=(ALL) NOPASSWD:ALL
-
->   ##############################
->   # --- Fin du bloc temporaire --- #
->   ##############################
->   ```
-
-> **Exemple complet dans le fichier :**
-> ```bash
-> # User privilege specification
-> root    ALL=(ALL:ALL) ALL
-
-> ##############################
-> # --- Bloc temporaire SUDO pour test --- #
-> ##############################
-> testsudo ALL=(ALL) NOPASSWD:ALL
-> ##############################
-> # --- Fin du bloc temporaire --- #
-> ##############################
-> ```
+##############################
+# --- Bloc temporaire SUDO pour test --- #
+##############################
+testsudo ALL=(ALL) NOPASSWD:ALL
+##############################
+# --- Fin du bloc temporaire --- #
+##############################
+```
 
 
 

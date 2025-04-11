@@ -1,6 +1,6 @@
 
 ---
-# **1. Introduction à la Gestion des Permissions**  
+# **1. Rappel à la Gestion des Permissions**  
 ---
 
 La gestion des permissions est un aspect essentiel de l'administration des systèmes Linux. Elle permet de contrôler qui peut accéder, modifier ou exécuter des fichiers et des répertoires. Une mauvaise configuration des permissions peut entraîner des failles de sécurité majeures, compromettant ainsi la confidentialité, l'intégrité et la disponibilité des données.

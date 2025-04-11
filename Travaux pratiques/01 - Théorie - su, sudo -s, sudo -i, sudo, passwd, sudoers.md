@@ -148,6 +148,124 @@ groups etudiant
 9. Incluez des captures d’écran dans votre rapport final.
 
 
+# Correction du TP
+
+
+### 11.1. Créer un utilisateur nommé `testsudo`
+```bash
+sudo adduser testsudo
+```
+
+### 11.2. Définir un mot de passe pour `testsudo`
+```bash
+sudo passwd testsudo
+```
+
+### 11.3. Tester une commande interdite par défaut
+```bash
+su - testsudo
+ls /root
+```
+💡 Résultat attendu :  
+> Permission denied (tests le fait que `testsudo` n’a aucun droit sudo pour le moment).
+
+
+
+### 11.4. Ajout temporaire via `visudo`
+```bash
+sudo visudo
+```
+
+Ajouter cette ligne **temporairement** :
+```bash
+testsudo ALL=(ALL) NOPASSWD:ALL
+```
+
+**Test immédiat :**
+```bash
+su - testsudo
+sudo ls /root
+```
+
+💡 Résultat attendu :  
+> `ls /root` fonctionne (accès root via `sudo` temporaire car injecté manuellement).
+
+
+
+### 5. Supprimer l’entrée manuelle de `sudoers`
+```bash
+sudo visudo
+```
+
+Supprimez la ligne :
+```bash
+testsudo ALL=(ALL) NOPASSWD:ALL
+```
+
+⛔️ Retestez :
+```bash
+su - testsudo
+sudo ls /root
+```
+
+💡 Résultat attendu :  
+> `sudo` ne fonctionne plus : preuve que **l’entrée via `visudo` était temporaire et volontaire**.
+
+
+
+### 6. Ajout permanent via le groupe `sudo`
+```bash
+sudo usermod -aG sudo testsudo
+```
+
+Déconnectez / reconnectez `testsudo` ou :
+```bash
+su - testsudo
+```
+
+Test :
+```bash
+sudo ls /root
+```
+
+💡 Résultat attendu :  
+> Le droit sudo est désormais **permanent** car hérité via le groupe.
+
+
+
+### 7. Comparer `sudo`, `sudo -s`, `sudo -i`
+
+Utilisez ces commandes sous `testsudo` après ajout au groupe `sudo` :
+
+| Commande         | Description                                      | Prompt shell | Variables | Exemple de commande |
+|------------------|--------------------------------------------------|--------------|-----------|----------------------|
+| `sudo ls /root`  | Exécute une seule commande en root               | Non          | Inchangeées | Affiche `/root`     |
+| `sudo -s`        | Lance un shell root avec **les variables de l’utilisateur** | Oui (root#) | utilisateur | `echo $HOME` → `/home/testsudo` |
+| `sudo -i`        | Lance un shell root avec **environnement root**  | Oui (root#) | root       | `echo $HOME` → `/root`          |
+
+**Captures à inclure dans le rapport** :
+- Avant tout ajout → `sudo` échoue
+- Après `visudo` → `sudo` fonctionne
+- Après suppression `visudo` → `sudo` échoue de nouveau
+- Après ajout au groupe sudo → `sudo` fonctionne à nouveau
+- Comparatif `sudo`, `sudo -s`, `sudo -i`
+
+
+
+## Tableau comparatif final (à inclure dans rapport)
+
+| Test effectué                            | Résultat attendu                     | Résultat observé       |
+|------------------------------------------|--------------------------------------|-------------------------|
+| `su - testsudo` + `sudo ls /root` (avant) | Permission refusée                   | ✅                      |
+| Ajout via `visudo`                        | Accès temporaire à sudo              | ✅                      |
+| Suppression de l'entrée `visudo`          | Plus d'accès sudo                    | ✅                      |
+| Ajout au groupe `sudo`                    | Accès permanent                      | ✅                      |
+| `sudo`                                    | Exécute une commande                 | ✅                      |
+| `sudo -s`                                 | Shell root, env utilisateur          | ✅                      |
+| `sudo -i`                                 | Shell root, env root                 | ✅                      |
+
+
+
 
 # 12. Pour aller plus loin
 
@@ -241,4 +359,5 @@ sudo -i -- ls /root
 
 
 >  **Conseil** : Pour expérimenter, créez deux scripts dans `/root/` et `/home/etudiant/`, puis observez lequel est chargé avec `sudo -s` vs `sudo -i`.
+
 

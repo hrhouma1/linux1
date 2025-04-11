@@ -140,7 +140,235 @@ source ~/.bashrc
 
 <br/>
 
-# **Tableau récapitulatif des commandes à retenir**
+
+
+# Exercice 8 - QCM
+
+
+## **QCM 1 : Déclaration de variables**
+
+**Question** :  
+Laquelle des instructions suivantes permet de **déclarer correctement** une variable locale appelée `ville` avec la valeur `Paris` ?
+
+a) `ville = Paris`  
+b) `ville=Paris`  
+c) `export ville Paris`  
+d) `set ville=Paris`
+
+**Bonne réponse** : **b**
+
+### Justification :  
+En Bash, on déclare une variable locale avec **`nom=valeur`** sans **aucun espace** autour du `=`. Les espaces sont interdits.
+
+### Démonstration :
+
+```bash
+ville = Paris     # Donne une erreur
+ville=Paris       # Correct
+echo $ville       # Affiche : Paris
+```
+
+
+
+## **QCM 2 : Syntaxe interdite**
+
+**Question** :  
+Pourquoi l’instruction `prenom = Alice` est incorrecte en Bash ?
+
+a) Il manque le mot-clé `var`  
+b) Le nom de la variable doit être en majuscule  
+c) Il y a un espace autour du `=`  
+d) Les variables ne peuvent pas contenir de chaînes de caractères
+
+**Bonne réponse** : **c**
+
+### Justification :  
+Un espace autour du `=` invalide l’affectation, car Bash interprète `prenom` comme une commande, et `=` comme un argument.
+
+### Démonstration :
+
+```bash
+prenom = Alice    # Bash : commande inconnue « prenom »
+prenom=Alice      # Fonctionne
+echo $prenom      # Affiche : Alice
+```
+
+
+
+## **QCM 3 : Visibilité des variables**
+
+**Question** :  
+Après avoir défini une variable avec `prenom=Marie`, que se passe-t-il si on ouvre un **nouveau shell** avec `bash` ?
+
+a) La variable est automatiquement transmise au nouveau shell  
+b) La variable est visible uniquement si elle est exportée  
+c) Toutes les variables sont réinitialisées par défaut  
+d) Le nouveau shell demande la redéfinition manuelle
+
+**Bonne réponse** : **b**
+
+### Justification :  
+Une variable locale est visible uniquement dans le shell courant. Pour qu’elle soit **héritée par les shells enfants**, elle doit être exportée.
+
+### Démonstration :
+
+```bash
+prenom=Marie
+bash
+echo $prenom       # Rien ne s’affiche
+
+exit
+export prenom=Marie
+bash
+echo $prenom       # Affiche : Marie
+```
+
+
+
+## **QCM 4 : Rendre une variable globale**
+
+**Question** :  
+Quelle commande permet de rendre la variable `universite` visible dans tous les processus enfants du shell courant ?
+
+a) `set universite=UdeM`  
+b) `declare universite=UdeM`  
+c) `universite=UdeM export`  
+d) `export universite=UdeM`
+
+**Bonne réponse** : **d**
+
+### Justification :  
+Seule la commande `export` permet de rendre une variable accessible dans les **processus enfants**. L’ordre est correct : `export NOM=valeur`.
+
+
+
+## **QCM 5 : Suppression d'une variable**
+
+**Question** :  
+Quelle commande permet de **supprimer une variable** du shell courant ?
+
+a) `delete variable`  
+b) `export variable=undefined`  
+c) `unset variable`  
+d) `remove variable`
+
+**Bonne réponse** : **c**
+
+### Justification :  
+La commande `unset` est la commande standard pour supprimer une variable, qu'elle soit locale ou exportée.
+
+### Démonstration :
+
+```bash
+prenom=Sara
+unset prenom
+echo $prenom        # Rien ne s'affiche
+```
+
+
+
+## **QCM 6 : Exploration de l’environnement**
+
+**Question** :  
+La commande `env | grep LANG` permet de :
+
+a) Supprimer les variables contenant le mot `LANG`  
+b) Rechercher et afficher les variables contenant le mot `LANG`  
+c) Modifier les variables de langue  
+d) Lister les variables locales
+
+**Bonne réponse** : **b**
+
+### Justification :  
+La commande `env` liste toutes les variables d’environnement. En la combinant avec `grep`, on peut filtrer l’affichage selon un mot-clé.
+
+### Démonstration :
+
+```bash
+env | grep LANG
+# Exemple de sortie : LANG=fr_CA.UTF-8
+```
+
+
+
+## **QCM 7 : Commandes de visualisation**
+
+**Question** :  
+Quelle commande permet de **voir toutes les variables d’environnement** uniquement ?
+
+a) `printenv`  
+b) `set`  
+c) `alias`  
+d) `ls /etc/environment`
+
+**Bonne réponse** : **a**
+
+### Justification :  
+`printenv` affiche uniquement les variables d’environnement.  
+`set` affiche toutes les variables locales **et** d’environnement **et** fonctions définies.
+
+
+
+## **QCM 8 : Variable persistante**
+
+**Question** :  
+Pour rendre une variable d’environnement **permanente**, que faut-il faire ?
+
+a) L’ajouter dans un script Bash exécuté à chaque démarrage  
+b) L’écrire dans `/etc/shadow`  
+c) Utiliser `unset` au démarrage  
+d) Exécuter `bash` avec l’option `--keep-vars`
+
+**Bonne réponse** : **a**
+
+### Justification :  
+Les variables d’environnement permanentes doivent être ajoutées dans un fichier lu automatiquement à l’ouverture d’un terminal : `.bashrc`, `.profile`, ou `/etc/environment`.
+
+
+
+## **QCM 9 : Variable système `PATH`**
+
+**Question** :  
+Quel est le rôle de la variable `PATH` dans un système Linux ?
+
+a) Elle indique le répertoire personnel de l’utilisateur  
+b) Elle contient les options du terminal courant  
+c) Elle définit les chemins où chercher les exécutables  
+d) Elle stocke les préférences linguistiques
+
+**Bonne réponse** : **c**
+
+### Justification :  
+`PATH` est une variable cruciale : elle indique où chercher les programmes lorsqu’une commande est tapée dans le terminal.
+
+### Démonstration :
+
+```bash
+echo $PATH
+# Affiche une liste de chemins séparés par des `:`
+```
+
+
+
+## **QCM 10 : Effet du `export`**
+
+**Question** :  
+Après avoir écrit `export VAR=test`, que se passe-t-il ?
+
+a) La variable est supprimée  
+b) La variable est uniquement accessible dans le shell actuel  
+c) La variable est accessible dans les shells enfants  
+d) La variable est enregistrée définitivement
+
+**Bonne réponse** : **c**
+
+### Justification :  
+`export` rend une variable visible par tous les processus enfants du shell actuel, mais **pas de manière permanente**. Pour la persistance, il faut modifier `.bashrc`.
+
+
+
+
+# 9 - **Tableau récapitulatif des commandes à retenir**
 
 | Action                                 | Commande                              |
 |----------------------------------------|----------------------------------------|

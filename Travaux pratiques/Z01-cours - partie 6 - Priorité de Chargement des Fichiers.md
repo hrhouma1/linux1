@@ -4,22 +4,126 @@
 <br/>
 
 
-# 1 - Objectif
+# Partie 1
+
+
+
+Lorsque vous utilisez un système Linux, vous interagissez souvent avec un terminal pour exécuter des commandes. Ce terminal est piloté par un **interpréteur de commandes**, souvent Bash (`/bin/bash`). À chaque ouverture de terminal ou connexion à la machine, **Linux charge automatiquement certains fichiers de configuration** pour préparer votre environnement de travail.
+
+Parmi les fichiers les plus importants à connaître se trouvent :
+
+- `.bash_profile`
+- `.profile`
+- `.bashrc`
+
+Ces fichiers permettent, par exemple, de :
+
+- Définir des **variables d’environnement**
+- Ajouter des **alias**
+- Modifier l’**invite de commande (prompt)**
+- Exécuter des scripts à l’ouverture d’un terminal
+
+Mais **tous ne sont pas lus de la même façon**, et surtout **pas dans le même ordre**. Comprendre **quand et lequel de ces fichiers est exécuté** est crucial pour diagnostiquer des comportements inattendus ou configurer correctement son environnement.
+
+
+
+## 1.1. Pourquoi est-ce important ?
+
+Imaginons que vous ajoutiez un alias ou une variable dans `.profile`, mais que rien ne se passe lors de votre connexion. Ou encore, vous modifiez `.bashrc`, mais cela ne change rien quand vous vous connectez en SSH.
+
+Sans comprendre la **logique de chargement** de ces fichiers, il est difficile de configurer un environnement cohérent.
+
+
+
+## 1.2. Objectif de ce pragraphe
+
+Ce cours vous guide pas à pas pour :
+
+- Comprendre **la différence entre un shell de login et un shell non-login**
+- Savoir **quel fichier est lu dans quel contexte**
+- Apprendre à **tester et vérifier le comportement** de votre configuration
+- Appliquer les **bonnes pratiques** pour un environnement propre et cohérent
+
+
+
+💡 **À la fin de cette leçon, vous saurez exactement :**
+
+- Quand `.bashrc`, `.bash_profile` ou `.profile` est utilisé
+- Pourquoi certains fichiers semblent "ignorés"
+- Comment organiser vos fichiers pour qu'ils soient toujours pris en compte
+
+
+
+## 1.2. Objectif de ce pragraphe
+
+Sous Linux, à chaque ouverture de terminal ou connexion à une session, le système lit automatiquement certains fichiers de configuration afin de :
+
+- Préparer votre environnement de travail
+- Charger des variables (`PATH`, `EDITOR`, etc.)
+- Exécuter des scripts ou définir des alias
+- Modifier le comportement du shell (`PS1`, couleurs, etc.)
+
+Mais **tous les fichiers ne sont pas toujours lus**, et **cela dépend du type de shell** que vous utilisez.
+
+
+
+##  1.3. Quand chaque fichier est-il chargé ?
+
+Voici un tableau synthétique :
+
+| Action de l'utilisateur                  | Type de shell      | Fichiers lus                                 | Fichiers ignorés                            |
+|------------------------------------------|---------------------|-----------------------------------------------|---------------------------------------------|
+| Ouverture d’un terminal (`Ctrl+Alt+T`)   | Non-login shell     | ✅ `.bashrc`                                  | ❌ `.bash_profile`, `.profile`               |
+| Connexion SSH (`ssh user@host`)          | Login shell         | ✅ `.bash_profile` → ou `.profile` si l'autre n'existe pas | ❌ `.bashrc`                                 |
+| `sudo -s`                                | Non-login shell     | ✅ `.bashrc` (de l’utilisateur courant)        | ❌ `.bash_profile`, `.profile`               |
+| `sudo -i`                                | Login shell (root)  | ✅ `/root/.bash_profile`                      | ❌ `/root/.profile`, `/root/.bashrc` (si non inclus manuellement) |
+| `su -` ou `su -l`                        | Login shell         | ✅ `.bash_profile` → ou `.profile`            | ❌ `.bashrc`                                 |
+| `bash` lancé manuellement                | Non-login shell     | ✅ `.bashrc`                                  | ❌ `.bash_profile`, `.profile`               |
+
+
+
+##  1.4. Résumé simple
+
+- **.bash_profile** → Chargé **seulement dans un shell de login**
+- **.profile** → Lu **si .bash_profile est absent**
+- **.bashrc** → Chargé **dans tous les shells interactifs non-login** (ex: terminal graphique)
+
+
+
+##  1.5. Bonnes pratiques
+
+Pour garantir un comportement cohérent dans tous les cas, on recommande **d’inclure `.bashrc` dans `.bash_profile`**, comme ceci :
+
+```bash
+# Dans ~/.bash_profile
+if [ -f ~/.bashrc ]; then
+  . ~/.bashrc
+fi
+```
+
+Ainsi, même dans un shell de login, `.bashrc` sera exécuté également.
+
+
+
+
+# Partie 2
+
+## 2.1 - Objectif
 
 Comprendre **l'ordre dans lequel Linux charge les fichiers de configuration shell** (`.bash_profile`, `.profile`, `.bashrc`) pour un utilisateur donné, et savoir **qui est prioritaire sur qui**.
 
 
 
-## 1.1. Règle d'or : **.bash_profile a priorité sur .profile**
+## 2.1. Règle d'or : **.bash_profile a priorité sur .profile**
 
 > 🔁 Autrement dit :  
 > **Si `.bash_profile` existe, `.profile` est ignoré**.
 
 
 
-## 1.2. Priorité de chargement selon le type de shell
+## 2.2. Priorité de chargement selon le type de shell
 
-### 🟡 1.2.1. Shell de **login** (connexion, `ssh`, `su -`, `sudo -i`) :
+### 🟡 2.2.1. Shell de **login** (connexion, `ssh`, `su -`, `sudo -i`) :
 
 Linux cherche dans cet ordre :
 
@@ -31,7 +135,7 @@ Linux cherche dans cet ordre :
 
 
 
-### 🟢 1.2.2. Shell **interactif non-login** (ex: terminal GNOME, `bash`) :
+### 🟢 2.2.2. Shell **interactif non-login** (ex: terminal GNOME, `bash`) :
 
 Linux exécute seulement :
 
@@ -43,15 +147,15 @@ Linux exécute seulement :
 <br/>
 <br/>
 
-# 2. Exemples de vraie vie
+# 2.3. Exemples de vraie vie
 
-### 2.1. Exemple 1 : `.bash_profile` existe
+### 2.3.1. Exemple 1 : `.bash_profile` existe
 
 - Tu ouvres une session SSH → `.bash_profile` est lu
 - `.profile` est **ignoré**
 - Tu ouvres un terminal → `.bashrc` est lu
 
-### 2.2. Exemple 2 : `.bash_profile` n’existe PAS
+### 2.3.2. Exemple 2 : `.bash_profile` n’existe PAS
 
 - Tu ouvres une session SSH → `.profile` est lu
 - Tu ouvres un terminal → `.bashrc` est lu
@@ -60,7 +164,7 @@ Linux exécute seulement :
 <br/>
 <br/>
 
-# 3. Résumé des priorités
+# 2.3.3. Résumé des priorités
 
 | Type de shell               | Fichier chargé en priorité                | Fichier ignoré                   |
 |-----------------------------|-------------------------------------------|----------------------------------|
@@ -71,7 +175,7 @@ Linux exécute seulement :
 <br/>
 <br/>
 
-# 4. Astuce recommandée pour tous
+# 2.4. Astuce recommandée pour tous
 
 Dans `.bash_profile`, ajoute toujours :
 
@@ -89,7 +193,7 @@ fi
 <br/>
 <br/>
 
-# 5. Expérience rapide à faire
+# 2.5. Expérience rapide à faire
 
 ```bash
 # Créez ou modifiez vos fichiers
@@ -112,7 +216,7 @@ echo "LU : .bashrc" >> ~/.bashrc
 <br/>
 <br/>
 
-# 6. Conclusion 
+# 2.6. Conclusion 
 
 - `.bash_profile` bloque `.profile`
 - `.bashrc` est toujours indépendant, il ne se déclenche que dans un terminal

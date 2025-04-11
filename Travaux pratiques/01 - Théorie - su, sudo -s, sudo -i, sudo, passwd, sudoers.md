@@ -471,6 +471,69 @@ sudo -l -U haythem
 Cela affichera la liste exacte des commandes que cet utilisateur est autorisé à exécuter avec `sudo`.
 
 
+> Remarque
+
+La commande :
+
+```bash
+sudo -l -U haythem
+```
+
+signifie :
+
+### **But :**  
+Afficher **les privilèges sudo** accordés à l’utilisateur `haythem`.
+
+
+
+### **Détail des options :**
+
+- `sudo` : commande permettant d'exécuter des actions en tant qu'administrateur (superutilisateur).
+- `-l` (ou `--list`) : liste les **commandes autorisées** que l’utilisateur peut exécuter avec `sudo`.
+- `-U haythem` : spécifie que l’on souhaite consulter les permissions pour l’utilisateur `haythem`.
+
+
+
+### **Exemple de sortie possible :**
+
+```bash
+Matching Defaults entries for haythem on this host:
+    env_reset, mail_badpass,
+    secure_path=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+User haythem may run the following commands on this host:
+    (ALL : ALL) ALL
+```
+
+Cela signifie que l'utilisateur `haythem` peut exécuter **toutes les commandes en tant que n'importe quel utilisateur ou groupe** avec `sudo`.
+
+
+
+### **Autres cas possibles :**
+
+1. **Utilisateur sans privilèges sudo :**
+```bash
+User haythem is not allowed to run sudo on this host.
+```
+
+2. **Privilèges limités :**
+```bash
+User haythem may run the following commands on this host:
+    (ALL) /usr/bin/systemctl restart apache2
+```
+Cela signifie que `haythem` **peut uniquement** redémarrer le service `apache2` avec `sudo`.
+
+
+
+### **Utilité:**
+- Vérifier les droits `sudo` de tout utilisateur (pas seulement l’utilisateur courant).
+- Faire un audit de sécurité.
+- Diagnostiquer les problèmes de permission.
+
+
+
+
+<br/>
 
 ## 12.4. Lister tous les utilisateurs du système, puis vérifier ceux appartenant au groupe `sudo`
 

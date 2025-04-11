@@ -136,7 +136,7 @@ groups etudiant
 <br/> 
 <br/> 
 
-# 11. TP à faire
+# 11. TP 1 à faire
 
 1. Créez un utilisateur nommé `testsudo`.
 2. Définissez un mot de passe pour ce nouvel utilisateur.
@@ -404,7 +404,138 @@ Utilisez ces commandes sous `testsudo` après ajout au groupe `sudo` :
 
 
 
-# 12. Pour aller plus loin
+
+
+
+<br/> 
+<br/> 
+
+# 12. TP 2 à faire
+
+
+**Énoncé :**  
+Listez tous les utilisateurs qui disposent de droits `sudo` sur un système Ubuntu 22.04. Utilisez au moins deux méthodes différentes pour identifier ces utilisateurs (ex. groupe `sudo`, fichiers `sudoers`, etc.).
+
+
+## 12.1. Lister les utilisateurs appartenant au groupe `sudo`
+
+C’est la méthode standard. Par défaut, les utilisateurs sudo sont membres du groupe `sudo`.
+
+```bash
+getent group sudo
+```
+
+Cela retourne une ligne de ce type :
+
+```
+sudo:x:27:haythem,alice,bob
+```
+
+Dans cet exemple, les utilisateurs `haythem`, `alice` et `bob` ont accès à `sudo`.
+
+
+
+## 12.2. Lister tous les utilisateurs avec des permissions sudo explicites
+
+Utilisez la commande suivante pour analyser les règles dans le fichier principal `/etc/sudoers` ainsi que dans les fichiers additionnels du répertoire `/etc/sudoers.d/` :
+
+```bash
+sudo grep -r '^%.*ALL' /etc/sudoers /etc/sudoers.d/
+```
+
+Exemple de sortie possible :
+
+```
+/etc/sudoers:%sudo   ALL=(ALL:ALL) ALL
+/etc/sudoers.d/admins:haythem ALL=(ALL) NOPASSWD:ALL
+```
+
+Cela signifie que le groupe `sudo` et l’utilisateur `haythem` ont des droits `sudo`.
+
+
+
+## 12.3. Vérifier si un utilisateur donné peut utiliser `sudo`
+
+Pour tester les droits `sudo` d’un utilisateur spécifique :
+
+```bash
+sudo -l -U nom_utilisateur
+```
+
+Exemple :
+
+```bash
+sudo -l -U haythem
+```
+
+Cela affichera la liste exacte des commandes que cet utilisateur est autorisé à exécuter avec `sudo`.
+
+
+
+## 12.4. Lister tous les utilisateurs du système, puis vérifier ceux appartenant au groupe `sudo`
+
+Liste de tous les utilisateurs :
+
+```bash
+cut -d: -f1 /etc/passwd
+```
+
+Puis, pour chaque utilisateur, vérifiez ses groupes :
+
+```bash
+groups nom_utilisateur
+```
+
+Exemple :
+
+```bash
+groups haythem
+```
+
+Retour :
+
+```
+haythem : haythem sudo
+```
+
+Cela indique que `haythem` fait partie du groupe `sudo`.
+
+
+
+## 12.5. Modifier le fichier `sudoers` de manière sécurisée
+
+Pour modifier les permissions sans risque d’erreur bloquante, utilisez toujours :
+
+```bash
+sudo visudo
+```
+
+Cette commande vérifie la syntaxe avant de sauvegarder, ce qui évite de rendre le système inaccessible en cas d’erreur.
+
+
+## Récapitulatif
+
+| Méthode                        | Commande principale                     | Objectif                                 |
+|-------------------------------|-----------------------------------------|------------------------------------------|
+| Groupe `sudo`                 | `getent group sudo`                     | Voir les utilisateurs membres             |
+| Fichier sudoers               | `grep -r '^%.*ALL' /etc/sudoers*`       | Voir les règles définies dans sudoers     |
+| Vérifier un utilisateur       | `sudo -l -U nom_utilisateur`            | Vérifier ses droits sudo                  |
+| Voir les groupes              | `groups nom_utilisateur`                | Vérifier s’il est dans le groupe `sudo`   |
+| Édition sécurisée             | `sudo visudo`                           | Modifier le fichier sudoers sans erreur   |
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 13. Pour aller plus loin
 
 - Consultez la documentation `man su`, `man sudo`, `man sudoers`.
 - Expérimentez la configuration de `sudo` dans des environnements isolés (ex: VM ou conteneurs).

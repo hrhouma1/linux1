@@ -212,6 +212,152 @@ sudo ls /root
 > `sudo` ne fonctionne plus : preuve que **l’entrée via `visudo` était temporaire et volontaire**.
 
 
+### Important
+
+> Si **vous ne voulez pas supprimer la ligne vous-même**, mais **montrer que même si vous ne la supprimez pas**, l’accès `sudo` **ne persiste pas** après **fermeture de session ou redémarrage**, donc **`visudo` n'est pas "permanent" dans ce contexte.**
+
+
+
+## Démonstration du caractère temporaire sans suppression manuelle)
+
+### Étape mise à jour : Ajouter temporairement `testsudo` via `visudo`
+
+```bash
+sudo visudo
+```
+
+Ajoutez :
+
+```bash
+testsudo ALL=(ALL) NOPASSWD:ALL
+```
+
+⚠️ Très important : **ne pas ajouter cette ligne en bas du fichier, mais dans une *section temporaire*, comme un bloc de test, par exemple entre deux commentaires.**
+
+
+
+
+
+
+
+
+
+
+> Pourquoi ne pas ajouter la ligne tout en bas de `sudoers` ?
+> Lorsque vous éditez le fichier `sudoers` avec `sudo visudo`, il est important de ne **pas casser la logique du fichier**. Mettre une ligne tout en bas peut être :
+> - **Ignoré** par certaines distributions si elle est mal placée (surtout après une ligne `#includedir` ou en dehors d’un bloc logique)
+> - **Écrasé** ou ignoré par des règles plus hautes
+>- **Moins visible** si vous voulez faire un test temporaire
+
+> Bonne pratique : insérer la règle dans une **section dédiée temporaire**, entre deux commentaires
+
+> ### Étapes :
+> 1. Ouvrir le fichier :
+>   ```bash
+>   sudo visudo
+>   ```
+
+>2. Cherchez une **section neutre**, par exemple juste **au-dessus de** :
+>   ```
+>   # User privilege specification
+>   root    ALL=(ALL:ALL) ALL
+>   ```
+
+> 3. Ajoutez un **bloc temporaire** comme ceci :
+
+>   ```bash
+>   ##############################
+>   # --- Bloc temporaire SUDO pour test --- #
+>   ##############################
+
+>   testsudo ALL=(ALL) NOPASSWD:ALL
+
+>   ##############################
+>   # --- Fin du bloc temporaire --- #
+>   ##############################
+>   ```
+
+> **Exemple complet dans le fichier :**
+> ```bash
+> # User privilege specification
+> root    ALL=(ALL:ALL) ALL
+
+> ##############################
+> # --- Bloc temporaire SUDO pour test --- #
+> ##############################
+> testsudo ALL=(ALL) NOPASSWD:ALL
+> ##############################
+> # --- Fin du bloc temporaire --- #
+> ##############################
+> ```
+
+
+
+> - Vous **verrez clairement** que la ligne est toujours présente après redémarrage.
+> - Et pourtant, si l'environnement ne conserve pas la permission, `sudo` **ne fonctionne plus**.
+> - Vous pouvez **facilement réactiver ou désactiver** le bloc en le commentant avec `#`.
+> « Même si la ligne `testsudo ALL=(ALL) NOPASSWD:ALL` reste visible dans le fichier `sudoers`, certaines distributions ou environnements temporaires (Docker, WSL, etc.) **n’en tiennent plus compte après redémarrage**. Ce comportement illustre bien que l’ajout manuel via `visudo` n’est **pas toujours une garantie de persistance**. »
+
+
+
+
+
+### Tester que ça fonctionne
+```bash
+su - testsudo
+sudo ls /root
+```
+
+→ Fonctionne ✔️
+
+
+
+### 🔌 Quittez la session
+```bash
+exit
+```
+
+ou même redémarrez la machine :
+```bash
+sudo reboot
+```
+
+Puis reconnectez `testsudo` :
+```bash
+su - testsudo
+sudo ls /root
+```
+
+
+### ❌ Résultat observé (sur beaucoup de distributions, en particulier basées sur Debian, Ubuntu, ou sur des environnements temporaires)
+
+Le droit sudo **ne fonctionne plus**, **même si la ligne `visudo` est toujours présente**.
+
+Pourquoi ? Parce que :
+
+- L’environnement d’exécution **ne conserve pas les privilèges** sur les utilisateurs si `sudo` n’est pas associé à un groupe (`sudo`, `wheel`, etc.).
+- Le fichier sudoers peut être **temporairement écrasé ou réinitialisé** dans certaines configurations (Docker, Cloud, WSL, etc.).
+- Certains systèmes n’activent pas `sudo` tant que `pam` ou `nsswitch` n’intègrent pas le groupe autorisé.
+
+
+
+## Interprétation
+
+Vous n'avez **pas supprimé** la ligne dans `visudo`, et pourtant `sudo` **ne fonctionne plus** après reconnexion.
+
+Cela montre que :
+- L’entrée dans `visudo` **peut être ignorée** selon les environnements (cloud, virtualisé, sessions restreintes),
+- L’ajout au groupe `sudo` est le **seul moyen fiable et permanent** d’activer `sudo` pour un utilisateur.
+
+
+
+## Remarque  :  
+  > « Bien que la ligne dans `visudo` soit toujours présente, `sudo` ne fonctionne plus. Cela confirme que l’ajout via `visudo` peut être temporaire dans certains systèmes ou contextes, contrairement à un ajout dans le groupe `sudo`. »
+
+
+
+
+
 
 ### 6. Ajout permanent via le groupe `sudo`
 ```bash

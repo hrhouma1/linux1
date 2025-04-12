@@ -613,3 +613,242 @@ echo $SHELL
 
 Cet exercice montre comment consulter l’état actuel de l’environnement du shell. Il permet de distinguer les **variables locales** des **variables d’environnement**, et de comprendre à quoi servent les variables système essentielles. Cela constitue une base importante pour l’écriture de scripts ou la configuration d’un environnement utilisateur.
 
+
+
+
+
+<br/>
+<br/>
+
+# Exercice 4 – Suppression d’une variable  
+**Objectif : Comprendre comment supprimer une variable avec `unset`.**
+
+
+
+### Étapes à suivre
+
+#### 1. Créer une variable locale appelée `testvar`
+
+Dans le terminal, tapez :
+
+```bash
+testvar=bonjour
+```
+
+#### 2. Vérifier que la variable contient bien une valeur
+
+```bash
+echo $testvar
+```
+
+Résultat attendu :
+
+```
+bonjour
+```
+
+#### 3. Supprimer la variable
+
+```bash
+unset testvar
+```
+
+#### 4. Vérifier que la variable a bien été supprimée
+
+```bash
+echo $testvar
+```
+
+Résultat :
+
+Il n’y aura **rien** d’affiché, car la variable n’existe plus.
+
+
+
+### Extension – Avec une variable exportée
+
+#### 1. Définir et exporter la variable
+
+```bash
+export testvar=bonjour
+```
+
+#### 2. Vérifier son contenu
+
+```bash
+echo $testvar
+```
+
+Résultat :
+
+```
+bonjour
+```
+
+#### 3. Supprimer la variable
+
+```bash
+unset testvar
+```
+
+#### 4. Vérifier si elle existe encore
+
+```bash
+echo $testvar
+```
+
+Résultat :  
+Aucune valeur affichée. Elle a bien été supprimée.
+
+
+
+### Conclusion
+
+- Une variable peut être supprimée avec `unset`, qu’elle soit **locale** ou **exportée**.
+- Une fois supprimée, elle **disparaît du shell courant**.
+
+
+
+## Exercice 5 – Tester la portée des variables dans un script  
+**Objectif : Vérifier quelles variables sont visibles dans un script Bash.**
+
+
+
+### Étapes pédagogiques complètes
+
+#### 1. Créer un script nommé `test_variable.sh`
+
+Dans votre terminal, tapez :
+
+```bash
+nano test_variable.sh
+```
+
+Collez ensuite ce contenu :
+
+```bash
+#!/bin/bash
+echo "Nom = $nom"
+echo "Ville = $ville"
+```
+
+Enregistrez avec :  
+- `Ctrl + O` puis `Entrée` pour sauvegarder
+- `Ctrl + X` pour quitter
+
+
+
+#### 2. Vérifier les droits du fichier avec `ls -la`
+
+```bash
+ls -la test_variable.sh
+```
+
+Regardez si le fichier a un `x` (exécution) dans les permissions. Exemple :
+
+```
+-rw-r--r-- 1 utilisateur utilisateur  45 avril 11 20:00 test_variable.sh
+```
+
+Ici, le fichier **n’est pas exécutable**. Il faut ajouter les droits.
+
+
+
+#### 3. Donner les droits d’exécution
+
+Méthode 1 – Avec `chmod +x` :
+
+```bash
+chmod +x test_variable.sh
+```
+
+Méthode 2 – Avec des droits numériques :
+
+```bash
+chmod 744 test_variable.sh
+```
+
+Cela donne :
+
+- 7 = lecture + écriture + exécution pour le propriétaire
+- 4 = lecture seule pour le groupe
+- 4 = lecture seule pour les autres
+
+
+
+#### 4. Définir les variables dans le terminal
+
+```bash
+nom="Alice"
+ville="Paris"
+```
+
+Seules ces deux lignes **ne suffisent pas** pour que les variables soient visibles dans un script.
+
+
+
+#### 5. Exporter uniquement `ville`
+
+```bash
+export ville
+```
+
+---
+
+#### 6. Exécuter le script
+
+```bash
+./test_variable.sh
+```
+
+
+
+### Résultat attendu :
+
+```
+Nom =
+Ville = Paris
+```
+
+
+
+## Questions / Réponses
+
+### 1. Quelle variable est visible dans le script ?
+
+Réponse : Seule la variable `ville` est visible, car elle a été **exportée**.
+
+### 2. Pourquoi `nom` n’est-elle pas affichée ?
+
+Réponse : La variable `nom` est **locale** au terminal, elle n’a pas été **exportée**. Un script Bash lancé avec `./` ou `bash` est un **sous-processus**, il ne connaît que les variables **exportées**.
+
+### 3. Comment rendre `nom` visible dans le script ?
+
+Réponse : Il faut l’exporter avant d’exécuter le script :
+
+```bash
+export nom
+```
+
+Puis relancer le script :
+
+```bash
+./test_variable.sh
+```
+
+Résultat :
+
+```
+Nom = Alice
+Ville = Paris
+```
+
+
+
+## Conclusion
+
+- Un script Bash **ne peut voir que les variables d’environnement** (exportées).
+- Les **variables locales** au terminal doivent être **exportées** pour être visibles.
+- Pour **exécuter un script**, il faut s’assurer qu’il a les **droits d’exécution** (`chmod +x` ou `chmod 744`).
+- On peut toujours vérifier les droits avec `ls -la`.
+

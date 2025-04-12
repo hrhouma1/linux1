@@ -521,5 +521,95 @@ La commande `export` joue un rôle fondamental pour rendre une variable **persis
 
 
 <br/>
+<br/>
 
+
+
+
+
+# Exercice 3 : Exploration des variables existantes  
+
+**Objectif : Observer les variables d’environnement déjà présentes dans le système.**
+
+
+
+### Étapes de réalisation
+
+#### 1. Afficher toutes les variables d’environnement avec la commande `env`
+
+```bash
+env
+```
+
+> Cette commande affiche toutes les **variables d’environnement** actuellement exportées dans le shell.
+
+
+
+#### 2. Filtrer les variables liées à la langue avec la commande :
+
+```bash
+env | grep LANG
+```
+
+**Exemple de sortie possible :**
+
+```
+LANG=fr_CA.UTF-8
+```
+
+> La variable `LANG` indique la **langue** et la **configuration régionale** (locale) utilisée par le système.
+
+
+
+#### 3. Afficher les valeurs des variables spécifiques suivantes
+
+```bash
+echo $HOME
+echo $USER
+echo $PWD
+echo $SHELL
+```
+
+**Exemples de résultats :**
+
+- `$HOME` → `/home/utilisateur`  
+- `$USER` → `utilisateur`  
+- `$PWD` → `/home/utilisateur` (répertoire courant)  
+- `$SHELL` → `/bin/bash` (ou autre selon le shell utilisé)
+
+
+
+## Réponses aux questions
+
+### 1. Quelle est la différence entre `env` et `set` ?
+
+**Réponse :**
+
+- `env` affiche **uniquement les variables d’environnement**, c’est-à-dire celles qui sont exportées et disponibles pour les sous-processus.  
+- `set` affiche **toutes les variables** du shell, y compris :
+  - les **variables locales**
+  - les **fonctions définies**
+  - les **variables d’environnement**
+  - les **paramètres spéciaux**
+
+> En résumé :  
+> `env` → variables d’environnement exportées  
+> `set` → tout le contenu du shell (environnement + variables locales + fonctions)
+
+
+
+### 2. À quoi servent les variables affichées ?
+
+**Réponse :**
+
+- **`HOME`** : répertoire personnel de l’utilisateur. C’est là que le shell se place par défaut au démarrage.
+- **`USER`** : identifiant de l’utilisateur en cours. Utile dans les scripts et les authentifications.
+- **`PWD`** : répertoire courant (Print Working Directory). Il reflète l’endroit où l’on se trouve dans l’arborescence du système de fichiers.
+- **`SHELL`** : chemin absolu vers l’interpréteur de commandes utilisé (par exemple `/bin/bash`). Cela permet de savoir quel shell est utilisé.
+
+
+
+## Conclusion
+
+Cet exercice montre comment consulter l’état actuel de l’environnement du shell. Il permet de distinguer les **variables locales** des **variables d’environnement**, et de comprendre à quoi servent les variables système essentielles. Cela constitue une base importante pour l’écriture de scripts ou la configuration d’un environnement utilisateur.
 

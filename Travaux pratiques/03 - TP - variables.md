@@ -447,7 +447,79 @@ Montreal
 
 
 
+<br/>
 
-# 12 - Correction Exercice 2
+# 12 - Correction Exercice 2 - De la variable locale à la variable d’environnement  
+
+**Objectif : Comprendre le rôle de la commande `export`.**
+
+
+
+### Étapes de réalisation
+
+#### 1. Création d’une variable appelée `universite` avec la valeur `UdeM`
+
+```bash
+universite=UdeM
+```
+
+#### 2. Transformation de cette variable en variable d’environnement (globale)
+
+```bash
+export universite
+```
+
+> À noter : on peut également faire directement :  
+> `export universite=UdeM`
+
+#### 3. Lancement d’un nouveau shell avec la commande `bash`
+
+```bash
+bash
+```
+
+#### 4. Affichage de la variable dans le nouveau shell
+
+```bash
+echo $universite
+```
+
+**Résultat attendu :**
+
+```
+UdeM
+```
+
+
+
+## Réponses aux questions
+
+### 1. Quelle est la différence entre une variable locale et une variable d’environnement ?
+
+**Réponse :**  
+Une **variable locale** est visible uniquement dans le shell dans lequel elle a été déclarée. Elle n’est pas transmise aux processus enfants.  
+Une **variable d’environnement** (ou variable exportée) est une variable qui est transmise aux processus enfants du shell (par exemple, un sous-shell lancé avec `bash`).
+
+Autrement dit :
+
+- **Variable locale** : valable uniquement dans le shell courant.
+- **Variable d’environnement** : valable dans le shell courant **et** tous les sous-shells lancés à partir de celui-ci.
+
+
+
+### 2. Pourquoi `export` est-il nécessaire ici ?
+
+**Réponse :**  
+La commande `export` est nécessaire pour transformer une variable locale en **variable d’environnement**, c’est-à-dire une variable qui sera **héritée par tous les sous-processus** (sous-shells, scripts, etc.).
+
+Sans `export`, la variable ne serait visible que dans le shell courant et disparaîtrait dès qu’un nouveau shell est ouvert.
+
+
+## Conclusion
+
+La commande `export` joue un rôle fondamental pour rendre une variable **persistante dans les sous-shells**. Elle permet de passer d’une portée **locale** à une portée **globale** dans le contexte de l’environnement du shell. Cela est essentiel pour les scripts, les configurations système et le passage de paramètres à des programmes.
+
+
+<br/>
 
 

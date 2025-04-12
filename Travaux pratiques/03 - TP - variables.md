@@ -852,3 +852,178 @@ Ville = Paris
 - Pour **exécuter un script**, il faut s’assurer qu’il a les **droits d’exécution** (`chmod +x` ou `chmod 744`).
 - On peut toujours vérifier les droits avec `ls -la`.
 
+
+
+
+<br/>
+<br/>
+
+
+
+## Exercice 6 – Modification temporaire de la variable `PATH`  
+**Objectif : Comprendre l’effet d’une modification temporaire d’une variable système.**
+
+
+
+### Étapes détaillées
+
+#### 1. Afficher la variable `PATH`
+
+```bash
+echo $PATH
+```
+
+**Explication :**  
+La variable `PATH` contient une **liste de dossiers** séparés par des deux-points `:`. Elle indique où le shell doit chercher les programmes lorsque vous tapez une commande.
+
+Exemple typique de sortie :
+
+```
+/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+```
+
+
+
+#### 2. Ajouter temporairement un dossier fictif au début
+
+```bash
+export PATH="/fake/bin:$PATH"
+```
+
+**Explication :**  
+On ajoute ici `/fake/bin` **avant** le reste du chemin. Cela signifie que si un programme se trouve dans `/fake/bin`, il sera **prioritaire**.
+
+
+
+#### 3. Vérifier la modification de la variable
+
+```bash
+echo $PATH
+```
+
+**Sortie attendue :**
+
+```
+/fake/bin:/usr/local/sbin:/usr/local/bin:...
+```
+
+> `/fake/bin` doit être tout au début.
+
+
+
+#### 4. Lancer un nouveau shell
+
+```bash
+bash
+```
+
+Puis, dans ce nouveau shell :
+
+```bash
+echo $PATH
+```
+
+**Résultat :**  
+Le dossier `/fake/bin` **n’apparaît plus** dans le chemin.
+
+
+
+### Question : Pourquoi la modification n’est-elle pas conservée dans le nouveau shell ?
+
+**Réponse pédagogique :**  
+La commande `export PATH=...` modifie temporairement la variable dans le **shell courant uniquement**.  
+Quand on lance un nouveau shell avec `bash`, celui-ci est un **sous-shell** qui **réinitialise certaines variables système**, comme `PATH`, à leur **valeur par défaut** (définie dans `/etc/profile`, `/etc/bash.bashrc` ou `~/.bashrc`, etc.).
+
+> Pour que la modification soit **permanente**, il faudrait **modifier le fichier `~/.bashrc`**.
+
+<br/>
+<br/>
+
+## Exercice 7 – Définir une variable de façon permanente  
+**Objectif : Apprendre à rendre une variable persistante d’une session à l’autre.**
+
+
+
+### Étapes détaillées
+
+#### 1. Ouvrir le fichier `~/.bashrc`
+
+```bash
+nano ~/.bashrc
+```
+
+> Ce fichier est exécuté automatiquement **à chaque fois qu’un nouveau terminal interactif est lancé**.
+
+
+
+#### 2. Ajouter la ligne suivante à la fin du fichier
+
+```bash
+export COURS_LINUX=Oui
+```
+
+> Placez cette ligne **tout en bas du fichier**, pour plus de clarté.
+
+
+
+#### 3. Enregistrer et quitter
+
+Dans l’éditeur `nano` :  
+- Appuyez sur `Ctrl + O` (puis Entrée) pour enregistrer  
+- Appuyez sur `Ctrl + X` pour quitter
+
+
+
+#### 4. Recharger le fichier `~/.bashrc` sans fermer le terminal
+
+```bash
+source ~/.bashrc
+```
+
+
+
+#### 5. Vérifier que la variable est bien définie
+
+```bash
+echo $COURS_LINUX
+```
+
+Résultat :
+
+```
+Oui
+```
+
+
+
+#### 6. Fermer le terminal, puis le rouvrir. Vérifier à nouveau :
+
+```bash
+echo $COURS_LINUX
+```
+
+Résultat :
+
+```
+Oui
+```
+
+
+
+### Question : Pourquoi utilise-t-on `~/.bashrc` pour rendre cette variable permanente dans le shell Bash ?
+
+**Réponse pédagogique :**  
+Le fichier `~/.bashrc` est lu **automatiquement à chaque ouverture d’un nouveau terminal interactif Bash**.  
+En ajoutant la ligne `export COURS_LINUX=Oui` dans ce fichier, la variable est recréée à **chaque session**, ce qui la rend **permanente pour l'utilisateur**.
+
+> C’est une pratique courante pour définir des **variables d’environnement utilisateur** personnalisées.
+
+---
+
+### Conclusion des deux exercices
+
+| Cas                        | Persistance après fermeture du terminal ? | Visible dans un nouveau shell ? |
+|---------------------------|-------------------------------------------|----------------------------------|
+| `export` dans le terminal | Non                                       | Non (si pas modifié `.bashrc`)  |
+| Ligne dans `~/.bashrc`    | Oui                                       | Oui                              |
+

@@ -378,3 +378,76 @@ d) La variable est enregistrée définitivement
 | Voir les variables d’environnement     | `env` ou `printenv`                    |
 | Supprimer une variable                 | `unset nom`                            |
 | Définir une variable permanente        | Modifier `~/.bashrc` + `source`        |
+
+
+
+
+# 11 - Correction Exercice 1
+
+
+
+### Étapes de réalisation
+
+#### 1. Création de la variable `ville` et affectation de la valeur `Montreal`
+
+```bash
+ville=Montreal
+```
+
+#### 2. Affichage du contenu de la variable
+
+```bash
+echo $ville
+```
+
+**Résultat attendu :**
+
+```
+Montreal
+```
+
+#### 3. Lancement d’un nouveau shell avec la commande `bash`
+
+```bash
+bash
+```
+
+#### 4. Tentative d’affichage à nouveau de la variable
+
+```bash
+echo $ville
+```
+
+**Résultat obtenu :**  
+Rien ne s’affiche, la variable n’existe plus dans ce nouveau shell.
+
+
+
+## Réponses aux questions
+### 1. La variable est-elle encore disponible dans le nouveau shell ?
+**Réponse :** Non, la variable `ville` n’est plus disponible dans le nouveau shell.
+### 2. Pourquoi ne l’est-elle plus ?
+**Réponse :** La variable a été définie dans le shell initial, et elle n’a pas été exportée. En Bash, une variable déclarée sans `export` est **locale au shell courant**. Lorsqu’un nouveau shell est lancé (dans ce cas via la commande `bash`), il s’agit d’un **sous-shell**, qui ne connaît que les variables **exportées** du shell parent. Les variables locales ne sont pas transmises automatiquement.
+## Explication complémentaire
+
+Si l’on souhaite rendre une variable accessible dans les sous-shells, il faut utiliser la commande `export` :
+
+```bash
+export ville=Montreal
+```
+
+Ainsi, après avoir lancé un nouveau shell avec `bash`, la commande `echo $ville` donnera :
+
+```
+Montreal
+```
+
+## Conclusion
+- Les variables locales ne sont visibles que dans le shell où elles sont définies. Pour qu’une variable soit accessible dans les sous-shells, elle doit être exportée avec la commande `export`.
+
+
+
+
+# 12 - Correction Exercice 2
+
+

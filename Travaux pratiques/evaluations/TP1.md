@@ -809,19 +809,11 @@ Indiquez le **fichier système** à modifier et faites une démonstration avec A
 
 
 
-
-
 <br/>
 <br/>
 <br/>
 
-
-
-
-
----
-
-## **5. 🎨 Personnalisation `.bashrc` – Créativité obligatoire !**
+## **PARTIE BONUS 3 – Personnalisation `.bashrc` – Créativité obligatoire !**
 
 **Tâche :** Créez pour chaque utilisateur un `.bashrc` qui s’affiche à la connexion avec un message personnalisé en ASCII art et une touche humoristique.
 
@@ -851,15 +843,15 @@ On voit :
                  |_| |_|              
 ```
 
-### 🔍 Votre mission :
+## Votre mission :
 - Inventez un message et un comportement différent pour chaque utilisateur.  
 - Claude pourrait avoir une date du jour.
 - Bernard un proverbe (avec `fortune`).
 - Danielle un logo de son rôle.
 
----
 
-## **6. Questions de réflexion à inclure dans le rapport**
+
+## Questions de réflexion à inclure dans le rapport**
 
 1. Quelle différence entre `chmod a+x` et `chmod 755` ?
 2. Pourquoi restreindre les droits d’exécution à certains utilisateurs ?
@@ -867,14 +859,4 @@ On voit :
 4. À quoi sert le `sticky bit` dans un répertoire comme `/tmp` ?
 5. Comment éviter qu’un utilisateur devienne accidentellement propriétaire d’un fichier critique ?
 
----
 
-## ✅ Évaluation (20 points)
-
-| Critère                                      | Points |
-|---------------------------------------------|--------|
-| Création des utilisateurs et arborescence   | 4      |
-| Permissions bien appliquées                 | 4      |
-| Tests fonctionnels réalisés avec captures   | 4      |
-| `.bashrc` personnalisés et originaux        | 4      |
-| Qualité du rapport et réponses aux questions| 4      |

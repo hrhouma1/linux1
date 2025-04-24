@@ -1,4 +1,4 @@
-# 🛡️ **TP – Gestion des Permissions et Personnalisation d’Environnement Linux**
+# **TP 1 – Gestion des Permissions et Personnalisation d’Environnement Linux**
 
 # **Objectif général :**
 Comprendre, appliquer et tester les **permissions Unix** (`chmod`, `chown`, `su`) dans un environnement multi-utilisateurs.  

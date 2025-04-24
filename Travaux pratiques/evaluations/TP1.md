@@ -1,54 +1,151 @@
 # 🛡️ **TP – Gestion des Permissions et Personnalisation d’Environnement Linux**
 
-## 🎯 **Objectif général :**
+# **Objectif général :**
 Comprendre, appliquer et tester les **permissions Unix** (`chmod`, `chown`, `su`) dans un environnement multi-utilisateurs.  
 Apprendre à personnaliser un environnement utilisateur avec `.bashrc`.
 
----
 
-## ⏳ **Durée :** 1 semaine  
-## 🧪 **Livrable :**  
+
+# **Durée :** 1 semaine  
+## **Livrable :**  
 - Un **rapport PDF ou Word** avec captures d’écran, explications et réflexions.  
 - Scripts ou commandes utilisées (dans le rapport et dans un fichier `.sh` si applicable).
 
----
-
-## 📦 **Contexte**
+# **Contexte**
 Vous êtes administrateur d’un serveur Linux utilisé par 4 collègues : **Albert, Bernard, Claude et Danielle**.  
 Vous devez :
-- Créer les utilisateurs.
+- Créer les utilisateurs : **Albert, Bernard, Claude et Danielle**. 
 - Préparer un espace de travail commun.
 - Attribuer des permissions spécifiques.
 - Tester les actions attendues.
 - Ajouter une touche personnelle à leur environnement avec des messages de bienvenue animés.
 
----
 
-# 🧭 **Étapes du TP**
+#  **Étapes du TP**
 
----
 
-## **1. Création des utilisateurs**
 
-**Tâche :** Créez les utilisateurs suivants :  
-`albert`, `bernard`, `claude`, `danielle`  
 
-**Résultat attendu :**
+
+
+
+
+
+
+<br/>
+<br/>
+
+# **PARTIE 1 – Donner les droits administrateur à l’utilisateur `eleve`**
+
+
+
+### **Contexte :**  
+Dans ce TP, vous travaillez principalement avec l’utilisateur `eleve`. Il est possible que cet utilisateur ait déjà été créé lors de l’installation d’Ubuntu 22.04. Si ce n’est pas le cas, vous devez le créer manuellement.
+
+
+
+### **Tâche :**
+
+Créer l’utilisateur **eleve** avec le mot de passe **eleve**  
+(**si ce n’est pas déjà fait lors de l’installation de Ubuntu 22.04**).  
+Puis, ajoutez cet utilisateur au groupe **sudo** afin qu’il puisse exécuter des commandes administratives.
+
+
+
+### **Commandes à compléter :**
+
 ```bash
-/home/albert
-/home/bernard
-/home/claude
-/home/danielle
+Commande 1.1 : ___________________________________________   # Créer l’utilisateur eleve avec le mot de passe eleve (si nécessaire)
+Commande 1.2 : ___________________________________________   # Ajouter l’utilisateur eleve au groupe sudo
+Commande 1.3 : ___________________________________________   # Ouvrir le fichier sudoers avec l’outil sécurisé
+Commande 1.4 : ___________________________________________   # Vérifier ou ajouter la ligne autorisant eleve à utiliser sudo
+Commande 1.5 : ___________________________________________   # Tester une commande avec sudo (ex : sudo ls /root)
 ```
 
-**Indices :** utilisez `adduser` (ou `useradd` avec options).  
-Vous devez vérifier que chaque utilisateur peut se connecter (commande `su`).
+
+
+### **Résultat attendu :**
+
+- L’utilisateur `eleve` existe et peut se connecter avec son mot de passe
+- Il peut exécuter des commandes avec `sudo` (mot de passe requis)
+- Aucun message d’erreur à l’exécution d’une commande `sudo`
 
 ---
+
+### **Captures d’écran exigées :**
+
+1. Création de l’utilisateur `eleve` (si nécessaire)
+2. Ajout au groupe sudo
+3. Contenu du fichier sudoers modifié ou vérifié
+4. Test réussi d’une commande avec `sudo`
+
+
+
+
+
+
+<br/>
+<br/>
+
+
+# **PARTIE 2 – Création des utilisateurs et modification de leurs mots de passe**
+
+
+
+### **Contexte :**  
+Vous êtes maintenant connecté en tant que `eleve` ou `root`, qui disposent des droits `sudo`. Vous devez :  
+- Créer quatre utilisateurs : `albert`, `bernard`, `claude`, `danielle`  
+- Définir un mot de passe initial lors de la création (notez-le)  
+- Vérifier que leurs répertoires personnels sont créés  
+- Tester la connexion avec `su -`  
+- Modifier leurs mots de passe **à partir de votre compte `eleve`**
+
+
+
+### **Commandes à compléter :**
+
+```bash
+Commande 2.1 : ___________________________________________   # Créer l’utilisateur albert (indiquez le mot de passe utilisé)
+Commande 2.2 : ___________________________________________   # Créer l’utilisateur bernard (mot de passe à noter)
+Commande 2.3 : ___________________________________________   # Créer l’utilisateur claude (mot de passe à noter)
+Commande 2.4 : ___________________________________________   # Créer l’utilisateur danielle (mot de passe à noter)
+Commande 2.5 : ___________________________________________   # Afficher les répertoires dans /home pour vérifier les créations
+Commande 2.6 : ___________________________________________   # Se connecter avec su - albert, puis revenir à eleve
+Commande 2.7 : ___________________________________________   # Modifier le mot de passe de l’utilisateur albert à partir de eleve
+Commande 2.8 : ___________________________________________   # Modifier le mot de passe de l’utilisateur bernard à partir de eleve
+Commande 2.9 : ___________________________________________   # Modifier le mot de passe de l’utilisateur claude à partir de eleve
+Commande 2.10 : __________________________________________  # Modifier le mot de passe de l’utilisateur danielle à partir de eleve
+```
+
+
+
+### **Résultat attendu :**
+
+- Les répertoires des utilisateurs apparaissent dans `/home`
+- `su - albert` permet de se connecter à sa session
+- Tous les mots de passe ont été modifiés avec succès depuis `eleve`
+
+
+
+### **Captures d’écran exigées :**
+
+1. Sortie de la commande `ls /home`
+2. Connexion réussie à la session de `albert` puis retour
+3. Modifications des mots de passe des 4 utilisateurs
+
+
+
+
+<br/>
+<br/>
+
+
+
 
 ## **2. Préparation d’un répertoire partagé**
 
 **Tâche :** Créez l’arborescence suivante :
+
 ```
 /home/shared_data/
 ├── file1.txt

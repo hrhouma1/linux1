@@ -494,8 +494,326 @@ Pour les autres, **vous devez inventer quelque chose d’unique**.
 
 
 
+<br/>
+<br/>
+<br/>
 
 
+
+
+## **PARTIE 8 – Questions de réflexion finales**
+
+---
+
+### **Contexte :**  
+Vous avez maintenant :
+- Créé et configuré plusieurs utilisateurs
+- Géré des fichiers et des permissions spécifiques
+- Modifié des environnements utilisateur via `.bashrc`
+- Vérifié les accès et exécuté des scripts selon les droits
+
+Il est temps de prendre du recul et de réfléchir aux **impacts, risques et bonnes pratiques** liés à ce que vous avez mis en place.
+
+---
+
+### **Instructions :**
+
+Répondez **sérieusement** aux questions suivantes. Vous devez **argumenter vos réponses**. Un copier-coller de commande ne suffit pas. Utilisez des exemples lorsque pertinent.
+
+**Votre réponse peut être écrite directement sous chaque question dans le rapport à remettre.**
+
+---
+
+### **Questions à compléter :**
+
+<br/>
+
+**1. Quelle est l'importance de bien configurer les permissions sur un système Linux multi-utilisateur ?**  
+(Expliquez ce qui pourrait arriver si tous les fichiers avaient des permissions 777.)
+
+Réponse :  
+...............................................................................................................................  
+...............................................................................................................................  
+...............................................................................................................................
+
+<br/>
+
+**2. Quelle est la différence entre les permissions d'exécution (`x`) et les permissions de lecture (`r`) ? Donnez un exemple concret.**
+
+Réponse :  
+...............................................................................................................................  
+...............................................................................................................................  
+...............................................................................................................................
+
+<br/>
+
+**3. Quelle commande permet de changer les permissions ? Quelle commande permet de changer le propriétaire ? Donnez un exemple concret d’utilisation correcte de chaque.**
+
+Réponse :  
+...............................................................................................................................  
+...............................................................................................................................  
+...............................................................................................................................
+
+<br/>
+
+**4. Quelle est la différence entre l’appartenance à un groupe (`sudo`) et le fait d’être explicitement listé dans le fichier `/etc/sudoers` ?**
+
+Réponse :  
+...............................................................................................................................  
+...............................................................................................................................  
+...............................................................................................................................
+
+<br/>
+
+**5. Pourquoi est-il déconseillé de donner des droits `sudo` à tous les utilisateurs d’un système ? Quels seraient les risques ?**
+
+Réponse :  
+...............................................................................................................................  
+...............................................................................................................................  
+...............................................................................................................................
+
+<br/>
+
+**6. Que se passerait-il si un utilisateur pouvait modifier un script qui est exécuté par un administrateur ? Donnez un exemple de faille.**
+
+Réponse :  
+...............................................................................................................................  
+...............................................................................................................................  
+...............................................................................................................................
+
+<br/>
+
+**7. Quelle est l’utilité de personnaliser le `.bashrc` ? Peut-on en faire un outil d’ingénierie sociale ou de sécurité ?**
+
+Réponse :  
+...............................................................................................................................  
+...............................................................................................................................  
+...............................................................................................................................
+
+
+
+
+<br/>
+<br/>
+<br/>
+
+
+
+
+---
+# **PARTIE BONUS 1 – Variables et visibilité entre utilisateurs**
+---
+
+### **Contexte :**  
+Vous allez mener une série de tests pour comprendre :
+
+- Comment fonctionnent les variables locales et exportées
+- Quelle est leur visibilité entre utilisateurs
+- Comment rendre une variable **persistante** pour un utilisateur spécifique
+- Comment **partager une variable** (ou pas) entre plusieurs utilisateurs
+
+---
+
+### **Règles à suivre :**
+
+- Travaillez à chaque fois avec un **utilisateur différent** (Albert, Bernard, Claude, Danielle)
+- Ne modifiez **que leur propre environnement**
+- Ne trichez pas en copiant un `.bashrc` d’un utilisateur à un autre — chaque utilisateur doit être traité **indépendamment**
+
+---
+
+### **Objectifs :**
+- Définir des variables pour chaque utilisateur
+- Tester leur visibilité dans un sous-shell
+- Vérifier qu’un autre utilisateur **ne peut pas voir** la variable
+- Ajouter une variable permanente via le `.bashrc` de chaque utilisateur
+
+---
+
+## **Scénario 1 – Variables locales et exportées**
+
+### **Étapes à suivre pour chaque utilisateur :**
+
+(Commencez par Albert)
+
+```bash
+Commande B1.1 : ___________________________________________   # Se connecter avec su - albert
+Commande B1.2 : ___________________________________________   # Créer une variable locale nom="Albert"
+Commande B1.3 : ___________________________________________   # Afficher la variable
+Commande B1.4 : ___________________________________________   # Lancer un sous-shell avec bash
+Commande B1.5 : ___________________________________________   # Vérifier si la variable est encore visible
+Commande B1.6 : ___________________________________________   # Exporter la variable nom
+Commande B1.7 : ___________________________________________   # Lancer un nouveau shell
+Commande B1.8 : ___________________________________________   # Vérifier que la variable est visible dans ce sous-shell
+Commande B1.9 : ___________________________________________   # Quitter et repasser à eleve
+```
+
+Répétez ces étapes pour Bernard (`nom="Bernard"`), Claude (`nom="Claude"`) et Danielle (`nom="Danielle"`).
+
+
+
+### **Résultat attendu :**
+
+- Les variables **non exportées** disparaissent dans un sous-shell
+- Les variables **exportées** persistent dans un sous-shell
+- Chaque utilisateur **ne peut accéder qu’à ses propres variables**
+
+
+
+## **Scénario 2 – Variables permanentes via .bashrc**
+
+### **Étapes à suivre (exemple avec Claude) :**
+
+```bash
+Commande B2.1 : ___________________________________________   # Se connecter avec su - claude
+Commande B2.2 : ___________________________________________   # Ouvrir le fichier ~/.bashrc
+Commande B2.3 : ___________________________________________   # Ajouter export PROJET_CLAUDE="Projet Système"
+Commande B2.4 : ___________________________________________   # Recharger ~/.bashrc avec source
+Commande B2.5 : ___________________________________________   # Vérifier que la variable est bien définie
+Commande B2.6 : ___________________________________________   # Fermer la session et se reconnecter pour tester la persistance
+Commande B2.7 : ___________________________________________   # Refaire echo $PROJET_CLAUDE
+```
+
+Répétez le même processus avec :
+
+- `PROJET_ALBERT="TP Sécurité"` pour Albert  
+- `PROJET_BERNARD="TP Scripts"` pour Bernard  
+- `PROJET_DANIELLE="TP Admin"` pour Danielle
+
+
+
+### **Résultat attendu :**
+
+- Chaque utilisateur possède une variable **permanente** visible dès la connexion
+- Ces variables **ne sont visibles que pour leur utilisateur**
+- La commande `echo $PROJET_X` retourne la bonne valeur après redémarrage
+
+
+
+## **Questions de réflexion à rédiger dans votre rapport :**
+
+<br/>
+
+**1. Quelle différence constatez-vous entre une variable exportée dans le terminal et une variable ajoutée dans `.bashrc` ?**  
+...............................................................................................................................
+
+**2. Est-il possible pour Bernard d'accéder à une variable définie par Albert ? Pourquoi ?**  
+...............................................................................................................................
+
+**3. Quelle méthode utiliseriez-vous si vous vouliez partager une même variable entre tous les utilisateurs ? (Piste : `/etc/profile`)**  
+...............................................................................................................................
+
+**4. Peut-on supprimer une variable exportée ? Comment ?**  
+...............................................................................................................................
+
+**5. À quoi faut-il faire attention lorsque l’on modifie `.bashrc` ? Donnez un exemple d'erreur potentielle.**  
+...............................................................................................................................
+
+
+
+
+
+
+
+
+
+<br/>
+<br/>
+<br/>
+
+## **PARTIE BONUS 2 – Visibilité des variables entre utilisateurs**
+
+
+
+### **Contexte :**  
+Vous allez tester si une variable définie (locale ou exportée) par **Albert** est accessible par les autres utilisateurs (**Bernard, Claude, Danielle**).  
+Cela vous permettra de comprendre les **limites de portée des variables** dans un système multi-utilisateur Linux.
+
+
+
+### **Objectifs :**
+- Définir une variable exportée avec un utilisateur
+- Se connecter avec un autre utilisateur
+- Tester la portée de la variable
+- Comprendre pourquoi elle n’est pas visible
+- Trouver **la bonne méthode** pour la rendre visible **pour tous**
+
+
+
+### **Étapes à suivre :**
+
+<br/>
+
+```bash
+Commande B1.1 : ___________________________________________   # Se connecter avec su - albert
+Commande B1.2 : ___________________________________________   # Créer une variable ville=Montreal
+Commande B1.3 : ___________________________________________   # Exporter la variable ville
+Commande B1.4 : ___________________________________________   # Vérifier qu'elle est bien exportée (echo $ville)
+Commande B1.5 : ___________________________________________   # Quitter la session albert (exit)
+Commande B1.6 : ___________________________________________   # Se connecter avec su - bernard
+Commande B1.7 : ___________________________________________   # Tenter d’afficher la variable $ville
+```
+
+
+
+### **Résultat attendu :**
+
+- La variable `ville` **existe uniquement pour Albert**, même si elle a été exportée
+- Pour Bernard (ou tout autre utilisateur), la variable **n’est pas visible**
+
+
+### **Question à rédiger dans votre rapport :**
+
+<br/>
+
+**1. Pourquoi la variable exportée par Albert n’est-elle pas visible par Bernard ?**  
+...............................................................................................................................
+
+**2. Comment faire pour qu’une variable soit accessible pour tous les utilisateurs automatiquement ?**  
+(Piste : où faudrait-il écrire `export ville=Montreal` pour qu’elle soit chargée pour tous les utilisateurs ?)  
+...............................................................................................................................
+
+
+
+### **Extension facultative (bonus avancé – 2 points supplémentaires)**
+
+Trouvez une manière de **définir une variable commune à tous les utilisateurs**, **sans avoir à la redéclarer pour chacun**.  
+Indiquez le **fichier système** à modifier et faites une démonstration avec Albert, Bernard ou Danielle.
+
+### Est-ce que ce tableau est correcte ?
+
+
+## **Tableau récapitulatif – Portée des variables dans un système Linux**
+
+| **Emplacement / Méthode**            | **Visible pour l’utilisateur courant ?** | **Visible dans un sous-shell ?** | **Visible pour les autres utilisateurs ?** | **Persiste après fermeture de session ?** |
+|--------------------------------------|------------------------------------------|----------------------------------|---------------------------------------------|--------------------------------------------|
+| `ville=Montreal`                     | ✅                                        | ❌                                | ❌                                           | ❌                                          |
+| `export ville=Montreal`             | ✅                                        | ✅                                | ❌                                           | ❌                                          |
+| Ajout dans `~/.bashrc`              | ✅                                        | ✅                                | ❌                                           | ✅ (pour cet utilisateur uniquement)       |
+| Ajout dans `/etc/profile` ou `/etc/environment` | ✅ pour tous                          | ✅ pour tous                      | ✅                                           | ✅                                          |
+
+---
+
+## **Conclusion à insérer dans le rapport :**
+
+- Une variable définie dans le terminal est **locale** au shell courant.
+- Une variable exportée est **héritable par les sous-shells**, mais **jamais** par d'autres utilisateurs.
+- Pour rendre une variable **permanente**, il faut la placer dans un fichier comme `.bashrc`.
+- Pour qu’elle soit **accessible à tous les utilisateurs**, il faut l’inscrire dans un fichier **système partagé** comme `/etc/profile`, **avec précaution** (droits root nécessaires).
+
+
+
+
+
+
+
+
+
+
+
+<br/>
+<br/>
+<br/>
 
 
 

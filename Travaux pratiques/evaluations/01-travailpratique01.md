@@ -35,8 +35,9 @@ Vous devez :
 <br/>
 <br/>
 
+----
 # **PARTIE 1 – Donner les droits administrateur à l’utilisateur `eleve`**
-
+----
 
 
 ### **Contexte :**  
@@ -86,8 +87,9 @@ Commande 1.5 : ___________________________________________   # Tester une comman
 <br/>
 <br/>
 
+----
 # **PARTIE 2 – Création des utilisateurs et modification de leurs mots de passe**
-
+----
 
 
 ### **Contexte :**  
@@ -137,8 +139,9 @@ Commande 2.10 : __________________________________________  # Modifier le mot de
 <br/>
 <br/>
 
+----
 # **PARTIE 3 – Ajout de Danielle et Claude à sudoers**
-
+----
 
 ### **Contexte :**  
 Vous êtes connecté avec l’utilisateur `eleve` (ou `root`) qui possède les droits `sudo`.  
@@ -190,8 +193,9 @@ Commande 3.9 : ___________________________________________   # Exécuter une com
 <br/>
 <br/>
 
+----
 # **PARTIE 4 – Préparation d’un répertoire partagé**
-
+----
 
 
 ### **Contexte :**  
@@ -274,10 +278,9 @@ Commande 4.9 : ___________________________________________   # Vérifier toute l
 <br/>
 <br/>
 
-
+----
 ## **PARTIE 5 – Attribution des permissions**
-
----
+----
 
 ### **Contexte :**  
 Vous avez créé une structure de fichiers partagée dans `/home/shared_data`.  
@@ -347,10 +350,9 @@ Commande 5.11 : __________________________________________  # Vérifier les perm
 
 
 
-
+----
 ## **PARTIE 6 – Table de tests d’accès par utilisateur**
-
----
+----
 
 ### **Contexte :**  
 Les permissions ont été attribuées. Il est maintenant temps de **tester les accès** de chaque utilisateur sur les fichiers et scripts du répertoire `/home/shared_data`.
@@ -422,9 +424,9 @@ Commande 6.9 : ___________________________________________   # Danielle modifie 
 <br/>
 <br/>
 
-
+----
 ## **PARTIE 7 – Personnalisation de l’environnement `.bashrc`**
-
+----
 
 
 ### **Contexte :**  
@@ -496,9 +498,9 @@ Pour les autres, **vous devez inventer quelque chose d’unique**.
 
 
 
-
+----
 ## **PARTIE 8 – Questions de réflexion finales**
-
+----
 
 
 ### **Contexte :**  
@@ -598,7 +600,7 @@ Réponse :
 
 ---
 # **PARTIE 9**
----
+----
 
 ### **Contexte :**  
 Vous allez mener une série de tests pour comprendre :
@@ -717,8 +719,9 @@ Répétez le même processus avec :
 <br/>
 <br/>
 
+----
 ## **PARTIE 10**
-
+----
 
 
 ### **Contexte :**  
@@ -803,20 +806,21 @@ Indiquez le **fichier système** à modifier et faites une démonstration avec A
 <br/>
 <br/>
 
+----
 ## **PARTIE Bonus**
-
+----
 
 ## Questions de réflexion à inclure dans le rapport**
 
-1. Quelle différence entre `chmod a+x` et `chmod 755` ? 
+**1. Quelle différence entre `chmod a+x` et `chmod 755` ?**  
 ...............................................................................................................................
-2. Pourquoi restreindre les droits d’exécution à certains utilisateurs ? 
+**2. Pourquoi restreindre les droits d’exécution à certains utilisateurs ?**  
 ...............................................................................................................................
-3. Que se passe-t-il si un fichier a les droits `777` dans un environnement sensible ?   
+**3. Que se passe-t-il si un fichier a les droits `777` dans un environnement sensible ?**  
 ...............................................................................................................................
-4. À quoi sert le `sticky bit` dans un répertoire comme `/tmp` ?  
+**4. À quoi sert le `sticky bit` dans un répertoire comme `/tmp` ?**  
 ...............................................................................................................................
-6. Comment éviter qu’un utilisateur devienne accidentellement propriétaire d’un fichier critique ?  
+**6. Comment éviter qu’un utilisateur devienne accidentellement propriétaire d’un fichier critique ?**  
 ...............................................................................................................................
 
 

@@ -789,10 +789,10 @@ Indiquez le **fichier système** à modifier et faites une démonstration avec A
 
 ## **Conclusion à insérer dans le rapport :**
 
-- Une variable définie dans le terminal est **locale** au shell courant.
-- Une variable exportée est **héritable par les sous-shells**, mais **jamais** par d'autres utilisateurs.
-- Pour rendre une variable **permanente**, il faut la placer dans un fichier comme `.bashrc`.
-- Pour qu’elle soit **accessible à tous les utilisateurs**, il faut l’inscrire dans un fichier **système partagé** comme `/etc/profile`, **avec précaution** (droits root nécessaires).
+- Une variable définie dans le terminal est **locale** au shell courant. Vrai ou faux ? 
+- Une variable exportée est **héritable par les sous-shells**, mais **jamais** par d'autres utilisateurs. Vrai ou faux ? 
+- Pour rendre une variable **permanente**, il faut la placer dans un fichier comme `.bashrc`. Vrai ou faux ? 
+- Pour qu’elle soit **accessible à tous les utilisateurs**, il faut l’inscrire dans un fichier **système partagé** comme `/etc/profile`, **avec précaution** (droits root nécessaires). Vrai ou faux ? 
 
 
 
@@ -806,9 +806,14 @@ Indiquez le **fichier système** à modifier et faites une démonstration avec A
 ## Questions de réflexion à inclure dans le rapport**
 
 1. Quelle différence entre `chmod a+x` et `chmod 755` ?
+...............................................................................................................................
 2. Pourquoi restreindre les droits d’exécution à certains utilisateurs ?
+...............................................................................................................................
 3. Que se passe-t-il si un fichier a les droits `777` dans un environnement sensible ?
+...............................................................................................................................
 4. À quoi sert le `sticky bit` dans un répertoire comme `/tmp` ?
-5. Comment éviter qu’un utilisateur devienne accidentellement propriétaire d’un fichier critique ?
+...............................................................................................................................
+6. Comment éviter qu’un utilisateur devienne accidentellement propriétaire d’un fichier critique ?
+...............................................................................................................................
 
 

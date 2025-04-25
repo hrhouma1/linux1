@@ -270,6 +270,9 @@ Commande 4.9 : ___________________________________________   # Vérifier toute l
 2. Affichage du contenu de `script1.sh` et `script2.sh` avec `cat`
 
 
+<br/>
+<br/>
+<br/>
 
 
 ## **PARTIE 5 – Attribution des permissions**
@@ -805,15 +808,15 @@ Indiquez le **fichier système** à modifier et faites une démonstration avec A
 
 ## Questions de réflexion à inclure dans le rapport**
 
-1. Quelle différence entre `chmod a+x` et `chmod 755` ?
+1. Quelle différence entre `chmod a+x` et `chmod 755` ? 
 ...............................................................................................................................
-2. Pourquoi restreindre les droits d’exécution à certains utilisateurs ?
+2. Pourquoi restreindre les droits d’exécution à certains utilisateurs ? 
 ...............................................................................................................................
-3. Que se passe-t-il si un fichier a les droits `777` dans un environnement sensible ?
+3. Que se passe-t-il si un fichier a les droits `777` dans un environnement sensible ?   
 ...............................................................................................................................
-4. À quoi sert le `sticky bit` dans un répertoire comme `/tmp` ?
+4. À quoi sert le `sticky bit` dans un répertoire comme `/tmp` ?  
 ...............................................................................................................................
-6. Comment éviter qu’un utilisateur devienne accidentellement propriétaire d’un fichier critique ?
+6. Comment éviter qu’un utilisateur devienne accidentellement propriétaire d’un fichier critique ?  
 ...............................................................................................................................
 
 

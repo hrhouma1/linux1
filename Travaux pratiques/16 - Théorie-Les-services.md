@@ -202,3 +202,178 @@ Sous **systemd**, tous les démons sont contrôlés via **`systemctl`**, avec le
 
 
 
+
+
+
+
+
+
+
+
+
+<br/>
+<br/>
+
+# **Partie 2 – Introduction à systemd et systemctl**
+
+---
+
+## **2.1 Qu’est-ce que systemd ?**
+
+**systemd** est le système d’initialisation par défaut de la majorité des distributions Linux modernes (Ubuntu, Fedora, Debian, CentOS, etc.).
+Il remplace l'ancien système SysVinit et sert à :
+
+* Initialiser le système au démarrage (montage des disques, démarrage des services, etc.)
+* Gérer tous les services système de manière centralisée
+* Offrir des outils intégrés tels que `systemctl`, `journalctl`, `systemd-analyze`, `systemd-nspawn`, etc.
+
+### Avantages de systemd :
+
+* Démarrage plus rapide grâce à une initialisation **parallèle**
+* Redémarrage automatique des services en cas de défaillance
+* Gestion avancée des dépendances entre services
+* Centralisation de la journalisation
+
+---
+
+## **2.2 Le rôle de `systemctl`**
+
+`systemctl` est l’outil principal en ligne de commande pour interagir avec `systemd`.
+
+Il permet de :
+
+* Démarrer, arrêter ou redémarrer un service
+* Activer ou désactiver un service au démarrage
+* Obtenir le statut d’un service
+* Afficher l’ensemble des services actifs ou inactifs
+
+---
+
+## **2.3 Commandes fondamentales avec `systemctl`**
+
+| Action                             | Commande                                |
+| ---------------------------------- | --------------------------------------- |
+| Démarrer un service                | `sudo systemctl start nom_du_service`   |
+| Arrêter un service                 | `sudo systemctl stop nom_du_service`    |
+| Redémarrer un service              | `sudo systemctl restart nom_du_service` |
+| Recharger la configuration         | `sudo systemctl reload nom_du_service`  |
+| Vérifier le statut                 | `systemctl status nom_du_service`       |
+| Activer un service au démarrage    | `sudo systemctl enable nom_du_service`  |
+| Désactiver un service au démarrage | `sudo systemctl disable nom_du_service` |
+
+Remplacez `nom_du_service` par le nom réel du service concerné (ex : `sshd`, `nginx`, `apache2`, etc.).
+
+---
+
+## **2.4 Visualisation des services**
+
+Afficher tous les services actifs :
+
+```bash
+systemctl list-units --type=service --state=running
+```
+
+Afficher tous les services (actifs ou non) :
+
+```bash
+systemctl list-units --type=service
+```
+
+---
+
+## **2.5 Utilisation de `journalctl` pour consulter les logs**
+
+`systemd` intègre un système de logs centralisé : `journald`.
+Vous pouvez consulter les journaux avec la commande `journalctl`.
+
+| Objectif                              | Commande                          |
+| ------------------------------------- | --------------------------------- |
+| Voir tous les logs                    | `journalctl`                      |
+| Voir les logs d’un service spécifique | `journalctl -u nom_du_service`    |
+| Voir les logs depuis le dernier boot  | `journalctl -b`                   |
+| Suivre les logs en temps réel         | `journalctl -f`                   |
+| Voir les logs de la dernière heure    | `journalctl --since "1 hour ago"` |
+
+---
+
+## **2.6 Les unités (`units`) dans systemd**
+
+Une unité est un objet que systemd peut gérer. Chaque unité correspond à un fichier avec une extension spécifique.
+
+| Type d’unité | Extension  | Exemple             |
+| ------------ | ---------- | ------------------- |
+| Service      | `.service` | `nginx.service`     |
+| Montage      | `.mount`   | `home.mount`        |
+| Socket       | `.socket`  | `cups.socket`       |
+| Cible        | `.target`  | `multi-user.target` |
+| Minuterie    | `.timer`   | `logrotate.timer`   |
+
+---
+
+## **2.7 Les cibles (`targets`) de systemd**
+
+Une cible représente un état global du système, équivalent aux anciens niveaux d’exécution (runlevels).
+
+| Nom de la cible     | Description                                     |
+| ------------------- | ----------------------------------------------- |
+| `rescue.target`     | Mode de récupération (accès root uniquement)    |
+| `multi-user.target` | Mode multi-utilisateur sans interface graphique |
+| `graphical.target`  | Mode avec interface graphique                   |
+| `default.target`    | Cible par défaut lors du démarrage              |
+
+Changer la cible courante :
+
+```bash
+sudo systemctl isolate multi-user.target
+```
+
+---
+
+## **2.8 Analyse des performances de démarrage**
+
+Mesurer le temps total de démarrage :
+
+```bash
+systemd-analyze
+```
+
+Lister les services classés par temps de chargement :
+
+```bash
+systemd-analyze blame
+```
+
+Voir la chaîne des dépendances critiques :
+
+```bash
+systemd-analyze critical-chain
+```
+
+---
+
+## **2.9 Gérer les redémarrages automatiques**
+
+Pour forcer le redémarrage automatique d’un service après un échec, modifiez ou créez une unité `.service` avec :
+
+```ini
+[Service]
+ExecStart=/chemin/vers/script
+Restart=always
+RestartSec=5
+```
+
+Cela redémarre le service 5 secondes après chaque échec.
+
+---
+
+## **2.10 Résumé**
+
+* `systemd` est le gestionnaire d’unités moderne des systèmes Linux
+* `systemctl` est l’interface en ligne de commande pour interagir avec `systemd`
+* Les services, cibles, sockets, et autres ressources sont appelés **unités**
+* `journalctl` permet de consulter les logs système
+* Les outils comme `systemd-analyze` permettent d’analyser les performances au démarrage
+
+
+
+

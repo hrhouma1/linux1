@@ -1260,3 +1260,239 @@ tail -n 20 /var/log/rsync_backup.log
 * Il permet une **journalisation complète** pour audit et suivi
 
 
+
+
+<br/>
+<br/>
+
+
+
+
+
+
+# **Partie 7 – Gestion des Logs et Rotation avec `logrotate`**
+
+---
+
+## **7.1 Pourquoi utiliser `logrotate` ?**
+
+Les journaux systèmes (dans `/var/log/`) **augmentent continuellement** avec le temps :
+
+* Ils peuvent **saturer le disque**
+* Deviennent **lourds à consulter**
+* Peuvent **réduire les performances** si mal gérés
+
+**logrotate** permet de :
+
+* Faire une **rotation automatique des logs**
+* Supprimer ou compresser les anciens fichiers
+* Conserver un historique limité dans le temps
+* Exécuter une commande après la rotation (ex : redémarrer un service)
+
+---
+
+## **7.2 Fonctionnement général**
+
+`logrotate` est généralement exécuté **quotidiennement par `cron`**, via :
+
+```bash
+/etc/cron.daily/logrotate
+```
+
+Il lit la **configuration globale** :
+
+```bash
+/etc/logrotate.conf
+```
+
+Et les **configurations spécifiques** :
+
+```bash
+/etc/logrotate.d/
+```
+
+---
+
+## **7.3 Syntaxe d’un fichier de configuration**
+
+### Exemple :
+
+```bash
+/var/log/webapp.log {
+    weekly
+    rotate 4
+    compress
+    missingok
+    notifempty
+    postrotate
+        systemctl restart webapp
+    endscript
+}
+```
+
+### Explications :
+
+* `weekly` : rotation chaque semaine
+* `rotate 4` : conserver 4 anciens fichiers
+* `compress` : compresser les anciens logs
+* `missingok` : ne pas afficher d’erreur si le fichier est manquant
+* `notifempty` : ne pas tourner le fichier s’il est vide
+* `postrotate` : exécuter une commande après la rotation
+
+---
+
+## **7.4 Exercice 1 – Rotation d’un journal personnalisé**
+
+### Objectif :
+
+Faire la rotation de `/var/log/rsync_backup.log` chaque semaine, garder 4 versions compressées.
+
+1. Créer le fichier `/etc/logrotate.d/rsync_backup` :
+
+```bash
+sudo nano /etc/logrotate.d/rsync_backup
+```
+
+2. Contenu :
+
+```bash
+/var/log/rsync_backup.log {
+    weekly
+    rotate 4
+    compress
+    missingok
+    notifempty
+}
+```
+
+3. Tester la configuration :
+
+```bash
+sudo logrotate /etc/logrotate.conf --debug
+```
+
+4. Forcer la rotation pour test :
+
+```bash
+sudo logrotate /etc/logrotate.conf --force
+```
+
+5. Vérifier :
+
+```bash
+ls -lh /var/log/rsync_backup*
+```
+
+---
+
+## **7.5 Exercice 2 – Rotation avec redémarrage de service**
+
+### Objectif :
+
+Faire la rotation de `/var/log/webapp.log` et redémarrer le service `webapp`.
+
+1. Créer le fichier :
+
+```bash
+sudo nano /etc/logrotate.d/webapp
+```
+
+2. Contenu :
+
+```bash
+/var/log/webapp.log {
+    weekly
+    rotate 2
+    compress
+    missingok
+    notifempty
+    postrotate
+        systemctl restart webapp
+    endscript
+}
+```
+
+3. Forcer une rotation pour tester :
+
+```bash
+sudo logrotate -f /etc/logrotate.conf
+```
+
+---
+
+## **7.6 Exercice 3 – Rotation et envoi par courriel (simulation)**
+
+### Objectif :
+
+Envoyer les 100 dernières lignes du fichier `/var/log/syslog` chaque nuit à minuit.
+
+1. Ajouter dans la crontab :
+
+```bash
+crontab -e
+```
+
+Contenu :
+
+```
+0 0 * * * tail -n 100 /var/log/syslog | mail -s "Derniers logs système" votreadresse@email.com
+```
+
+2. Pour tester l'envoi localement :
+
+```bash
+mail
+```
+
+Prérequis : le système doit avoir un **agent de mail installé** (`mailutils`, `sendmail`, `postfix`...).
+
+---
+
+## **7.7 Exercice 4 – Rotation personnalisée d’un fichier simulé**
+
+1. Créez un faux journal :
+
+```bash
+echo "ligne test" >> /tmp/test.log
+```
+
+2. Créez le fichier `/etc/logrotate.d/testlog` :
+
+```bash
+sudo nano /etc/logrotate.d/testlog
+```
+
+Contenu :
+
+```bash
+/tmp/test.log {
+    daily
+    rotate 3
+    compress
+    missingok
+    notifempty
+}
+```
+
+3. Forcez la rotation :
+
+```bash
+sudo logrotate -f /etc/logrotate.conf
+```
+
+4. Observez les fichiers :
+
+```bash
+ls -lh /tmp/test.log*
+```
+
+---
+
+## **7.8 Résumé**
+
+* `logrotate` gère la taille, la fréquence, la conservation et la compression des logs
+* Il s’intègre parfaitement avec `cron` (via `/etc/cron.daily/logrotate`)
+* Il peut redémarrer des services ou envoyer des mails
+* Les fichiers de configuration personnalisés vont dans `/etc/logrotate.d/`
+
+

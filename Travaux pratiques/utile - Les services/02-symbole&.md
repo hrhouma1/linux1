@@ -53,3 +53,49 @@ Le terminal sera **bloqué** tant que le script tourne, car il exécute une bouc
 | `commande`   | S'exécute au **premier plan** (bloque le terminal) |
 | `commande &` | S'exécute en **arrière-plan** (libère le terminal) |
 
+
+<br/>
+<br/>
+
+# Exercice - Tester une commande avec et sans `&`
+
+### Étape 1 – Sans `&` (commande au premier plan)
+
+Tape cette commande dans ton terminal :
+
+```bash
+sleep 5
+```
+
+🕒 **Observation :**
+
+* Le terminal est bloqué pendant 5 secondes.
+* Tu ne peux rien faire d’autre.
+* Après 5 secondes, tu récupères la main.
+
+---
+
+### Étape 2 – Avec `&` (commande en arrière-plan)
+
+Tape cette commande :
+
+```bash
+sleep 5 &
+```
+
+🕒 **Observation :**
+
+* Le terminal te rend immédiatement la main.
+* Tu peux taper une autre commande **pendant que le `sleep` tourne**.
+* Tu verras une sortie comme :
+
+```
+[1] 12345
+```
+
+➡️ Pour voir le processus actif :
+
+```bash
+jobs
+```
+

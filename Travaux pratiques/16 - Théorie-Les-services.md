@@ -1496,3 +1496,117 @@ ls -lh /tmp/test.log*
 * Les fichiers de configuration personnalisés vont dans `/etc/logrotate.d/`
 
 
+
+
+
+# **Partie 8 – Quiz Final et Évaluation Pratique**
+
+---
+
+## **8.1 Objectif pédagogique**
+
+Valider que l’apprenant sait :
+
+* Créer, activer et surveiller un service systemd personnalisé
+* Planifier des tâches répétitives et ponctuelles avec `cron` et `at`
+* Synchroniser des dossiers avec `rsync` et limiter la bande passante
+* Gérer la rotation des journaux avec `logrotate`
+* Utiliser les bons outils de surveillance (`systemctl`, `journalctl`, `logrotate`, etc.)
+
+---
+
+## **8.2 Partie A – Lecture et analyse de `crontab` (5 points)**
+
+Expliquez **ce que fait chaque ligne** suivante :
+
+1. `0 3 * * 0 /usr/local/bin/backup.sh`
+2. `*/10 9-17 * * 1-5 who >> /var/log/connected.log`
+3. `@reboot systemctl restart nginx`
+4. `0 19 * * * /home/user/sync.sh`
+5. `0 7 * * * pkill rsync`
+
+---
+
+## **8.3 Partie B – Création de service systemd (15 points)**
+
+Vous devez créer un service appelé `weather_logger` qui :
+
+* Exécute un script `/usr/local/bin/weather.sh`
+* Écrit la température dans `/var/log/weather.log` toutes les 5 minutes (via cron)
+* Le service doit se relancer automatiquement en cas d’échec
+* Fournir le fichier `weather_logger.service`
+* Activer et démarrer le service
+* Vérifier son statut et ses logs
+
+---
+
+## **8.4 Partie C – Planification différée avec `at` (5 points)**
+
+1. Créez un script `/home/user/alert.sh` qui envoie un message "Test de sécurité terminé" dans un fichier `/tmp/alerte.log`.
+2. Programmez ce script pour qu’il s’exécute dans **2 heures** exactement à partir de maintenant.
+
+---
+
+## **8.5 Partie D – Synchronisation `rsync` (10 points)**
+
+Créez un script `sync_project.sh` qui :
+
+* Sauvegarde le dossier `/home/user/projects/` vers `/mnt/sauvegardes/`
+* Supprime les fichiers obsolètes (`--delete`)
+* Limite la bande passante à 150 KB/s
+* Enregistre les actions dans `/var/log/sync.log`
+
+Planifiez ce script pour qu’il s’exécute **tous les soirs à 22h**.
+
+---
+
+## **8.6 Partie E – Rotation de logs avec `logrotate` (10 points)**
+
+1. Créez un fichier de configuration `/etc/logrotate.d/weather` pour le fichier `/var/log/weather.log`
+2. Exigences :
+
+   * Rotation hebdomadaire
+   * 3 fichiers conservés
+   * Compression activée
+   * Rotation même si vide
+   * Redémarrage du service `weather_logger` après la rotation
+
+---
+
+## **8.7 Partie F – Étude de cas finale : scénario complet (15 points)**
+
+**Contexte :** Vous gérez un serveur Linux sur lequel tourne une application personnalisée (`/usr/local/bin/monitor.py`).
+
+Objectifs :
+
+1. Créer un service `monitor.service` qui exécute ce script au démarrage du système.
+2. Planifier une sauvegarde du répertoire `/opt/monitoring` tous les jours à 1h dans `/mnt/monitor_backup` avec `rsync`, limitée à 250 KB/s.
+3. Créer un fichier `/etc/logrotate.d/monitoring.log` pour `/var/log/monitoring.log`, avec rotation tous les 2 jours, conservation de 5 logs compressés.
+4. Envoyer les 100 dernières lignes de `/var/log/syslog` par mail chaque matin à 6h à `admin@example.com`.
+
+---
+
+## **8.8 Barème (sur 60 points)**
+
+| Partie                      | Points |
+| --------------------------- | ------ |
+| A – Analyse de crontab      | 5      |
+| B – Service systemd         | 15     |
+| C – Planification avec `at` | 5      |
+| D – Script rsync            | 10     |
+| E – logrotate personnalisé  | 10     |
+| F – Cas complet             | 15     |
+
+---
+
+## **8.9 Consignes finales**
+
+* Tous les scripts doivent être exécutable (`chmod +x`)
+* Les chemins doivent être **absolus**
+* Vous devez montrer la sortie de :
+
+  * `systemctl status`
+  * `journalctl -u`
+  * `ls -lh` dans les répertoires de logs et sauvegardes
+
+

@@ -2,141 +2,91 @@
 
 
 
-## **Partie 1 – Introduction aux Démons et Services**
+# **Partie 1 – Introduction aux Démons et Services**
 
 ### 1.1 Qu’est-ce qu’un démon ?
 
-* Définition simple
-* Définition technique
-* Exemples typiques de démons : `sshd`, `httpd`, `crond`, `rsyslogd`
-* Comment les démons sont créés au démarrage
-
 ### 1.2 Démons vs Services : quelle différence ?
 
-* Point commun : processus en arrière-plan
-* Distinction au niveau de la gestion et de l’activation
-
-
-
-## **Partie 2 – Introduction à systemd**
+# **Partie 2 – Introduction à systemd**
 
 ### 2.1 Qu’est-ce que systemd ?
 
-* Remplacement de SysV Init
-* Fonctionnalités principales
-* Concepts clés : unités, cibles, journaux
-
 ### 2.2 Commandes essentielles avec `systemctl`
-
-* `start`, `stop`, `restart`, `status`, `enable`, `disable`
-* Gestion des services au démarrage
-* Liste des services actifs : `systemctl list-units --type=service`
 
 ### 2.3 Journaux avec `journalctl`
 
-* Lire les logs d’un service
-* Filtrage par date, service, boot, etc.
 
----
-
-## **Partie 3 – Créer et Gérer ses Propres Services**
+# **Partie 3 – Créer et Gérer ses Propres Services**
 
 ### 3.1 Fichiers `.service` personnalisés
 
-* Structure d’un fichier unit (`[Unit]`, `[Service]`, `[Install]`)
-* Exemple complet avec `/usr/local/bin/webapp`
-* Activation au démarrage
 
 ### 3.2 Redémarrage automatique et gestion des erreurs
 
-* `Restart=always`, `RestartSec`, etc.
 
 ### 3.3 Analyse de performance
 
-* Utilisation de `systemd-analyze`, `blame`, `critical-chain`
 
 
-
-## **Partie 4 – Planification avec cron**
+# **Partie 4 – Planification avec cron**
 
 ### 4.1 Syntaxe de base d’un `cron job`
 
-* Champs de la syntaxe (`* * * * *`)
-* Signification de chaque champ
-* Répétitions, intervalles, jours spécifiques
+
 
 ### 4.2 Exemples pratiques avec correction
 
-* **Exercice 1** : Sauvegarde de `/etc` tous les dimanches à 3h
-* **Exercice 2** : Sauvegarde PostgreSQL quotidienne à 23h30
-* **Exercice 3** : Vérification et redémarrage automatique de `nginx`
-* **Exercice 4** : Téléchargement automatique avec `wget`
-* **Exercice 5** : Rotation de pages HTML toutes les minutes
-* **Exercice 6** : Script `mypage.sh` avec index.txt dynamique
+
 
 ### 4.3 Contrôle d’accès à `cron`
 
-* Fichiers `cron.allow` et `cron.deny`
 
 
 
-## **Partie 5 – Tâches ponctuelles avec at**
+# **Partie 5 – Tâches ponctuelles avec at**
 
 ### 5.1 Introduction à `at`
 
-* Utilisation de base : `at now + 1 minute`
-* Liste des jobs (`atq`), suppression (`atrm`), contenu (`at -c`)
-* Exécution différée d’un script
+
 
 ### 5.2 Exemples pratiques avec correction
 
-* **Exercice 9** : Script différé `traitement.sh`
-* Contrôle d’accès avec `at.allow` et `at.deny`
 
 
-## **Partie 6 – Sauvegardes Avancées et Planifiées**
+
+# **Partie 6 – Sauvegardes Avancées et Planifiées**
 
 ### 6.1 Sauvegarde de fichiers avec `rsync`
 
-* Options : `-a`, `--bwlimit`, `--delete`
-* Optimisation de la bande passante
-* Programmation avec `cron`
+
 
 ### 6.2 Exercice : rsync limité à 200KB/s de 19h à 7h
 
-* Script de synchronisation
-* Planification avec `cron` (lancement/arrêt automatique)
 
 
 
-## **Partie 7 – Logs et Rotation**
+
+# **Partie 7 – Logs et Rotation**
 
 ### 7.1 Centralisation des logs avec `rsyslog`
 
-* Modification du fichier `/etc/rsyslog.conf`
-* Définition d’un fichier unique `/var/log/syslog.log`
 
 ### 7.2 Rotation avec `logrotate`
 
-* Création du fichier `/etc/logrotate.d/syslog`
-* Options : `weekly`, `rotate`, `compress`, `notifempty`
+
 
 ### 7.3 Exercice : Surveillance journalière des logs
 
-* Envoi par courriel des 100 dernières lignes
-* Commande `tail | mail`
 
 
 
-## **Partie 8 – Quiz et Analyse**
+
+# **Partie 8 – Quiz et Analyse**
 
 ### 8.1 Analyse de tâches cron complexes
 
-* Explication des lignes de crontab (Exercice 7)
-
 ### 8.2 Quiz final
-
-* Scénarios à corriger (syntaxe erronée, accès interdit, conflits de port, etc.)
 
 
 <br/>

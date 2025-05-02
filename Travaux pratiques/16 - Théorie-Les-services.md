@@ -605,3 +605,251 @@ Sans `enable`, le service ne sera pas lancé au prochain redémarrage.
 * Un bon service inclut une politique de redémarrage robuste
 * La structure `[Unit]`, `[Service]`, `[Install]` est obligatoire
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+<br/>
+<br/>
+
+# **Partie 4 – Planification de Tâches avec cron**
+
+---
+
+## **4.1 Introduction**
+
+`cron` est un outil qui permet de programmer **des tâches répétitives** sous Linux.
+Le **démon `crond`** s’exécute en arrière-plan et lit les fichiers `crontab` pour exécuter les commandes à une date/heure précises.
+
+---
+
+## **4.2 Structure d’une tâche cron**
+
+```bash
+*     *     *     *     *   commande à exécuter
+-     -     -     -     -
+|     |     |     |     |
+|     |     |     |     +----- jour de la semaine (0 à 6, dimanche = 0)
+|     |     |     +----------- mois (1 à 12)
+|     |     +----------------- jour du mois (1 à 31)
+|     +----------------------- heure (0 à 23)
++---------------------------- minute (0 à 59)
+```
+
+---
+
+## **4.3 Astuce pour s’entraîner rapidement**
+
+Modifier la crontab pour l’utilisateur courant :
+
+```bash
+crontab -e
+```
+
+Afficher les tâches cron existantes :
+
+```bash
+crontab -l
+```
+
+---
+
+## **4.4 Exercice 1 – Sauvegarde de /etc tous les dimanches à 3h**
+
+### Objectif :
+
+Créer un script qui archive `/etc` dans `/var/backups`.
+
+### Étapes :
+
+1. Créer un dossier d'exercice :
+
+```bash
+mkdir ~/cron_tp && cd ~/cron_tp
+```
+
+2. Créer un fichier `backup.sh` :
+
+```bash
+nano backup.sh
+```
+
+Contenu :
+
+```bash
+#!/bin/bash
+tar -czf /var/backups/etc-backup-$(date +%Y%m%d).tar.gz /etc
+```
+
+3. Rendre le script exécutable :
+
+```bash
+chmod +x backup.sh
+```
+
+4. Créer le dossier de destination si besoin :
+
+```bash
+sudo mkdir -p /var/backups
+```
+
+5. Ajouter à la crontab :
+
+```bash
+crontab -e
+```
+
+Ajouter la ligne suivante :
+
+```
+0 3 * * 0 /home/utilisateur/cron_tp/backup.sh
+```
+
+Remplacez `utilisateur` par votre nom d’utilisateur Linux.
+
+---
+
+## **4.5 Exercice 2 – Amuse-toi avec du texte**
+
+### Objectif :
+
+Écrire « Bonjour ! Nous sommes le \[date] » toutes les 5 minutes dans un fichier.
+
+### Commande dans la crontab :
+
+```bash
+*/5 * * * * echo "Bonjour ! Nous sommes le $(date)" >> /tmp/bonjour.txt
+```
+
+Vérifiez ensuite :
+
+```bash
+tail /tmp/bonjour.txt
+```
+
+---
+
+## **4.6 Exercice 3 – Créer une page web dynamique qui change toutes les minutes**
+
+### Objectif :
+
+Télécharger différentes pages web toutes les minutes et les afficher dans le dossier web.
+
+### Étapes :
+
+1. Créer un fichier `mypage.sh` :
+
+```bash
+nano ~/cron_tp/mypage.sh
+```
+
+Contenu :
+
+```bash
+#!/bin/bash
+urls=("www.yahoo.com" "www.cmaisonneuve.qc.ca" "www.crosemont.qc.ca" "www.netflix.com")
+
+index_file="/home/$USER/index.txt"
+backup_dir="/var/www/html"
+
+index=0
+if [[ -f "$index_file" ]]; then
+  read -r index < "$index_file"
+fi
+
+url=${urls[$((index % ${#urls[@]}))]}
+wget -qO "$backup_dir/index.html" --timeout=10 "$url"
+
+next_index=$(( (index + 1) % ${#urls[@]} ))
+echo "$next_index" > "$index_file"
+```
+
+2. Rendre le script exécutable :
+
+```bash
+chmod +x ~/cron_tp/mypage.sh
+```
+
+3. Lancer la tâche toutes les minutes :
+
+```bash
+crontab -e
+```
+
+Ajouter :
+
+```
+* * * * * /home/utilisateur/cron_tp/mypage.sh
+```
+
+4. Tester en accédant à :
+
+```
+http://localhost/index.html
+```
+
+Chaque minute, la page changera automatiquement.
+
+---
+
+## **4.7 Exercice 4 – Observer les processus et les utilisateurs**
+
+### Objectif :
+
+Observer qui est connecté et quels processus tournent entre 9h et 17h.
+
+### Ajouter à la crontab :
+
+```bash
+# Toutes les heures entre 9h et 17h : processus
+0 9-17 * * 1-5 ps aux >> /var/log/processus.txt
+
+# Toutes les 5 minutes entre 9h et 17h : utilisateurs connectés
+*/5 9-17 * * 1-5 who >> /var/log/qui.txt
+```
+
+Visualiser ensuite :
+
+```bash
+tail /var/log/processus.txt
+tail /var/log/qui.txt
+```
+
+---
+
+## **4.8 Astuce : tester ses tâches cron en direct**
+
+Pour s’assurer que tout fonctionne :
+
+1. Mettre une tâche chaque minute :
+
+```bash
+* * * * * echo "Tâche test à $(date)" >> ~/cron.log
+```
+
+2. Lancer :
+
+```bash
+tail -f ~/cron.log
+```
+
+Attendez une minute : la ligne s’affichera automatiquement.
+
+---
+
+## **4.9 Résumé**
+
+* `cron` permet d’exécuter des scripts à des moments précis, automatiquement.
+* Un script cron doit être **exécutable** et spécifier un **chemin absolu**.
+* Vous pouvez observer les résultats avec `tail`, ou créer des fichiers `.log` pour vérifier vos essais.
+* Ce système permet de faire **des sauvegardes**, des **tests automatisés**, ou de **mettre à jour dynamiquement des services**.
+

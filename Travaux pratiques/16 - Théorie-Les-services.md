@@ -853,3 +853,410 @@ Attendez une minute : la ligne s’affichera automatiquement.
 * Vous pouvez observer les résultats avec `tail`, ou créer des fichiers `.log` pour vérifier vos essais.
 * Ce système permet de faire **des sauvegardes**, des **tests automatisés**, ou de **mettre à jour dynamiquement des services**.
 
+
+
+
+
+
+<br/>
+<br/>
+
+
+
+# **Partie 5 – Tâches Ponctuelles avec `at`**
+
+---
+
+## **5.1 Qu’est-ce que `at` ?**
+
+Le programme `at` permet de programmer **une tâche unique** à exécuter **plus tard**, **une seule fois** (contrairement à `cron`, qui est répétitif).
+
+C’est parfait pour :
+
+* Planifier un **redémarrage** du système
+* Lancer un **script de traitement différé**
+* Automatiser une **opération sensible** à un moment précis
+
+---
+
+## **5.2 Vérification et installation du service `atd`**
+
+Avant toute chose, assurez-vous que le démon `atd` est actif :
+
+```bash
+sudo systemctl start atd
+sudo systemctl enable atd
+sudo systemctl status atd
+```
+
+Si `at` n’est pas installé :
+
+```bash
+sudo apt install at   # Debian/Ubuntu
+sudo yum install at   # CentOS/RHEL
+```
+
+---
+
+## **5.3 Syntaxe de base**
+
+```bash
+at <heure ou moment>
+```
+
+Exemples :
+
+```bash
+at now + 1 minute
+at 17:00
+at 09:30 tomorrow
+at now + 2 days
+```
+
+Une fois dans l’éditeur `at>`, tapez la commande à exécuter, puis terminez par `Ctrl + D`.
+
+---
+
+## **5.4 Exercice 1 – Planifier un message différé**
+
+### Objectif :
+
+Afficher un message sur votre terminal dans **1 minute**.
+
+1. Lancez la commande :
+
+```bash
+at now + 1 minute
+```
+
+2. Dans le prompt `at>`, tapez :
+
+```bash
+echo "Ceci est un message planifié avec at"
+```
+
+3. Terminez avec :
+
+```bash
+Ctrl + D
+```
+
+4. Attendez une minute et vérifiez que le message s’affiche.
+
+---
+
+## **5.5 Exercice 2 – Script différé sur un autre terminal**
+
+### Objectif :
+
+Afficher un message sur un autre terminal (ex: `/dev/pts/0`).
+
+1. Créez un script `traitement.sh` :
+
+```bash
+nano ~/cron_tp/traitement.sh
+```
+
+Contenu :
+
+```bash
+#!/bin/bash
+echo "Message différé sur le terminal /dev/pts/0" > /dev/pts/0
+```
+
+2. Rendre le script exécutable :
+
+```bash
+chmod +x ~/cron_tp/traitement.sh
+```
+
+3. Planifier le script :
+
+```bash
+at now + 2 minutes -f ~/cron_tp/traitement.sh
+```
+
+Ouvrez le terminal `pts/0` en parallèle et observez.
+
+---
+
+## **5.6 Gestion des tâches `at`**
+
+| Action                               | Commande              |
+| ------------------------------------ | --------------------- |
+| Voir les tâches planifiées           | `atq` ou `at -l`      |
+| Supprimer une tâche (ID = 5 par ex.) | `atrm 5` ou `at -d 5` |
+| Voir le contenu de la tâche ID 5     | `at -c 5`             |
+
+---
+
+## **5.7 Contrôle d’accès à `at`**
+
+| Fichier         | Fonction                                                             |
+| --------------- | -------------------------------------------------------------------- |
+| `/etc/at.allow` | Seuls les utilisateurs listés ici peuvent utiliser `at`              |
+| `/etc/at.deny`  | Tous les utilisateurs **sauf** ceux listés ici peuvent utiliser `at` |
+
+Priorité :
+
+* Si `at.allow` existe, **seuls** les utilisateurs dans ce fichier ont le droit.
+* Sinon, `at.deny` s’applique.
+
+### Exemple : interdire `toto`
+
+```bash
+echo toto >> /etc/at.deny
+```
+
+---
+
+## **5.8 Exercice 3 – Planifier un redémarrage vendredi à 17h**
+
+### Objectif :
+
+Automatiser un redémarrage à une date précise.
+
+1. Tapez :
+
+```bash
+at 17:00 Fri
+```
+
+2. Dans le prompt `at>`, entrez :
+
+```bash
+sudo /sbin/shutdown -r now
+```
+
+3. Terminez avec `Ctrl + D`
+
+Note : Pour tester sans redémarrage, utilisez `echo "Redémarrage prévu"` à la place.
+
+---
+
+## **5.9 Exercice 4 – Script automatique dans 2 jours**
+
+1. Créez un script simple :
+
+```bash
+echo "echo Traitement terminé dans 2 jours" > ~/cron_tp/futur.sh
+chmod +x ~/cron_tp/futur.sh
+```
+
+2. Planifiez-le :
+
+```bash
+at now + 2 days -f ~/cron_tp/futur.sh
+```
+
+---
+
+## **5.10 Résumé**
+
+* `at` est utile pour des **tâches ponctuelles**, uniques, différées.
+* Il est complémentaire de `cron`, qui est cyclique.
+* Vous pouvez observer **immédiatement** l’effet avec `echo`, ou construire des **scripts différés**.
+
+
+
+<br/>
+<br/>
+
+
+
+# **Partie 6 – Sauvegardes Avancées et Planifiées avec `rsync`**
+
+---
+
+## **6.1 Pourquoi utiliser `rsync` ?**
+
+`rsync` est un outil de synchronisation puissant qui permet de copier des fichiers :
+
+* localement ou entre deux machines
+* de manière **optimisée** (il ne copie que les fichiers modifiés)
+* avec **compression, filtrage, sauvegarde et journalisation**
+
+Il est idéal pour :
+
+* des **sauvegardes régulières**
+* des **migrations de serveurs**
+* des **copies différentielles rapides**
+
+---
+
+## **6.2 Syntaxe de base**
+
+```bash
+rsync [options] source destination
+```
+
+Exemple simple :
+
+```bash
+rsync -av /home/user/documents /mnt/backup/
+```
+
+Options fréquentes :
+
+* `-a` : archive (préserve les permissions, liens, dates)
+* `-v` : verbose (affiche ce qui est copié)
+* `--delete` : supprime les fichiers absents de la source
+* `--bwlimit=KBps` : limite la bande passante utilisée
+
+---
+
+## **6.3 Exercice 1 – Sauvegarde locale avec limitation de bande passante**
+
+### Objectif :
+
+Sauvegarder le dossier `/home` dans `/mnt/backup` tous les soirs à 20h, **sans saturer la bande passante**.
+
+### Étapes :
+
+1. Créer le script :
+
+```bash
+mkdir -p ~/cron_tp
+nano ~/cron_tp/sync_home.sh
+```
+
+Contenu :
+
+```bash
+#!/bin/bash
+rsync -av --delete --bwlimit=200 /home/ /mnt/backup/
+```
+
+2. Rendre le script exécutable :
+
+```bash
+chmod +x ~/cron_tp/sync_home.sh
+```
+
+3. Ajouter dans `crontab` :
+
+```bash
+crontab -e
+```
+
+Ajouter :
+
+```
+0 20 * * * /home/utilisateur/cron_tp/sync_home.sh
+```
+
+(Remplacez `utilisateur` par votre nom réel)
+
+---
+
+## **6.4 Exercice 2 – Synchronisation à distance**
+
+### Objectif :
+
+Synchroniser `/var/www` vers un autre serveur via SSH.
+
+1. Commande directe (à tester manuellement avant automatisation) :
+
+```bash
+rsync -avz -e ssh /var/www user@remote_host:/backup/www
+```
+
+2. Script automatisé :
+
+```bash
+nano ~/cron_tp/rsync_remote.sh
+```
+
+Contenu :
+
+```bash
+#!/bin/bash
+rsync -az -e ssh /var/www user@192.168.0.100:/backup/www
+```
+
+3. Crontab (exécution quotidienne à 01h) :
+
+```
+0 1 * * * /home/utilisateur/cron_tp/rsync_remote.sh
+```
+
+Pré-requis :
+
+* accès SSH sans mot de passe (clé publique/privée configurée)
+* droits en écriture sur `/backup/www` sur la machine distante
+
+---
+
+## **6.5 Exercice 3 – Sauvegarde uniquement la nuit**
+
+### Objectif :
+
+Limiter l’exécution de `rsync` aux heures non ouvrables (19h à 7h).
+Arrêter tout processus `rsync` en journée.
+
+### Étapes :
+
+1. Script de lancement `rsync` :
+
+```bash
+crontab -e
+```
+
+Ajouter :
+
+```
+0 19 * * * /home/utilisateur/cron_tp/sync_home.sh
+```
+
+2. Script d’arrêt de sécurité :
+
+```
+0 7 * * * pkill rsync
+```
+
+Cela garantit que :
+
+* `rsync` commence à 19h
+* S’il est encore actif à 7h, il est tué
+
+---
+
+## **6.6 Exercice 4 – Sauvegarde avec journalisation**
+
+1. Script :
+
+```bash
+nano ~/cron_tp/rsync_logged.sh
+```
+
+Contenu :
+
+```bash
+#!/bin/bash
+date >> /var/log/rsync_backup.log
+rsync -av --delete /home /mnt/backup >> /var/log/rsync_backup.log 2>&1
+```
+
+2. Planification quotidienne :
+
+```bash
+0 22 * * * /home/utilisateur/cron_tp/rsync_logged.sh
+```
+
+3. Lecture du journal :
+
+```bash
+tail -n 20 /var/log/rsync_backup.log
+```
+
+---
+
+## **6.7 Résumé**
+
+* `rsync` est un outil **rapide**, **intelligent**, et **contrôlable**
+* Il peut être limité en bande passante avec `--bwlimit`
+* Il peut être automatisé avec `cron`
+* Il peut être **restreint à certaines plages horaires**
+* Il permet une **journalisation complète** pour audit et suivi
+
+

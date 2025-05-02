@@ -104,7 +104,7 @@
 
 Un **démon** (ou *daemon* en anglais) est un **programme qui tourne en arrière-plan**, sans interface graphique, et qui **travaille silencieusement** pour offrir des **services essentiels** au système ou aux utilisateurs.
 
-### ✦ Exemples simples :
+###  Exemples simples :
 
 * `sshd` : permet les connexions à distance via SSH
 * `httpd` : serveur web Apache

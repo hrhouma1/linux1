@@ -100,7 +100,7 @@
 
 
 
-## **1.1 Définition Vulgarisée : Qu’est-ce qu’un démon ?**
+## **1.1 Définition : Qu’est-ce qu’un démon ?**
 
 Un **démon** (ou *daemon* en anglais) est un **programme qui tourne en arrière-plan**, sans interface graphique, et qui **travaille silencieusement** pour offrir des **services essentiels** au système ou aux utilisateurs.
 

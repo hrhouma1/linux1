@@ -377,3 +377,231 @@ Cela redémarre le service 5 secondes après chaque échec.
 
 
 
+<br/>
+<br/>
+
+
+# **Partie 3 – Créer et Gérer ses Propres Services avec systemd**
+
+---
+
+## **3.1 Objectif de cette partie**
+
+Comprendre comment :
+
+* Créer une unité de service personnalisée
+* Intégrer un script système dans systemd
+* Tester, activer, désactiver et relancer ce service
+
+---
+
+## **3.2 Structure d’un fichier `.service`**
+
+Les fichiers de service se trouvent généralement dans :
+
+* `/etc/systemd/system/` (unités personnalisées et persistantes)
+* `/lib/systemd/system/` (unités installées par les paquets)
+
+### Exemple de fichier `webapp.service` :
+
+```ini
+[Unit]
+Description=Service personnalisé pour lancer une application web
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/webapp
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+```
+
+### Explication des sections :
+
+* `[Unit]` : dépendances du service, description
+* `[Service]` : commande à exécuter, politique de redémarrage
+* `[Install]` : cible d’activation (ici, niveau multi-utilisateur)
+
+---
+
+## **3.3 Étapes de création d’un service systemd personnalisé**
+
+### Étape 1 – Écrire ou localiser le script à exécuter
+
+Exemple :
+
+```bash
+sudo nano /usr/local/bin/webapp
+```
+
+Contenu du script :
+
+```bash
+#!/bin/bash
+while true; do
+  echo "Application en cours d'exécution" >> /var/log/webapp.log
+  sleep 30
+done
+```
+
+Rendre le script exécutable :
+
+```bash
+sudo chmod +x /usr/local/bin/webapp
+```
+
+---
+
+### Étape 2 – Créer l’unité de service
+
+```bash
+sudo nano /etc/systemd/system/webapp.service
+```
+
+Copiez le contenu suivant :
+
+```ini
+[Unit]
+Description=Web Application Custom Service
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/webapp
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+```
+
+---
+
+### Étape 3 – Activer et démarrer le service
+
+Recharger systemd pour prendre en compte le nouveau fichier :
+
+```bash
+sudo systemctl daemon-reexec
+```
+
+Ou plus fréquemment :
+
+```bash
+sudo systemctl daemon-reload
+```
+
+Activer le service au démarrage :
+
+```bash
+sudo systemctl enable webapp
+```
+
+Démarrer le service :
+
+```bash
+sudo systemctl start webapp
+```
+
+---
+
+### Étape 4 – Vérifier le bon fonctionnement
+
+Afficher l’état du service :
+
+```bash
+systemctl status webapp
+```
+
+Vérifier les journaux :
+
+```bash
+journalctl -u webapp
+```
+
+---
+
+## **3.4 Modifier un service déjà en place**
+
+Si vous modifiez le fichier `.service` :
+
+1. Sauvegardez
+2. Rechargez la configuration :
+
+```bash
+sudo systemctl daemon-reload
+```
+
+3. Redémarrez le service :
+
+```bash
+sudo systemctl restart webapp
+```
+
+---
+
+## **3.5 Supprimer un service personnalisé**
+
+Désactiver le service :
+
+```bash
+sudo systemctl disable webapp
+```
+
+Arrêter le service :
+
+```bash
+sudo systemctl stop webapp
+```
+
+Supprimer le fichier d’unité :
+
+```bash
+sudo rm /etc/systemd/system/webapp.service
+```
+
+Recharger systemd :
+
+```bash
+sudo systemctl daemon-reload
+```
+
+---
+
+## **3.6 Cas pratique : Redémarrage automatique d’un script planté**
+
+Dans le bloc `[Service]`, utilisez :
+
+```ini
+Restart=always
+RestartSec=5
+```
+
+Cela permet :
+
+* Un redémarrage automatique après échec
+* Une attente de 5 secondes entre chaque redémarrage
+
+---
+
+## **3.7 Cas pratique : Service temporaire non persistant**
+
+Créer un service que l’on souhaite **exécuter uniquement une fois**, sans l’enregistrer pour les démarrages futurs :
+
+```bash
+sudo systemctl start /etc/systemd/system/webapp.service
+```
+
+Sans `enable`, le service ne sera pas lancé au prochain redémarrage.
+
+---
+
+## **3.8 Résumé**
+
+* Les services personnalisés systemd sont définis dans des fichiers `.service`
+* Ils permettent d’intégrer n’importe quel script au système
+* L’utilisation des commandes `daemon-reload`, `enable`, `start`, `status` est essentielle
+* Un bon service inclut une politique de redémarrage robuste
+* La structure `[Unit]`, `[Service]`, `[Install]` est obligatoire
+

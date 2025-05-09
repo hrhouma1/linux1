@@ -226,3 +226,204 @@ Votre rapport doit contenir :
 * Les captures d'écran principales (Git, Node, MariaDB, Wiki.js Web),
 * Les éventuelles erreurs rencontrées et leur résolution.
 
+
+
+<br/>
+<br/>
+
+# Annexe 1 - Installation et configuration de Wiki.js**
+
+
+
+### **Préparation de l’Environnement (20 points)**
+
+#### **2.2.1 Installer Git (5 points)**
+
+**Commandes :**
+
+```bash
+sudo apt update
+sudo apt install git -y
+```
+
+**Vérification :**
+
+```bash
+git --version
+```
+
+**Explication :**
+Git est un système de contrôle de version distribué, utilisé ici pour cloner ou gérer des projets (comme Wiki.js). La commande `git --version` confirme l'installation en affichant la version.
+
+---
+
+#### **2.2.2 Installer Node.js LTS (5 points)**
+
+**Commandes :**
+
+```bash
+curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+sudo apt install -y nodejs
+```
+
+**Vérification :**
+
+```bash
+node -v
+npm -v
+```
+
+**Explication :**
+Node.js est requis pour exécuter Wiki.js. `npm` est le gestionnaire de paquets Node.js. La version LTS est plus stable et recommandée pour la production.
+
+---
+
+#### **2.2.3 Installer MariaDB (10 points)**
+
+**Commandes :**
+
+```bash
+sudo apt install mariadb-server -y
+sudo systemctl start mariadb
+sudo systemctl enable mariadb
+sudo mysql_secure_installation
+```
+
+**Vérification :**
+
+```bash
+sudo systemctl status mariadb
+```
+
+ou
+
+```bash
+sudo mysqladmin -u root -p version
+```
+
+**Explication :**
+MariaDB est un système de base de données relationnelle. `mysql_secure_installation` permet de renforcer la sécurité en désactivant l’accès distant root, en supprimant les utilisateurs anonymes, etc.
+
+---
+
+### **Partie 2.3 – Configuration de la base de données (10 points)**
+
+#### **2.3.1 Création de la base de données**
+
+**Commandes SQL :**
+
+```sql
+CREATE DATABASE wikijs;
+CREATE USER 'wikiuser'@'localhost' IDENTIFIED BY 'motdepassefort';
+GRANT ALL PRIVILEGES ON wikijs.* TO 'wikiuser'@'localhost';
+FLUSH PRIVILEGES;
+```
+
+**Explication :**
+
+* `CREATE DATABASE` crée une nouvelle base.
+* `CREATE USER` crée un utilisateur dédié à Wiki.js.
+* `GRANT` donne tous les droits sur la base.
+* `FLUSH PRIVILEGES` recharge les droits.
+
+---
+
+### **Partie 2.4 – Installation de Wiki.js (30 points)**
+
+#### **2.4.1 Téléchargement et installation (10 points)**
+
+**Commandes :**
+
+```bash
+sudo adduser wikijs
+sudo mkdir -p /opt/wikijs
+sudo chown wikijs:wikijs /opt/wikijs
+cd /opt/wikijs
+sudo -u wikijs wget https://github.com/Requarks/wiki/releases/latest/download/wiki-js.tar.gz
+sudo -u wikijs tar xzf wiki-js.tar.gz
+cd /opt/wikijs
+sudo -u wikijs npm install
+```
+
+**Explication :**
+On crée un utilisateur système, puis on télécharge et décompresse Wiki.js. `npm install` installe les dépendances.
+
+---
+
+#### **2.4.2 Configuration de Wiki.js (10 points)**
+
+**Fichier `config.yml` :**
+
+```yaml
+db:
+  type: mariadb
+  host: localhost
+  port: 3306
+  user: wikiuser
+  pass: motdepassefort
+  db: wikijs
+```
+
+**Explication :**
+Ces champs permettent à Wiki.js de se connecter à la base MariaDB. Le type doit être `mariadb`, le port est 3306 par défaut, les identifiants sont ceux définis plus tôt.
+
+---
+
+#### **2.4.3 Démarrage et test (10 points)**
+
+**Commande :**
+
+```bash
+cd /opt/wikijs
+sudo -u wikijs node server
+```
+
+**Vérification :**
+
+* Accès à `http://<IP>:3000`
+* L’interface d’installation de Wiki.js s’affiche dans le navigateur
+* L’utilisateur crée un compte administrateur
+
+---
+
+### **Partie 2.5 – Automatisation et sécurité (10 points)**
+
+#### **2.5.1 Création d’un service systemd**
+
+**Fichier `/etc/systemd/system/wikijs.service` :**
+
+```ini
+[Unit]
+Description=Wiki.js Service
+After=network.target mariadb.service
+
+[Service]
+Type=simple
+User=wikijs
+WorkingDirectory=/opt/wikijs
+ExecStart=/usr/bin/node server
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+```
+
+**Commandes :**
+
+```bash
+sudo systemctl daemon-reexec
+sudo systemctl enable wikijs
+sudo systemctl start wikijs
+```
+
+**Vérification :**
+
+```bash
+sudo systemctl status wikijs
+```
+
+**Finalisation :**
+
+* Accès via navigateur (port 3000)
+* Création du compte admin
+

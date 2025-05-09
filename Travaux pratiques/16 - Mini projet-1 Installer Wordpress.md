@@ -115,7 +115,7 @@ Reload privilege tables now? [Y/n] Y
    - Mot de passe : securepassword1
    - Hôte de la base de données : localhost
 
-### 5. Troubleshooting pour le 8080
+### 5. Troubleshooting pour le 8080 (À ignorer)
 
 1. **Créer un fichier de configuration pour le port 8080**:
 
@@ -169,6 +169,123 @@ sudo systemctl restart apache2
 
 
 
+
+
+
+# Annexe 1 - Résolution de l'erreure volontaire dans ce travail !
+
+
+L’erreur que nous avons rencontré avec Apache est très  liée à **une erreur dans le fichier de configuration `wordpress.conf`**, comme l’indique ce message :
+
+```
+apachectl[20266]: AH00014: Configuration check failed
+```
+
+## **Étape 1 – Diagnostic de l'erreur**
+
+Exécutez la commande suivante pour obtenir plus de détails :
+
+```bash
+journalctl -xeu apache2.service
+```
+
+Vous verrez un message comme :
+
+```
+(2)No such file or directory: AH00526: Syntax error on line X of /etc/apache2/sites-available/wordpress.conf
+```
+
+
+
+
+
+
+# **Étape 2 – Refaire proprement**
+
+1. Supprimez la mauvaise config (si pas déjà fait) :
+
+```bash
+sudo rm /etc/apache2/sites-available/wordpress.conf
+```
+
+2. Recréez-la proprement :
+
+```bash
+sudo nano /etc/apache2/sites-available/wordpress.conf
+```
+
+3. Collez le bloc de configuration ci-dessus, enregistrez.
+
+
+Voici **un exemple correct** pour un site sur le port 8080 :
+
+```apache
+<VirtualHost *:8080>
+    ServerName localhost
+    DocumentRoot /var/www/html/wordpress
+
+    <Directory /var/www/html/wordpress>
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/wordpress_error.log
+    CustomLog ${APACHE_LOG_DIR}/wordpress_access.log combined
+</VirtualHost>
+```
+
+> ### Vérifications :
+
+> * Les variables `${APACHE_LOG_DIR}` **doivent être entourées de guillemets doubles** si vous tapez manuellement >>(`"${APACHE_LOG_DIR}"`).
+> * Le chemin `/var/www/html/wordpress` **doit exister**.
+> * Aucun caractère bizarre, espace manquant ou `EOF` mal placé dans notre script précédent.
+
+4. Activez le site et redémarrez Apache :
+
+```bash
+sudo a2ensite wordpress.conf
+sudo a2enmod rewrite
+sudo systemctl restart apache2
+```
+
+5. Vérifiez le statut :
+
+```bash
+systemctl status apache2
+```
+
+<br/>
+
+# Si l’erreur persiste
+
+1. Vérifiez si le port 8080 est libre :
+
+```bash
+sudo netstat -tulnp | grep :8080
+```
+
+2. Vérifiez s’il y a une **erreur de chemin ou d’accès** :
+
+```bash
+ls -ld /var/www/html/wordpress
+```
+
+
+
+
+
+
+
+
+
+
+
+
+<br/>
+<br/>
+<br/>
+<br/>­
 <br/>
 <br/>
 

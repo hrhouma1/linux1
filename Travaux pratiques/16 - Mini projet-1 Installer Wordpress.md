@@ -217,7 +217,7 @@ sudo nano /etc/apache2/sites-available/wordpress.conf
 3. Collez le bloc de configuration ci-dessus, enregistrez.
 
 
-Voici **un exemple correct** pour un site sur le port 8080 :
+Ci-bas **un exemple correct** pour un site sur le port 8080 :
 
 ```apache
 <VirtualHost *:8080>

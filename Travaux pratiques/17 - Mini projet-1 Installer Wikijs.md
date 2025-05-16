@@ -147,7 +147,7 @@ bindIP: 127.0.0.1
 
 ```bash
 su
-sudo nano /etc/systemd/system/wikijs.service
+sudo nano /etc/systemd/system/wikijs.service ==> erreur (Section de Troubleshooting #1)
 ```
 
 ## Section de Troubleshooting #1
@@ -198,7 +198,7 @@ Activez et démarrez le service :
 sudo systemctl daemon-reload
 sudo systemctl start wikijs
 sudo systemctl enable wikijs
-systemctl status wikijs
+systemctl status wikijs ==> erreur 2 (Sections de Troubleshooting #2 , pb1 , pb2, pb3 et pb4)
 ```
 
 ## Section de Troubleshooting #2

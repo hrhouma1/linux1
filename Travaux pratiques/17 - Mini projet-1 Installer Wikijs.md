@@ -1,429 +1,393 @@
-# **Travail Pratique – Installation et Configuration de Wiki.js sur Ubuntu 22.04**
+# Installer Wiki.js sur Ubuntu 22.04 LTS
 
-# **1. Objectif**
+Ubuntu 22.04 LTS (iso)
+[https://releases.ubuntu.com/22.04/ubuntu-22.04-live-server-amd64.iso](https://releases.ubuntu.com/22.04/ubuntu-22.04-live-server-amd64.iso)
 
-Ce travail pratique vise à évaluer votre capacité à :
+## Introduction
 
-* Mettre en place un environnement Linux fonctionnel dans une machine virtuelle,
-* Installer des logiciels essentiels (Git, Node.js, MariaDB),
-* Configurer une base de données,
-* Installer et configurer l'application Wiki.js,
-* Automatiser le démarrage du service avec systemd.
+Ce document guide à travers l'installation de Wiki.js, un moteur Wiki moderne et puissant basé sur Node.js, Git, et Markdown. Wiki.js est distribué sous la licence Affero GNU General Public License et supporte plusieurs systèmes de gestion de bases de données.
 
+## Prérequis
 
+- Ubuntu 22.04 LTS
+- Accès à un terminal avec droits sudo
+- Connexion internet
 
-# **2. Instructions Générales**
+## Installation de Git
 
-* Réalisez toutes les étapes sur une machine virtuelle Ubuntu Server 22.04.
-* Documentez chaque commande utilisée.
-* Commentez chaque étape (à quoi elle sert, comment on vérifie son bon fonctionnement).
-* À la fin, regroupez votre documentation dans un **rapport PDF ou Markdown**.
-
-
-
-## **Partie 2.1 – Mise en place de la machine virtuelle**
-
-**Téléchargez et démarrez une VM Ubuntu 22.04.**
-Indiquez :
-
-* Le logiciel utilisé (VirtualBox, VMware, autre),
-* La configuration (RAM, CPU, disque),
-* Le nom d’utilisateur créé.
-
-
-## **Partie 2.2 – Préparation de l'Environnement (20 points)**
-
-### **2.2.1 Installation de Git (5 points)**
-
-* Commande(s) utilisée(s) :
+Wiki.js nécessite Git. Pour l'installer sur Ubuntu 22.04, suivez ces étapes :
 
 ```bash
+sudo -s (ou su)
 sudo apt update
 sudo apt install git
 ```
 
-* Vérification :
+Vérifiez l'installation :
 
 ```bash
 git --version
 ```
 
-* Expliquez à quoi sert Git et comment valider que l'installation est réussie.
+## Installation de Node.js
 
-
-
-### **2.2.2 Installation de Node.js LTS (5 points)**
-
-* Utilisez NodeSource :
+Wiki.js fonctionne avec Node.js. Installez la version LTS de Node.js en utilisant le script de NodeSource :
 
 ```bash
 curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-sudo apt install -y nodejs
+sudo apt-get install -y nodejs
 ```
 
-* Vérifiez les versions :
+Vérifiez les versions installées :
 
 ```bash
-node -v
-npm -v
+node -v && npm -v
 ```
 
-* Expliquez pourquoi utiliser la version LTS et ce qu’est `npm`.
+## Installation et configuration de MariaDB
 
-
-
-### **2.2.3 Installation de MariaDB (10 points)**
-
-* Commandes utilisées :
+Installez MariaDB pour gérer les données de Wiki.js :
 
 ```bash
-sudo apt install mariadb-server
+sudo apt install mariadb-server mariadb-client
 sudo systemctl start mariadb
 sudo systemctl enable mariadb
-sudo mysql_secure_installation
+sudo systemctl status mariadb
+mariadb
+exit;
+mysql
+exit;
+sudo mariadb-secure-installation
 ```
 
-* Vérification :
+Renforcez l'instance à l'aide de la commande :
 
 ```bash
-sudo systemctl status mariadb
+sudo mariadb-secure-installation
+```
+
+![image](https://github.com/user-attachments/assets/3019525a-f7aa-4399-b070-07d971a9e44f)
+
+
+
+Suivez les instructions pour sécuriser l'installation de MariaDB. Ensuite, connectez-vous à MariaDB et configurez la base de données :
+
+```bash
 sudo mysql -u root -p
 ```
 
-* Expliquez ce que fait `mysql_secure_installation` et comment tester la connexion.
-
-
-
-## **Partie 2.3 – Configuration de la Base de Données (10 points)**
-
-### **2.3.1 Création de la base Wiki.js**
-
-* Commandes SQL à fournir :
+Dans le shell MariaDB, exécutez les commandes suivantes :
 
 ```sql
-CREATE DATABASE wikijs;
-CREATE USER 'wikiuser'@'localhost' IDENTIFIED BY 'motdepassefort';
-GRANT ALL PRIVILEGES ON wikijs.* TO 'wikiuser'@'localhost';
+CREATE DATABASE wikidb;
+CREATE USER 'wikidb_user'@'localhost' IDENTIFIED BY 'PASSWORD';
+GRANT ALL PRIVILEGES ON wikidb.* TO 'wikidb_user'@'localhost';
 FLUSH PRIVILEGES;
+show databses;
+use wikidb;
+show tables;
+EXIT;
 ```
 
-* Expliquez chaque ligne.
+## Téléchargement et installation de Wiki.js
 
+Créez un utilisateur et un dossier pour Wiki.js :
 
+### Créez un utilisateur et un dossier pour Wiki.js :
 
-## **Partie 2.4 – Installation de Wiki.js (30 points)**
-
-### **2.4.1 Téléchargement et préparation (10 points)**
-
-* Créez un utilisateur :
-
-```bash
-sudo adduser wikijs
+```sh
+sudo adduser --system --group wikijs
+sudo mkdir -p /var/www/wikijs
+ ls -la /var/www/
+sudo chown -R wikijs:wikijs /var/www/wikijs
+ ls -la /var/www/
+ls -la /var/www/wikijs
 ```
 
-* Placez-vous dans le répertoire :
+### Modifiez le shell de l'utilisateur `wikijs` pour permettre la connexion :
 
-```bash
-sudo mkdir -p /opt/wikijs
-sudo chown wikijs:wikijs /opt/wikijs
+```sh
+sudo usermod -s /bin/bash wikijs
 ```
 
-* Téléchargement :
+### Téléchargez et installez Wiki.js :
 
-```bash
-cd /opt/wikijs
-sudo -u wikijs wget https://github.com/Requarks/wiki/releases/latest/download/wiki-js.tar.gz
-sudo -u wikijs tar xzf wiki-js.tar.gz
+```sh
+sudo su - wikijs
+pwd
+whoami
+cd /var/www/wikijs
+wget https://github.com/Requarks/wiki/releases/latest/download/wiki-js.tar.gz
+tar xzf wiki-js.tar.gz
+ls -la
+rm wiki-js.tar.gz
+cp config.sample.yml config.yml
+nano config.yml
 ```
 
-* Installez les dépendances :
-
-```bash
-cd /opt/wikijs
-sudo -u wikijs npm install
-```
-
-
-
-### **2.4.2 Configuration du fichier `config.yml` (10 points)**
-
-* Modifiez :
+Configurez le fichier `config.yml` pour utiliser MariaDB :
 
 ```yaml
 db:
   type: mariadb
   host: localhost
   port: 3306
-  user: wikiuser
-  pass: motdepassefort
-  db: wikijs
+  user: wikidb_user
+  pass: PASSWORD
+  db: wikidb
+  ssl: false
+
+bindIP: 127.0.0.1
 ```
 
-* Expliquez chaque paramètre modifié.
+## Création d'un service systemd
 
-
-
-### **2.4.3 Lancement et test (10 points)**
-
-* Démarrage :
+- Avant de créer le service, il est important de revenir à l'utilisateur principal root en utilisant la commande su
+- Créez un service pour gérer Wiki.js :
 
 ```bash
-sudo -u wikijs node server
+su
+sudo nano /etc/systemd/system/wikijs.service
 ```
 
-* Vérifiez l’accès via navigateur à `http://<IP_VM>:3000`.
+## Section de Troubleshooting #1
 
-* Capturez une capture d’écran de l’interface Wiki.js.
+- Une fois arrivé ici, vous allez devoir changer le mot de passe de l'utilistaeur wikijs et l'ajouter aux sudoers
+
+
+```bash
+whoami ==> wikijs
+exit; ou (sudo -s) ou (su)
+whoami ==> root
+sudo passwd wikijs
+sudo usermod -aG sudo wikijs
+su - wikijs
+sudo nano /etc/systemd/system/wikijs.service
+```
 
 
 
-## **Partie 2.5 – Automatisation et Sécurité (10 points)**
+```bash
+su
+sudo nano /etc/systemd/system/wikijs.service
+```
 
-### **2.5.1 Création d’un service systemd**
-
-* Créez `/etc/systemd/system/wikijs.service` :
+Ajoutez le contenu suivant :
 
 ```ini
 [Unit]
-Description=Wiki.js Service
-After=network.target mariadb.service
+Description=Wiki.js
+After=network.target
 
 [Service]
 Type=simple
-User=wikijs
-WorkingDirectory=/opt/wikijs
 ExecStart=/usr/bin/node server
 Restart=always
+
+User=wikijs
+Environment=NODE_ENV=production
+WorkingDirectory=/var/www/wikijs
 
 [Install]
 WantedBy=multi-user.target
 ```
 
-* Activez le service :
+Activez et démarrez le service :
 
 ```bash
-sudo systemctl daemon-reexec
-sudo systemctl enable wikijs
+sudo systemctl daemon-reload
 sudo systemctl start wikijs
+sudo systemctl enable wikijs
+systemctl status wikijs
 ```
 
-* Vérifiez :
+## Section de Troubleshooting #2
+
 
 ```bash
-sudo systemctl status wikijs
+sudo journalctl -u wikijs.service --no-pager --lines=50
+
+
+
+
+sudo systemctl daemon-reload
+sudo systemctl start wikijs
+sudo systemctl enable wikijs
+systemctl status wikijs
 ```
 
-* Créez un compte admin sur l’interface web.
-
-
-# **Remise du travail**
-
-Votre rapport doit contenir :
-
-* Toutes les commandes utilisées,
-* Les explications à chaque étape,
-* Les vérifications de fonctionnement,
-* Les captures d'écran principales (Git, Node, MariaDB, Wiki.js Web),
-* Les éventuelles erreurs rencontrées et leur résolution.
-
-
-
-<br/>
-<br/>
-
-# Annexe 1 - Installation et configuration de Wiki.js**
-
-
-
-### **Préparation de l’Environnement (20 points)**
-
-#### **2.2.1 Installer Git (5 points)**
-
-**Commandes :**
+### pb1
+![image](https://github.com/user-attachments/assets/04fe428f-fed9-4d62-9406-73168c862a4e)
 
 ```bash
+sudo journalctl -u wikijs.service --no-pager --lines=50
+```
+
+```ssh
+May 14 13:29:17 wikiSrv node[5808]: bad indentation of a mapping entry at line 37, column 3:
+May 14 13:29:17 wikiSrv node[5808]:       sslOptions:
+May 14 13:29:17 wikiSrv node[5808]:       ^
+May 14 13:29:17 wikiSrv node[5808]: >>> Unable to read configuration file! Did you create the config.yml file?
+May 14 13:29:17 wikiSrv systemd[1]: wikijs.service: Main process exited, code=exited, status=1/FAILURE
+May 14 13:29:17 wikiSrv systemd[1]: wikijs.service: Failed with result 'exit-code'.
+May 14 13:29:17 wikiSrv systemd[1]: wikijs.service: Scheduled restart job, restart counter is at 5.
+May 14 13:29:17 wikiSrv systemd[1]: Stopped Wiki.js.
+May 14 13:29:17 wikiSrv systemd[1]: wikijs.service: Start request repeated too quickly.
+May 14 13:29:17 wikiSrv systemd[1]: wikijs.service: Failed with result 'exit-code'.
+May 14 13:29:17 wikiSrv systemd[1]: Failed to start Wiki.js.
+```
+
+![image](https://github.com/user-attachments/assets/baf8441a-0477-4e67-982d-ed73d8ee47e9)
+
+```ssh
+cd /var/www/wikijs
+nano config.yml
+commenter les deux lignes
+#  sslOptions:
+#    auto: true
+    # rejectUnauthorized: false
+```
+
+
+```ssh
+sudo systemctl daemon-reload
+sudo systemctl start wikijs
+sudo systemctl enable wikijs
+systemctl status wikijs
+```
+
+
+### pb2
+![image](https://github.com/user-attachments/assets/7982dad5-8b96-4e52-9a5f-7f9ad7e155fd)
+
+
+```ssh
+May 14 13:36:52 wikiSrv node[5954]: bad indentation of a mapping entry at line 47, column 3:
+May 14 13:36:52 wikiSrv node[5954]:       schema: public
+May 14 13:36:52 wikiSrv node[5954]:       ^
+May 14 13:36:52 wikiSrv node[5954]: >>> Unable to read configuration file! Did you create the config.yml file?
+May 14 13:36:52 wikiSrv systemd[1]: wikijs.service: Main process exited, code=exited, status=1/FAILURE
+May 14 13:36:52 wikiSrv systemd[1]: wikijs.service: Failed with result 'exit-code'.
+May 14 13:36:52 wikiSrv systemd[1]: wikijs.service: Scheduled restart job, restart counter is at 5.
+May 14 13:36:52 wikiSrv systemd[1]: Stopped Wiki.js.
+May 14 13:36:52 wikiSrv systemd[1]: wikijs.service: Start request repeated too quickly.
+May 14 13:36:52 wikiSrv systemd[1]: wikijs.service: Failed with result 'exit-code'.
+May 14 13:36:52 wikiSrv systemd[1]: Failed to start Wiki.js.
+```
+
+
+
+
+![image](https://github.com/user-attachments/assets/b380a06d-0d6a-4a74-af4c-62d3c08cae7a)
+
+
+
+
+```ssh
+cd /var/www/wikijs
+nano config.yml
+commenter les deux lignes
+  # Optional - PostgreSQL only:
+#  schema: public
+```
+
+
+```ssh
+sudo systemctl daemon-reload
+sudo systemctl start wikijs
+sudo systemctl enable wikijs
+systemctl status wikijs
+```
+
+### pb3
+![image](https://github.com/user-attachments/assets/ea61e773-5d69-4438-80a4-c16845b3571f)
+
+```ssh
+May 14 13:38:54 wikiSrv node[6066]: bad indentation of a mapping entry at line 50, column 3:
+May 14 13:38:54 wikiSrv node[6066]:       storage: path/to/database.sqlite
+May 14 13:38:54 wikiSrv node[6066]:       ^
+May 14 13:38:54 wikiSrv node[6066]: >>> Unable to read configuration file! Did you create the config.yml file?
+May 14 13:38:54 wikiSrv systemd[1]: wikijs.service: Main process exited, code=exited, status=1/FAILURE
+May 14 13:38:54 wikiSrv systemd[1]: wikijs.service: Failed with result 'exit-code'.
+May 14 13:38:54 wikiSrv systemd[1]: wikijs.service: Scheduled restart job, restart counter is at 5.
+May 14 13:38:54 wikiSrv systemd[1]: Stopped Wiki.js.
+May 14 13:38:54 wikiSrv systemd[1]: wikijs.service: Start request repeated too quickly.
+May 14 13:38:54 wikiSrv systemd[1]: wikijs.service: Failed with result 'exit-code'
+```
+
+
+
+
+![image](https://github.com/user-attachments/assets/940fdb35-3d60-4dbc-841f-2edbbb0a16aa)
+
+
+
+
+```ssh
+cd /var/www/wikijs
+nano config.yml
+commenter les deux lignes
+  # SQLite only:
+#  storage: path/to/database.sqlite
+```
+
+```ssh
+sudo systemctl daemon-reload
+sudo systemctl start wikijs
+sudo systemctl enable wikijs
+systemctl status wikijs
+```
+
+
+## Accès à Wiki.js
+
+Accédez à Wiki.js via votre navigateur en utilisant l'URL : `http://<adresse_IP>:3000`. Suivez les instructions pour créer un compte administrateur et terminer l'installation.
+
+
+## pb4
+
+- Accès à azure http://<VOTRE-IP>:3000/
+  
+1. Il faut ajouter une règle de traffic entrant :
+
+![image](https://github.com/user-attachments/assets/401656ca-2543-4798-a8fb-9fff35b761d4)
+
+2. J'ai changé ici le paramètre bindIP: 0.0.0.0 à la place de bindIP: 127.0.0.1
+
+wikijs@wikiSrv:/var/www/wikijs$ nano config.yml
+
+![image](https://github.com/user-attachments/assets/e5b6ca2c-d2b0-440e-bb31-f6bcc8a39fc9)
+
+
+```ssh
+sudo systemctl daemon-reload
+sudo systemctl start wikijs
+sudo systemctl enable wikijs
+systemctl status wikijs
+```
+
+et surtout surtout :
+
+```ssh
+sudo systemctl restart wikijs
+```
+
+
+ ## Félicitations ! ==> Accès à Wiki.js
+
+Accédez à Wiki.js via votre navigateur en utilisant l'URL : `http://<adresse_IP>:3000`. Suivez les instructions pour créer un compte administrateur et terminer l'installation.
+
+
+
+# HTTP ==> HTTPS
+
+```ssh
+ssh -i key1.pem azureuser@<adresse_ip_publique_de_votre_vm>
+sudo -i
 sudo apt update
-sudo apt install git -y
+sudo apt install certbot python3-certbot-apache
+sudo ufw allow 'Apache Full'
+sudo certbot --apache # Entrez votre nom de domaine lorsqu'il vous sera demandé comme ceci: haythemrehouma.eastus.cloudapp.azure.com
+sudo systemctl status certbot.timer
+sudo certbot renew --dry-run
 ```
-
-**Vérification :**
-
-```bash
-git --version
-```
-
-**Explication :**
-Git est un système de contrôle de version distribué, utilisé ici pour cloner ou gérer des projets (comme Wiki.js). La commande `git --version` confirme l'installation en affichant la version.
-
----
-
-#### **2.2.2 Installer Node.js LTS (5 points)**
-
-**Commandes :**
-
-```bash
-curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-sudo apt install -y nodejs
-```
-
-**Vérification :**
-
-```bash
-node -v
-npm -v
-```
-
-**Explication :**
-Node.js est requis pour exécuter Wiki.js. `npm` est le gestionnaire de paquets Node.js. La version LTS est plus stable et recommandée pour la production.
-
----
-
-#### **2.2.3 Installer MariaDB (10 points)**
-
-**Commandes :**
-
-```bash
-sudo apt install mariadb-server -y
-sudo systemctl start mariadb
-sudo systemctl enable mariadb
-sudo mysql_secure_installation
-```
-
-**Vérification :**
-
-```bash
-sudo systemctl status mariadb
-```
-
-ou
-
-```bash
-sudo mysqladmin -u root -p version
-```
-
-**Explication :**
-MariaDB est un système de base de données relationnelle. `mysql_secure_installation` permet de renforcer la sécurité en désactivant l’accès distant root, en supprimant les utilisateurs anonymes, etc.
-
----
-
-### **Partie 2.3 – Configuration de la base de données (10 points)**
-
-#### **2.3.1 Création de la base de données**
-
-**Commandes SQL :**
-
-```sql
-CREATE DATABASE wikijs;
-CREATE USER 'wikiuser'@'localhost' IDENTIFIED BY 'motdepassefort';
-GRANT ALL PRIVILEGES ON wikijs.* TO 'wikiuser'@'localhost';
-FLUSH PRIVILEGES;
-```
-
-**Explication :**
-
-* `CREATE DATABASE` crée une nouvelle base.
-* `CREATE USER` crée un utilisateur dédié à Wiki.js.
-* `GRANT` donne tous les droits sur la base.
-* `FLUSH PRIVILEGES` recharge les droits.
-
----
-
-### **Partie 2.4 – Installation de Wiki.js (30 points)**
-
-#### **2.4.1 Téléchargement et installation (10 points)**
-
-**Commandes :**
-
-```bash
-sudo adduser wikijs
-sudo mkdir -p /opt/wikijs
-sudo chown wikijs:wikijs /opt/wikijs
-cd /opt/wikijs
-sudo -u wikijs wget https://github.com/Requarks/wiki/releases/latest/download/wiki-js.tar.gz
-sudo -u wikijs tar xzf wiki-js.tar.gz
-cd /opt/wikijs
-sudo -u wikijs npm install
-```
-
-**Explication :**
-On crée un utilisateur système, puis on télécharge et décompresse Wiki.js. `npm install` installe les dépendances.
-
----
-
-#### **2.4.2 Configuration de Wiki.js (10 points)**
-
-**Fichier `config.yml` :**
-
-```yaml
-db:
-  type: mariadb
-  host: localhost
-  port: 3306
-  user: wikiuser
-  pass: motdepassefort
-  db: wikijs
-```
-
-**Explication :**
-Ces champs permettent à Wiki.js de se connecter à la base MariaDB. Le type doit être `mariadb`, le port est 3306 par défaut, les identifiants sont ceux définis plus tôt.
-
----
-
-#### **2.4.3 Démarrage et test (10 points)**
-
-**Commande :**
-
-```bash
-cd /opt/wikijs
-sudo -u wikijs node server
-```
-
-**Vérification :**
-
-* Accès à `http://<IP>:3000`
-* L’interface d’installation de Wiki.js s’affiche dans le navigateur
-* L’utilisateur crée un compte administrateur
-
----
-
-### **Partie 2.5 – Automatisation et sécurité (10 points)**
-
-#### **2.5.1 Création d’un service systemd**
-
-**Fichier `/etc/systemd/system/wikijs.service` :**
-
-```ini
-[Unit]
-Description=Wiki.js Service
-After=network.target mariadb.service
-
-[Service]
-Type=simple
-User=wikijs
-WorkingDirectory=/opt/wikijs
-ExecStart=/usr/bin/node server
-Restart=always
-
-[Install]
-WantedBy=multi-user.target
-```
-
-**Commandes :**
-
-```bash
-sudo systemctl daemon-reexec
-sudo systemctl enable wikijs
-sudo systemctl start wikijs
-```
-
-**Vérification :**
-
-```bash
-sudo systemctl status wikijs
-```
-
-**Finalisation :**
-
-* Accès via navigateur (port 3000)
-* Création du compte admin
-

@@ -1,10 +1,6 @@
 # TP 2 – Gestion de plusieurs sites web avec un reverse proxy (proxy inverse) dans un environnement Linux
 
-
-## Sujet : **Déploiement manuel multi-instance de Wiki.js avec Reverse Proxy NGINX**
-
-### Niveau : Collégial technique / Université – Session Printemps 2025
-
+<br/>
 
 
 <h1 id="tb"> Table des matières </h1>
@@ -30,6 +26,7 @@ Vous êtes administrateur système dans une entreprise de services numériques. 
 
 Chaque instance de Wiki.js devra être installée **manuellement sur une seule machine Ubuntu Server 22.04 LTS**, connectée à sa propre base de données MariaDB et exposée via un **reverse proxy NGINX**.
 [Retour à la table des matières](#tb)
+
 <br/>
 
 
@@ -44,6 +41,7 @@ Chaque instance de Wiki.js devra être installée **manuellement sur une seule m
 
 
 [Retour à la table des matières](#tb)
+
 <br/>
 
 
@@ -56,6 +54,7 @@ Chaque instance de Wiki.js devra être installée **manuellement sur une seule m
 * Vous devez suivre une démarche professionnelle, avec structure, clarté et rigueur.
 
 [Retour à la table des matières](#tb)
+
 <br/>
 
 
@@ -80,6 +79,7 @@ Chaque instance de Wiki.js devra être installée **manuellement sur une seule m
    * `wikijs-dev.service`, `wikijs-test.service`, `wikijs-prod.service`
 
 [Retour à la table des matières](#tb)
+
 <br/>
 
 
@@ -97,7 +97,9 @@ Chaque instance de Wiki.js devra être installée **manuellement sur une seule m
 8. Testez l’accès aux sites avec un navigateur ou `curl`.
 
 [Retour à la table des matières](#tb)
+
 <br/>
+
 
 
 <h1 id="partie3">PARTIE 3 – VALIDATION, DÉPANNAGE ET ANALYSE (30 POINTS)</h1>
@@ -122,6 +124,7 @@ Chaque instance de Wiki.js devra être installée **manuellement sur une seule m
 * Rôle du DNS public
 
 [Retour à la table des matières](#tb)
+
 <br/>
 
 <h1 id="partie4">PARTIE 4 – QUESTION D’ANALYSE ARCHITECTURALE (10 POINTS)</h1>
@@ -147,6 +150,7 @@ Deux approches sont possibles pour exposer plusieurs environnements :
    c) Quelle approche recommandez-vous et pourquoi ? (3 points)
 
 [Retour à la table des matières](#tb)
+
 <br/>
 
 <h1 id="grille">GRILLE D’ÉVALUATION</h1>

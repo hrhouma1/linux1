@@ -1,13 +1,13 @@
+# TP 2 – Gestion de plusieurs sites web avec un reverse proxy (proxy inverse) dans un environnement Linux
 
-# EXAMEN NATIONAL – ADMINISTRATION SYSTÈME ET SERVICES WEB
 
 ## Sujet : **Déploiement manuel multi-instance de Wiki.js avec Reverse Proxy NGINX**
 
 ### Niveau : Collégial technique / Université – Session Printemps 2025
 
----
 
-# Table des matières
+
+<h1 id="tb"> Table des matières </h1>
 
 * [Contexte](#contexte)
 * [Objectifs de l’épreuve](#objectifs)
@@ -18,9 +18,9 @@
 * [Partie 4 – Question d’analyse architecturale](#partie4)
 * [Grille d’évaluation](#grille)
 
----
 
-<h2 id="contexte">CONTEXTE</h2>
+
+<h1 id="contexte">CONTEXTE</h1>
 
 Vous êtes administrateur système dans une entreprise de services numériques. Votre mandat consiste à configurer un environnement local hébergeant **trois instances indépendantes de Wiki.js**, chacune représentant un environnement classique de développement logiciel :
 
@@ -29,10 +29,11 @@ Vous êtes administrateur système dans une entreprise de services numériques. 
 * Environnement de production (`prod.site1.local`)
 
 Chaque instance de Wiki.js devra être installée **manuellement sur une seule machine Ubuntu Server 22.04 LTS**, connectée à sa propre base de données MariaDB et exposée via un **reverse proxy NGINX**.
+[Retour à la table des matières](#tb)
+<br/>
 
----
 
-<h2 id="objectifs">OBJECTIFS DE L’ÉPREUVE</h2>
+<h1 id="objectifs">OBJECTIFS DE L’ÉPREUVE</h2>
 
 * Maîtriser l’installation manuelle d’un moteur de wiki basé sur Node.js.
 * Gérer correctement des bases de données SQL distinctes.
@@ -41,9 +42,12 @@ Chaque instance de Wiki.js devra être installée **manuellement sur une seule m
 * Diagnostiquer des erreurs de déploiement fréquentes.
 * Appliquer les meilleures pratiques en matière d’isolation de service.
 
----
 
-<h2 id="consignes">CONSIGNES GÉNÉRALES</h2>
+[Retour à la table des matières](#tb)
+<br/>
+
+
+<h1 id="consignes">CONSIGNES GÉNÉRALES</h1>
 
 * Vous travaillez **sur une seule machine virtuelle Ubuntu 22.04**.
 * Toutes les instances doivent être **indépendantes**, sans ports en conflit.
@@ -51,9 +55,11 @@ Chaque instance de Wiki.js devra être installée **manuellement sur une seule m
 * Les adresses `*.site1.local` doivent fonctionner via `/etc/hosts`.
 * Vous devez suivre une démarche professionnelle, avec structure, clarté et rigueur.
 
----
+[Retour à la table des matières](#tb)
+<br/>
 
-<h2 id="partie1">PARTIE 1 – INSTALLATION ET CONFIGURATION DE WIKI.JS (40 POINTS)</h2>
+
+<h1 id="partie1">PARTIE 1 – INSTALLATION ET CONFIGURATION DE WIKI.JS (40 POINTS)</h1>
 
 1. Créez trois utilisateurs Linux dédiés : `wikijs_dev`, `wikijs_test`, `wikijs_prod`.
 2. Créez trois bases de données distinctes sous MariaDB :
@@ -73,9 +79,11 @@ Chaque instance de Wiki.js devra être installée **manuellement sur une seule m
 
    * `wikijs-dev.service`, `wikijs-test.service`, `wikijs-prod.service`
 
----
+[Retour à la table des matières](#tb)
+<br/>
 
-<h2 id="partie2">PARTIE 2 – CONFIGURATION DU REVERSE PROXY NGINX (30 POINTS)</h2>
+
+<h1 id="partie2">PARTIE 2 – CONFIGURATION DU REVERSE PROXY NGINX (30 POINTS)</h1>
 
 6. Configurez NGINX pour servir les sous-domaines suivants :
 
@@ -88,9 +96,11 @@ Chaque instance de Wiki.js devra être installée **manuellement sur une seule m
 7. Modifiez `/etc/hosts` pour faire pointer ces domaines vers `127.0.0.1`.
 8. Testez l’accès aux sites avec un navigateur ou `curl`.
 
----
+[Retour à la table des matières](#tb)
+<br/>
 
-<h2 id="partie3">PARTIE 3 – VALIDATION, DÉPANNAGE ET ANALYSE (30 POINTS)</h2>
+
+<h1 id="partie3">PARTIE 3 – VALIDATION, DÉPANNAGE ET ANALYSE (30 POINTS)</h1>
 
 9. Corrigez les erreurs suivantes si elles apparaissent :
 
@@ -111,9 +121,10 @@ Chaque instance de Wiki.js devra être installée **manuellement sur une seule m
 * Configuration du `bindIP`
 * Rôle du DNS public
 
----
+[Retour à la table des matières](#tb)
+<br/>
 
-<h2 id="partie4">PARTIE 4 – QUESTION D’ANALYSE ARCHITECTURALE (10 POINTS)</h2>
+<h1 id="partie4">PARTIE 4 – QUESTION D’ANALYSE ARCHITECTURALE (10 POINTS)</h1>
 
 #### Énoncé
 
@@ -135,9 +146,10 @@ Deux approches sont possibles pour exposer plusieurs environnements :
    b) Cas d’usage où l’approche B est tolérable, et quand elle est déconseillée (3 points)
    c) Quelle approche recommandez-vous et pourquoi ? (3 points)
 
----
+[Retour à la table des matières](#tb)
+<br/>
 
-<h2 id="grille">GRILLE D’ÉVALUATION</h2>
+<h1 id="grille">GRILLE D’ÉVALUATION</h1>
 
 | Critères                             | Points |
 | ------------------------------------ | ------ |

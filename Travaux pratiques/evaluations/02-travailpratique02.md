@@ -25,9 +25,10 @@ Vous êtes administrateur système dans une entreprise de services numériques. 
 * Environnement de production (`prod.site1.local`)
 
 Chaque instance de Wiki.js devra être installée **manuellement sur une seule machine Ubuntu Server 22.04 LTS**, connectée à sa propre base de données MariaDB et exposée via un **reverse proxy NGINX**.
-[Retour à la table des matières](#tb)
 
-<br/>
+
+![TP2](https://github.com/user-attachments/assets/52622709-bad2-4c31-9472-4b6bd6fc06b4)
+
 
 
 <h1 id="objectifs">OBJECTIFS DE L’ÉPREUVE</h2>

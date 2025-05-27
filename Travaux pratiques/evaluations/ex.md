@@ -18,8 +18,11 @@
 | demo          | `wikijs_demo`  | `/var/www/demo.site1`  | 3005 | `wikidb_demo`  |
 
 > **Astuce** : faites exactement comme pour `dev/test/prod`, en changeant seulement :
+
 > • le nom d’utilisateur `wikijs_stage`…
+
 > • le dossier `/var/www/stage.site1`…
+
 > • la base/port dans `config.yml`.
 
 Une fois les dossiers/configs prêts :

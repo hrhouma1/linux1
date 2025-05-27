@@ -1,13 +1,13 @@
 # Exercice annexe : « Créer 3 nouveaux services *Wiki.js* et tester différentes façons de les arrêter »
 
-### Objectif pédagogique
+### Objectif 
 
 1. **Maitriser la création d’instances supplémentaires à partir d’un template systemd (`wikijs@.service`).**
 2. **Comparer plusieurs commandes de “mise à l’arrêt” et repérer celles qui fonctionnent correctement (et pourquoi).**
 
 
 
-# 1️⃣ Création de trois nouvelles instances
+# Création de trois nouvelles instances
 
 *(on part du même gabarit `/etc/systemd/system/wikijs@.service` déjà en place)*
 
@@ -43,62 +43,121 @@ sudo systemctl status wikijs@demo  --no-pager
 
 
 
-# 2️⃣ Consigne : « Arrêtez proprement les 3 services créés »
-
-On vous propose **six** commandes possibles ; **trois** seulement sont correctes pour arrêter *uniquement* l’instance ciblée ; les autres sont inefficaces ou dangereuses.
-
-> **Question :** *lesquelles choisissez-vous et pourquoi ?*
-
-| Candidat | Commande à exécuter                 | Analyse attendue                                                                                                                |                                                                                    |
-| -------- | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
-| **A**    | `sudo systemctl stop wikijs@stage`  | ✔️ Bonne pratique : systemd gère le PID et les dépendances.                                                                     |                                                                                    |
-| **B**    | `sudo systemctl disable wikijs@qa`  | ❌ Ne stoppe rien immédiatement : désactive seulement au prochain boot.                                                          |                                                                                    |
-| **C**    | `sudo killall wikijs`               | ❌ Tue **toutes** les instances ; perte de contrôle, pas sélectif.                                                               |                                                                                    |
-| **D**    | `sudo fuser -k 3005/tcp`            | ✔️ Valide : tue le processus écoutant sur le port **3005** (demo) ; fonctionne si on connaît le port, mais pas orienté service. |                                                                                    |
-| **E**    | \`sudo lsof -ti:3004                | xargs sudo kill -9\`                                                                                                            | ✔️ Valide pour *qa* (port 3004) ; force‐kill PID → brutal, pas de journal systemd. |
-| **F**    | `sudo systemctl reload wikijs@demo` | ❌ Reload ≠ Stop : envoie SIGHUP, le service reste actif.                                                                        |                                                                                    |
 
 
 
-# 3️⃣ Correction/commentaires à fournir aux étudiants
-
-1. **Réponse attendue** : A ✅, D ✅, E ✅
-2. **Pourquoi ?**
-
-| Commande                      | Effet réel                                       | Raisons                                                        |
-| ----------------------------- | ------------------------------------------------ | -------------------------------------------------------------- |
-| `systemctl stop wikijs@stage` | demande à systemd d’envoyer `SIGTERM` au bon PID | Respecte la journalisation ; relance facile.                   |
-| `fuser -k 3005/tcp`           | tue le processus dont **le port** est 3005       | Utile quand le service n’est pas connu mais que le port l’est. |
-| `lsof -ti:3004 …`             | même logique que *fuser* mais via lsof           | Variante équivalente, plus verbeuse.                           |
-| Autres                        | **Incorrects** pour un *stop immédiat et ciblé*  | —                                                              |
-
-> **Discussion** : insister sur la préférence à donner à `systemctl stop <instance>` qui …
-> • enregistre l’évènement dans `journalctl`,
-> • respecte les dépendances,
-> • peut déclencher des *ExecStopPost* si définis.
 
 
 
-# 4️⃣ Prolongement (facultatif)
 
-1. **Relancer** les 3 instances en une ligne :
 
-   ```bash
-   sudo systemctl restart wikijs@{stage,qa,demo}
-   ```
 
-2. **Lister** tous les sockets ouverts par Wiki.js :
 
-   ```bash
-   sudo lsof -iTCP -sTCP:LISTEN | grep node
-   ```
 
-3. **Vérifier** qu’aucun port 3003-3005 n’est à nouveau ouvert après l’arrêt :
+<br/>
 
-   ```bash
-   sudo ss -tlnp | egrep '3003|3004|3005'
-   ```
+# Annexe 1
 
+```bash
+# 1. Afficher tous les processus Node avec l’unité systemd (si elle existe)
+ps -eo pid,user,unit,cmd | grep -w node
+
+# 2. Version compacte : PID + ligne de commande
+pgrep -a node
+
+# 3. Boucle : pour chaque PID Node, montrer les ports qu’il écoute
+for pid in $(pgrep node); do lsof -Pan -p "$pid" -i; done
+
+# 4. Afficher directement tous les sockets Node ouverts
+ss -tlnp | grep node
+
+# 5. Pour un PID précis (REMPLACEZ 1234 par le vrai PID) :
+systemctl status --pid=1234
+cat /proc/1234/cgroup | grep system.slice
+
+# 6. Arrêter proprement l’instance systemd (REMPLACEZ wikijs@qa)
+sudo systemctl stop wikijs@qa
+
+# 7. Plan B si aucun service systemd (toujours remplacer 1234)
+kill -15 1234        # arrêt doux
+kill -9  1234        # arrêt brutal (ultime recours)
+
+# 8. Vérifier qu’il ne reste plus de Node en écoute
+ss -tlnp | grep node
+```
+
+
+<br/>
+
+# Annexe 2
+
+
+
+## Tenter plusieurs commandes d’arrêt
+
+```bash
+# Commande A – arrêt correct par systemd
+sudo systemctl stop wikijs@stage
+
+# Commande B – erreur logique : désactive pour plus tard, ne stoppe pas
+sudo systemctl disable wikijs@qa
+
+# Commande C – ⚠️ très risquée : tue tous les processus "wikijs"
+sudo killall wikijs
+
+# Commande D – arrêt indirect via le port de l’instance demo (3005)
+sudo fuser -k 3005/tcp
+
+# Commande E – arrêt forcé de qa (port 3004) via lsof + kill -9
+sudo lsof -ti:3004 | xargs sudo kill -9
+
+# Commande F – reload ≠ stop : ne coupe pas le service
+sudo systemctl reload wikijs@demo
+```
+
+
+
+## Relancer et analyser
+
+### Réponses correctes uniquement :
+
+```bash
+sudo systemctl stop wikijs@stage
+sudo fuser -k 3005/tcp
+sudo lsof -ti:3004 | xargs sudo kill -9
+```
+
+### Vérification de l’arrêt :
+
+```bash
+# Vérifier qu’aucun service n’est encore actif
+sudo systemctl status wikijs@stage
+sudo systemctl status wikijs@qa
+sudo systemctl status wikijs@demo
+
+# Voir si des ports sont toujours écoutés
+sudo ss -tlnp | grep node
+```
+
+
+
+## Prolongement (facultatif)
+
+```bash
+# 1. Redémarrer proprement toutes les instances
+sudo systemctl restart wikijs@{stage,qa,demo}
+```
+
+```bash
+# 2. Revoir tous les ports Node.js actuellement actifs
+sudo lsof -iTCP -sTCP:LISTEN | grep node
+```
+
+```bash
+# 3. Vérifier que tous les ports sont bien libérés après un arrêt
+sudo systemctl stop wikijs@{stage,qa,demo}
+sudo ss -tlnp | egrep '3003|3004|3005'
+```
 
 
 

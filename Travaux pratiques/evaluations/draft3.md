@@ -305,3 +305,61 @@ Puis, dans le navigateur de la VM ou de votre poste (si hosts modifié) :
 3. Superviser les trois services avec **Prometheus** (`node_exporter`) + **Alertmanager**.
 
 
+<br/>
+
+# Annexe 1 -  Pourquoi **un seul** fichier suffit ? — principe des « unités template » systemd
+
+
+
+| Terme                                               | Signification rapide                                     |
+| --------------------------------------------------- | -------------------------------------------------------- |
+| **[wikijs@.service](mailto:wikijs@.service)**       | *Template* (gabarit) contenant un `@` avant l’extension. |
+| **[wikijs@dev.service](mailto:wikijs@dev.service)** | *Instance* du template, identifiée par `dev` (= **%i**). |
+
+1. **On écrit le gabarit *une seule fois*** :
+   `/etc/systemd/system/wikijs@.service`
+   Dans ce fichier, les variables `%i` (et éventuellement `%I`) seront remplacées à l’exécution par la partie qui suit le `@` dans le nom de l’instance.
+
+2. **On déclare ensuite autant d’instances qu’on veut, sans recopier le fichier** :
+
+```bash
+# Création/activation immédiate de trois instances
+sudo systemctl enable --now wikijs@dev
+sudo systemctl enable --now wikijs@test
+sudo systemctl enable --now wikijs@prod
+```
+
+* `wikijs@dev` ==> `%i = dev`
+  → `User=wikijs_dev`
+  → `WorkingDirectory=/var/www/dev.site1`
+
+* `wikijs@test` ==> `%i = test`
+  → `User=wikijs_test`
+  → `WorkingDirectory=/var/www/test.site1`
+
+* `wikijs@prod` ==> `%i = prod`
+  → `User=wikijs_prod`
+  → `WorkingDirectory=/var/www/prod.site1`
+
+3. **Vérifier chaque instance** :
+
+```bash
+sudo systemctl status wikijs@dev
+sudo systemctl status wikijs@test
+sudo systemctl status wikijs@prod
+```
+
+4. **Redémarrer ou arrêter une instance précise** :
+
+```bash
+sudo systemctl restart wikijs@prod     # uniquement prod
+sudo systemctl stop wikijs@test        # uniquement test
+```
+
+#### En résumé
+
+* **Un seul fichier** `wikijs@.service` suffit.
+* Le même gabarit est **réutilisé** pour chaque environnement grâce au nom d’instance après le `@`.
+* Cela évite trois copies quasi identiques et rend la maintenance (mise à jour, options) bien plus simple.
+
+

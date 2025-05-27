@@ -1,9 +1,4 @@
-<h1 id="intro">TP 2 — Guide « cliquer–taper » ultra-détaillé : installer NGINX + trois Wiki.js (dev / test / prod) sur Ubuntu 22.04</h1>
-
-> Objectif : zéro raccourci.
-> Chaque bloc comporte : **la commande complète**, **pourquoi on la tape**, et **comment vérifier** que ça marche.
-> Tout est pensé pour des étudiantes et étudiants qui débutent.
-
+<h1 id="intro">TP 2 — Guide et éléments de installer NGINX + trois Wiki.js (dev / test / prod) sur Ubuntu 22.04</h1>
 
 
 ## <h1 id="0">0. Schéma cible</h1>
@@ -14,7 +9,7 @@
 | test.site1.local | 3001         | `/var/www/test.site1` | `wikijs_test` | `wikidb_test` |
 | prod.site1.local | 3002         | `/var/www/prod.site1` | `wikijs_prod` | `wikidb_prod` |
 
----
+
 
 ## <h1 id="1">1. Pré-requis système</h1>
 
@@ -41,7 +36,7 @@ Vérification :
 ufw status      # doit lister 22/tcp (OpenSSH) et 80/tcp (ALLOW)
 ```
 
----
+
 
 ## <h1 id="2">2. Installation **pas à pas** de NGINX</h1>
 
@@ -54,7 +49,7 @@ ufw status      # doit lister 22/tcp (OpenSSH) et 80/tcp (ALLOW)
 | 2.5   | `nginx -t`                              | Teste la syntaxe de tous les fichiers ; doit afficher : *syntax is ok / test is successful* |
 | 2.6   | Ouvrir un navigateur sur `http://IP_VM` | On doit voir *Welcome to nginx!*                                                            |
 
----
+
 
 ## <h1 id="3">3. Fichier `/etc/hosts` local</h1>
 
@@ -70,7 +65,7 @@ Ajouter ou compléter :
 
 > Cette ligne permet au navigateur **local** de « résoudre » les noms sans DNS externe.
 
----
+
 
 ## <h1 id="4">4. Installation des dépendances Wiki.js</h1>
 
@@ -116,7 +111,7 @@ FLUSH PRIVILEGES;
 EXIT;
 ```
 
----
+
 
 ## <h1 id="5">5. Création des comptes Linux et dossiers</h1>
 
@@ -132,7 +127,7 @@ Vérifier :
 ls -ld /var/www/*.site1     # trois dossiers vides (propriété wikijs_env)
 ```
 
----
+
 
 ## <h1 id="6">6. Téléchargement et configuration de Wiki.js (x3)</h1>
 
@@ -184,7 +179,6 @@ Rejouer exactement la même séquence en changeant seulement :
 | Port     | `3001`                | `3002`                |
 | Base     | `wikidb_test`         | `wikidb_prod`         |
 
----
 
 ## <h1 id="7">7. Service systemd générique</h1>
 
@@ -220,7 +214,7 @@ done
 Si `active (running)` → OK.
 Sinon : `journalctl -u wikijs@dev -n 50` pour lire l’erreur (indentation, mot de passe…).
 
----
+
 
 ## <h1 id="8">8. Configuration NGINX ultra-commentée</h1>
 
@@ -269,7 +263,6 @@ systemctl reload nginx
 systemctl status nginx     # toujours running
 ```
 
----
 
 ## <h1 id="9">9. Validation finale</h1>
 
@@ -286,7 +279,6 @@ Puis, dans le navigateur de la VM ou de votre poste (si hosts modifié) :
 * `http://test.site1.local` → interface (3001)
 * `http://prod.site1.local` → interface (3002)
 
----
 
 ## <h1 id="10">10. Dépannage rapide</h1>
 
@@ -296,7 +288,7 @@ Puis, dans le navigateur de la VM ou de votre poste (si hosts modifié) :
 | `curl: (6) Could not resolve host` | /etc/hosts mal écrit      | Vérifier ligne `127.0.0.1  dev.site1.local …`                  |
 | `ER_ACCESS_DENIED` dans les logs   | Mot de passe DB incorrect | Re-éditer `config.yml` + redémarrer service                    |
 
----
+
 
 ## <h1 id="11">11. Aller plus loin (optionnel)</h1>
 

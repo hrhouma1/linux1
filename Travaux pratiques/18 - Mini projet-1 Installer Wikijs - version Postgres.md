@@ -76,7 +76,7 @@ cp config.sample.yml config.yml
 exit
 ```
 
----
+
 
 ## <h2 id="config-postgres">6. Configuration de Wiki.js pour PostgreSQL</h2>
 
@@ -85,6 +85,39 @@ exit
 ```bash
 sudo nano /var/www/wikijs/config.yml
 ```
+
+
+### Erreur  sudo 
+
+Le message :
+
+```
+wikijs is not in the sudoers file.  This incident will be reported.
+```
+
+
+Exécute ceci **en tant que `root`** :
+
+```bash
+exit
+passwd wikijs et on met wikijs comme mot de passe aussi
+usermod -aG sudo wikijs
+```
+
+Puis vérifie :
+
+```bash
+groups wikijs
+```
+
+Tu devrais voir :
+
+```bash
+wikijs : wikijs sudo
+```
+
+
+
 
 ### Remplacez la section `db:` par :
 

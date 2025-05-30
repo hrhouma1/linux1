@@ -490,3 +490,434 @@ GRANT SELECT ON TABLES TO lecteur;
 ```
 
 
+# Annexe 3 - Les services
+
+## Partie 1 
+
+- Pour voir **tous les ports actifs** (ouverts, écoutés ou en écoute par des services, y compris Node.js) sur **Ubuntu 24.04**, tu peux utiliser plusieurs commandes. 
+- Voici les plus efficaces :
+
+## <h1 id="liste-ports"> Voir tous les ports actifs (mode Node.js inclus)</h1>
+
+### 1. Avec `ss` (remplaçant moderne de `netstat`)
+
+```bash
+sudo ss -tuln
+```
+
+**Explication :**
+
+* `-t` : TCP
+* `-u` : UDP
+* `-l` : ports en écoute (listening)
+* `-n` : sans résolution DNS (plus rapide)
+
+
+### 2. Avec `lsof` pour voir **quel processus utilise quel port**
+
+```bash
+sudo lsof -i -P -n
+```
+
+**Filtrer par Node.js uniquement (si nécessaire)** :
+
+```bash
+sudo lsof -i -P -n | grep node
+```
+
+
+
+### 3. Avec `netstat` (si installé)
+
+```bash
+sudo netstat -tulnp
+```
+
+Sinon installe-le :
+
+```bash
+sudo apt install net-tools
+```
+
+
+
+### 4. Voir tous les processus Node.js en cours
+
+```bash
+ps aux | grep node
+```
+
+
+
+### 5. Voir les services écoutant sur un port particulier (ex. 3000, 8080)
+
+```bash
+sudo lsof -i :3000
+```
+
+
+
+### 6. Afficher les ports avec `nmap` (scan local)
+
+```bash
+sudo apt install nmap
+sudo nmap -sT -O localhost
+```
+
+
+
+### 7. Avec `docker` si tu utilises des conteneurs (ignorer, docker n'est pas inclu dans le programme de ce cours)
+
+```bash
+docker ps --format "table {{.Names}}\t{{.Ports}}"
+```
+
+
+
+
+<br/>
+<br/>
+
+## Partie 2
+
+
+<h1 id="stop-node-service">🛑 Arrêter un service Node.js installé avec systemd</h1>
+
+### Étape 1 – Trouver le nom du service
+
+Si tu n'es pas sûr du nom exact du service, liste les services actifs liés à Node.js :
+
+```bash
+systemctl | grep node
+```
+
+Ou liste tous les services actifs :
+
+```bash
+systemctl list-units --type=service
+```
+
+Tu peux aussi chercher dans le dossier systemd :
+
+```bash
+ls /etc/systemd/system/
+```
+
+
+
+### Étape 2 – Arrêter le service
+
+Une fois le nom trouvé (ex. `wikijs.service` ou `my-node-app.service`) :
+
+```bash
+sudo systemctl stop nom-du-service
+```
+
+**Exemple** :
+
+```bash
+sudo systemctl stop wikijs.service
+```
+
+
+
+### Étape 3 – (Optionnel) Désactiver le service au démarrage
+
+```bash
+sudo systemctl disable nom-du-service
+```
+
+
+
+### Étape 4 – (Optionnel) Supprimer complètement le service
+
+```bash
+sudo rm /etc/systemd/system/nom-du-service.service
+sudo systemctl daemon-reexec
+sudo systemctl daemon-reload
+```
+
+
+<br/>
+<br/>
+
+## Partie 3
+
+
+###  **Exemple : Ton application Node.js tourne sur le port `3100`**, et elle est lancée par l'utilisateur `www-data` via un processus `node`.
+
+```
+node      1064738   www-data   18u  TCP *:3100 (LISTEN)
+```
+
+
+###  **Étape 1 — Trouver et arrêter le service systemd**
+
+Si elle est lancée comme service, alors son nom de service pourrait ressembler à `wikijs`, `nodeapp`, `app3100`, etc.
+
+Essaye :
+
+```bash
+systemctl | grep 3100
+```
+
+ou encore plus général :
+
+```bash
+systemctl | grep node
+```
+
+
+
+### **Étape 2 — Stopper le service (si connu)**
+
+Une fois que tu as trouvé le nom du service (ex. `wikijs.service`), fais :
+
+```bash
+sudo systemctl stop wikijs.service
+```
+
+
+
+###  **Étape 3 — Optionnel : tuer le processus manuellement**
+
+Si le service ne s’arrête pas ou si ce n’est pas un vrai service systemd (par exemple lancé manuellement par un script), tu peux tuer le processus directement :
+
+```bash
+sudo kill 1064738
+```
+
+ou plus sûr :
+
+```bash
+sudo kill -9 1064738
+```
+
+
+
+###  Vérification
+
+Après l’arrêt :
+
+```bash
+sudo ss -tuln | grep 3100
+```
+
+ou
+
+```bash
+sudo lsof -i :3100
+```
+
+Il ne devrait plus rien apparaître.
+
+
+<br/>
+<br/>
+
+## Partie 4 - Ton application Node.js écoute toujours sur le **port 3100**, et elle est relancée **même après que tu l’aies tuée** manuellement. Cela indique que :
+
+- **Elle est gérée par un service ou un superviseur qui la relance automatiquement**, probablement via :
+
+* `systemd` (mais pas sous le nom `wikijs.service`)
+* un autre nom de service comme `node`, `app3100`, `wikisaas`, etc.
+* `pm2`, un gestionnaire de processus Node.js
+* `docker` (mais ici tu utilises `www-data` donc probablement pas Docker quin'est pas inclut dans notre cours linux 1)
+
+
+###  Étapes pour l’identifier et l’arrêter **définitivement**
+
+####  1. Trouver le **vrai nom du service**
+
+Essaie cette commande pour trouver tous les services contenant “node” ou `3100` :
+
+```bash
+sudo systemctl list-units --type=service | grep -i node
+```
+
+Ou plus largement :
+
+```bash
+ps aux | grep node
+```
+
+Puis :
+
+```bash
+ps -fp 1072723
+```
+
+Cela va nous dire **quel script** ou **fichier** est exécuté et **par quoi** il a été lancé.
+
+
+
+####  2. Vérifier si `pm2` est utilisé (très courant pour Node.js)
+
+```bash
+which pm2 && pm2 list
+```
+
+Si `pm2` est installé, il relance automatiquement ton app. Pour l’arrêter définitivement :
+
+```bash
+pm2 stop all
+pm2 delete all
+pm2 unstartup
+```
+
+
+
+####  3. Voir l’origine exacte du processus `1072723`
+
+```bash
+sudo ls -l /proc/1072723/exe
+sudo cat /proc/1072723/cmdline | tr '\0' ' '
+```
+
+Cela va t’afficher **le chemin réel du script Node.js**, par exemple :
+
+```
+/usr/bin/node /var/www/wiki/server.js
+```
+
+
+
+####  4. Trouver les fichiers `.service` qui pourraient être responsables
+
+Liste les fichiers dans `/etc/systemd/system/` et `/lib/systemd/system/` :
+
+```bash
+ls /etc/systemd/system/ | grep -i wiki
+ls /lib/systemd/system/ | grep -i wiki
+```
+
+Ou plus large :
+
+```bash
+grep -r 3100 /etc/systemd/system/
+```
+
+
+
+###  Étape finale : désactivation et arrêt complet
+
+Une fois que tu as le vrai nom du service, fais :
+
+```bash
+sudo systemctl stop nom.service
+sudo systemctl disable nom.service
+```
+
+Puis recharge :
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl reset-failed
+```
+
+
+
+<br/>
+<br/>
+
+# Partie 5 - **supprimer définitivement** un service Node.js (ou tout autre service systemd), il faut procéder en trois étapes :
+
+
+
+<h1 id="supprimer-service">Suppression complète d’un service systemd personnalisé</h1>
+
+### Étape 1 — Trouver le nom du service exact
+
+D’abord, liste tous les services systemd personnalisés :
+
+```bash
+ls /etc/systemd/system/
+```
+
+Cherche un fichier qui pourrait ressembler à :
+
+* `wikijs.service`
+* `nodeapp.service`
+* `app3100.service`
+* etc.
+
+Tu peux aussi filtrer :
+
+```bash
+ls /etc/systemd/system/ | grep -i wiki
+```
+
+
+
+###  Étape 2 — Stopper et désactiver le service
+
+Supposons que le nom du fichier est `wikijs.service`, exécute :
+
+```bash
+sudo systemctl stop wikijs.service
+sudo systemctl disable wikijs.service
+```
+
+
+
+###  Étape 3 — Supprimer le fichier de définition du service
+
+```bash
+sudo rm /etc/systemd/system/wikijs.service
+```
+
+Ensuite, recharge systemd pour appliquer les changements :
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl reset-failed
+```
+
+
+
+###  (Optionnel) Vérifier qu’il n’existe plus
+
+```bash
+systemctl list-units --type=service | grep wiki
+```
+
+ou
+
+```bash
+systemctl status wikijs.service
+```
+
+Tu dois obtenir un message comme :
+
+```
+Unit wikijs.service could not be found.
+```
+
+
+
+### Conclusion - commandes utiles : 
+
+```bash
+ls -l /etc/systemd/system/
+```
+
+ou
+
+```bash
+grep -r ExecStart /etc/systemd/system/
+```
+
+
+
+
+## Analyser le `cmdline` ou le processus exact en fonction du PID `1072723` 
+
+```bash
+ps -fp 1072723
+sudo cat /proc/1072723/cmdline | tr '\0' ' '
+```
+
+
+
+
+

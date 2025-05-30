@@ -919,5 +919,65 @@ sudo cat /proc/1072723/cmdline | tr '\0' ' '
 
 
 
+<br/>
+<br/>
+
+Annexe  4 - Qu'est-ce que `pm2` ici ?
+
+Dans le contexte de Node.js, `pm2` désigne **Process Manager 2**, un outil très utilisé pour :
+
+* Lancer des applications Node.js en arrière-plan
+* Les maintenir en vie même après un crash
+* Les redémarrer automatiquement au démarrage du système
+* Gérer plusieurs processus Node.js facilement
+
+
+
+### Pourquoi `pm2` peut être en cause
+
+Même si vous arrêtez un service Node.js manuellement (`kill`, `systemctl`, etc.), `pm2` peut automatiquement :
+
+* Redémarrer l'application
+* Réinitialiser les processus au démarrage de la machine (si `pm2 startup` a été exécuté)
+
+C’est pourquoi il est important de vérifier si `pm2` est actif.
+
+
+
+### Commandes à connaître pour arrêter complètement `pm2`
+
+1. Vérifier si `pm2` est installé :
+
+```bash
+which pm2 && pm2 list
+```
+
+2. Arrêter tous les processus gérés par `pm2` :
+
+```bash
+pm2 stop all
+```
+
+3. Supprimer les processus enregistrés :
+
+```bash
+pm2 delete all
+```
+
+4. Désactiver le redémarrage automatique au démarrage :
+
+```bash
+pm2 unstartup
+```
+
+5. Facultatif : désinstaller `pm2` s’il n’est plus nécessaire :
+
+```bash
+npm uninstall -g pm2
+```
+
+
+
+
 
 

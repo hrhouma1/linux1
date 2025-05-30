@@ -214,3 +214,279 @@ sudo certbot renew --dry-run
 
 Wiki.js est maintenant opérationnel avec PostgreSQL sur Ubuntu 22.04.
 
+
+<br/>
+<br/>
+
+# Annexe 1  - Explorer PostgreSQL
+
+## <h1 id="connexion">1. Connexion à PostgreSQL</h1>
+
+```bash
+sudo -u postgres psql
+```
+
+Ou, si tu veux te connecter directement à une base spécifique avec un utilisateur :
+
+```bash
+psql -U wikidb_user -d wikidb -h localhost
+```
+
+
+
+## <h1 id="navigation">2. Commandes de navigation dans `psql`</h1>
+
+| Commande       | Description                       |
+| -------------- | --------------------------------- |
+| `\l`           | Liste toutes les bases de données |
+| `\c nom_base`  | Se connecter à une base           |
+| `\dt`          | Liste les tables                  |
+| `\d nom_table` | Affiche la structure d'une table  |
+| `\du`          | Liste les utilisateurs            |
+| `\dn`          | Liste les schémas                 |
+| `\df`          | Liste les fonctions               |
+| `\x`           | Active le mode d'affichage étendu |
+| `\q`           | Quitter `psql`                    |
+
+
+
+## <h1 id="requetes">3. Exemples de requêtes utiles</h1>
+
+### Tables, colonnes et index :
+
+```sql
+-- Lister toutes les tables d’un schéma
+SELECT tablename FROM pg_tables WHERE schemaname = 'public';
+
+-- Voir les colonnes d'une table
+SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'users';
+
+-- Voir les index
+SELECT * FROM pg_indexes WHERE tablename = 'users';
+```
+
+
+
+### Espaces et tailles :
+
+```sql
+-- Taille d'une base
+SELECT pg_size_pretty(pg_database_size('wikidb'));
+
+-- Taille d’une table
+SELECT pg_size_pretty(pg_total_relation_size('users'));
+```
+
+
+
+### Activité et sessions :
+
+```sql
+-- Voir les connexions actives
+SELECT * FROM pg_stat_activity;
+
+-- Voir les verrous en cours
+SELECT * FROM pg_locks;
+```
+
+
+
+### Schéma courant :
+
+```sql
+-- Voir le schéma par défaut de l’utilisateur connecté
+SHOW search_path;
+```
+
+
+
+## <h1 id="export">4. Export et dump</h1>
+
+```bash
+# Dump complet de la base
+pg_dump -U wikidb_user -d wikidb -F c -f wikidb.dump
+
+# Export en SQL lisible
+pg_dump -U wikidb_user -d wikidb -F p -f wikidb.sql
+```
+
+
+
+## <h1 id="nettoyage">5. Nettoyage et vérification</h1>
+
+```sql
+-- Trouver les tables vides
+SELECT schemaname, tablename
+FROM pg_tables
+WHERE schemaname = 'public'
+AND NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = tablename);
+
+-- Vérifier les contraintes
+SELECT * FROM information_schema.table_constraints WHERE table_schema = 'public';
+```
+
+
+
+<br/>
+<br/>
+
+
+
+# Annexe 2 - Optionnel - Explorer  les bases de PostgreSQL
+
+
+
+
+# <h1 id="exercice-postgresql"> Exercice : Maîtriser les bases de PostgreSQL (via terminal)</h1>
+
+
+
+## <h2 id="objectif"> Objectif</h2>
+
+Créer une base de données complète nommée `coursdb`, avec un utilisateur dédié, deux tables (`etudiants`, `programmes`), relations, insertions, requêtes SQL, et gestion de droits.
+
+
+
+## <h2 id="etape1">Étape 1 – Créer la base et l’utilisateur</h2>
+
+### En tant que superutilisateur PostgreSQL :
+
+```bash
+sudo -u postgres psql
+```
+
+### Dans `psql` :
+
+```sql
+-- Créer une base de données
+CREATE DATABASE coursdb;
+
+-- Créer un utilisateur
+CREATE USER cours_user WITH PASSWORD 'cours123';
+
+-- Donner tous les droits sur la base
+GRANT ALL PRIVILEGES ON DATABASE coursdb TO cours_user;
+
+-- Quitter
+\q
+```
+
+
+
+## <h2 id="etape2"> Étape 2 – Se connecter à la base</h2>
+
+```bash
+psql -U cours_user -d coursdb -h localhost
+```
+
+
+## <h2 id="etape3"> Étape 3 – Créer les tables</h2>
+
+```sql
+-- Créer la table programmes
+CREATE TABLE programmes (
+    id SERIAL PRIMARY KEY,
+    nom TEXT NOT NULL,
+    niveau TEXT NOT NULL
+);
+
+-- Créer la table etudiants avec relation vers programmes
+CREATE TABLE etudiants (
+    id SERIAL PRIMARY KEY,
+    nom TEXT NOT NULL,
+    age INTEGER CHECK (age > 0),
+    programme_id INTEGER REFERENCES programmes(id) ON DELETE CASCADE
+);
+```
+
+
+
+## <h2 id="etape4"> Étape 4 – Insérer des données</h2>
+
+```sql
+-- Insérer des programmes
+INSERT INTO programmes (nom, niveau) VALUES
+('Informatique', 'DEC'),
+('Administration', 'AEC');
+
+-- Insérer des étudiants
+INSERT INTO etudiants (nom, age, programme_id) VALUES
+('Alice', 21, 1),
+('Bob', 24, 1),
+('Caroline', 20, 2);
+```
+
+
+
+## <h2 id="etape5"> Étape 5 – Faire des requêtes</h2>
+
+```sql
+-- Tous les étudiants
+SELECT * FROM etudiants;
+
+-- Nom des étudiants avec leur programme
+SELECT e.nom AS etudiant, p.nom AS programme
+FROM etudiants e
+JOIN programmes p ON e.programme_id = p.id;
+
+-- Compter les étudiants par programme
+SELECT p.nom, COUNT(e.id) AS total
+FROM programmes p
+LEFT JOIN etudiants e ON p.id = e.programme_id
+GROUP BY p.nom;
+```
+
+
+
+## <h2 id="etape6">🛠 Étape 6 – Modifier ou supprimer</h2>
+
+```sql
+-- Modifier un étudiant
+UPDATE etudiants SET age = 22 WHERE nom = 'Alice';
+
+-- Supprimer un étudiant
+DELETE FROM etudiants WHERE nom = 'Bob';
+
+-- Supprimer un programme (provoque suppression en cascade)
+DELETE FROM programmes WHERE nom = 'Administration';
+```
+
+
+
+## <h2 id="etape7"> Étape 7 – Gestion des utilisateurs</h2>
+
+```sql
+-- Connecté en tant que postgres
+sudo -u postgres psql
+
+-- Créer un lecteur seul
+CREATE USER lecteur WITH PASSWORD 'readonly123';
+
+-- Connexion à la base
+\c coursdb
+
+-- Donner accès en lecture seulement
+GRANT CONNECT ON DATABASE coursdb TO lecteur;
+GRANT USAGE ON SCHEMA public TO lecteur;
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO lecteur;
+
+-- Appliquer automatiquement aux futures tables
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
+GRANT SELECT ON TABLES TO lecteur;
+
+\q
+```
+
+
+
+## <h2 id="bonus"> Bonus – Vérification</h2>
+
+```sql
+-- Voir les utilisateurs
+\du
+
+-- Lister les tables et voir leurs droits
+\dt+
+```
+
+

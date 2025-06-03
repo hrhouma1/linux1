@@ -1,5 +1,10 @@
-# Problème technique – Port bloqué sur le serveur
+# Arréter un service
 
+
+# Prérequis:
+
+- Avoir un site wikijs en cours d'exécution
+  
 ## Contexte
 
 Monsieur Éric, administrateur système, tente d’installer et de lancer une application nommée **Wiki.js** sur un serveur Ubuntu. L’application est censée écouter sur le port 3000, mais elle ne fonctionne pas. Après plusieurs essais infructueux, Éric entreprend une série d’investigations pour identifier et résoudre le problème.

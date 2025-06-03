@@ -3,7 +3,7 @@
 
 # Prérequis:
 
-- Avoir un site wikijs en cours d'exécution
+- Avoir un site wikijs en cours d'exécution (Regardez le document suivant : 18 - Mini projet-1 Installer Wikijs - version Postgres.md)
   
 ## Contexte
 

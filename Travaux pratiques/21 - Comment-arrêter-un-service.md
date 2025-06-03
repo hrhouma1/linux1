@@ -170,6 +170,18 @@ Ces outils permettent de visualiser l'arborescence des services et processus con
 systemd-cgls
 ```
 
+ou encore 
+
+```bash
+systemd-cgls
+systemd-cgls | grep -i wiki
+systemd-cgls | grep -i postgres
+systemd-cgls | grep -i nginx
+systemd-cgls /system.slice/wikijs.service
+ls /sys/fs/cgroup/system.slice/ | grep wiki
+ps -ef | grep wiki
+```
+
 Tu peux ensuite chercher le PID du processus, et voir à quel service il est rattaché.
 
 

@@ -126,6 +126,7 @@ wikijs : wikijs sudo
 ### Remplacez la section `db:` par :
 
 ```yaml
+port: 3000
 db:
   type: postgres
   host: localhost

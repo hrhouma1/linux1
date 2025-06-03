@@ -125,10 +125,185 @@ sudo nmap -sT -O localhost
 
 
 
-## Questions pour les apprenants
+# Questions
 
 1. Pourquoi le port 3000 restait-il bloqué malgré l’usage de `kill` ?
 2. Quelle méthode permet d’identifier le nom du service qui utilise un port spécifique ?
 3. Quelle commande pourrait-on utiliser pour rechercher tous les services contenant le mot `wiki` dans leur nom ou leur description ?
 4. Proposez un script bash permettant d’automatiser cette investigation.
+
+
+
+# Annexe 1 : Méthodes plus avancées
+
+
+La méthode décrite (recherche manuelle à partir du port avec `lsof`, `ps`, `systemctl`, etc.) est **fiable mais artisanale**. Il existe des **méthodes plus avancées et automatisées**, utiles pour les environnements complexes, comme les serveurs de production ou les clusters. Voici un aperçu des alternatives plus avancées :
+
+
+
+##  Méthodes plus avancées pour identifier le service derrière un port
+
+### 1. **`systemd-cgls` ou `systemd-cgtop`**
+
+Ces outils permettent de visualiser l'arborescence des services et processus contrôlés par systemd.
+
+```bash
+systemd-cgls
+```
+
+Tu peux ensuite chercher le PID du processus, et voir à quel service il est rattaché.
+
+
+
+### 2. **`systemctl status` combiné à `--property`**
+
+Tu peux interroger tous les services et demander à voir leur `MainPID`, puis croiser avec le port :
+
+```bash
+systemctl show --all --property=MainPID --no-pager
+```
+
+Puis :
+
+```bash
+sudo lsof -i :3000
+```
+
+Et tu compares les `MainPID` au PID qui utilise le port.
+
+
+
+### 3. **Utiliser `fuser` pour directement tuer le processus par port**
+
+```bash
+sudo fuser -k 3000/tcp
+```
+
+Cela tue directement le processus associé au port. Mais attention : cette méthode **ne désactive pas le service**, donc il peut redémarrer. Elle est utile dans un script temporaire.
+
+
+
+### 4. **Avec `ss --processes`**
+
+```bash
+sudo ss -lptn 'sport = :3000'
+```
+
+Cela montre directement :
+
+* le port,
+* le protocole,
+* le processus,
+* **et parfois le nom du service** si bien configuré.
+
+
+
+### 5. **Utiliser `netstat` avec `--program` (si disponible)**
+
+```bash
+sudo netstat -tulnp | grep 3000
+```
+
+Permet d’identifier directement le programme utilisant un port. Tu peux croiser avec `systemctl` :
+
+```bash
+ps -p <PID> -o pid,cmd
+```
+
+
+
+### 6. **Via journaux `systemd`**
+
+Si le service a bien démarré par systemd, tu peux faire :
+
+```bash
+journalctl -u wikijs.service
+```
+
+Cela te montre l’historique d’exécution, y compris le port écouté.
+
+
+
+## Bonus : Automatisation avec un script
+
+Un script plus avancé pourrait :
+
+1. Chercher le port avec `ss` ou `lsof`
+2. Extraire le PID
+3. Associer le PID à un service via `systemctl`
+4. Afficher le nom du service automatiquement
+
+
+<br/>
+<br/>
+
+# Annexe 2 - Automatiser l'identification du service systemd responsable d'un port donné. 
+
+
+
+
+###  Script Bash : Identifier le service systemd derrière un port
+
+```bash
+#!/bin/bash
+
+# Demande à l'utilisateur d'entrer le numéro de port
+read -p "Entrez le numéro de port (ex: 3000) : " PORT
+
+# Étape 1 : Obtenir le PID du processus qui écoute sur ce port
+PID=$(sudo lsof -i :$PORT -sTCP:LISTEN -t)
+
+# Vérification si un PID a été trouvé
+if [ -z "$PID" ]; then
+    echo "Aucun processus ne semble écouter sur le port $PORT."
+    exit 1
+fi
+
+echo "Processus détecté sur le port $PORT : PID = $PID"
+
+# Étape 2 : Afficher les informations sur le processus
+echo "Commande liée à ce PID :"
+ps -p $PID -o pid,cmd
+
+# Étape 3 : Chercher le service systemd auquel appartient ce PID
+echo ""
+echo "Recherche du service systemd correspondant..."
+SERVICE=$(systemctl | grep $PID | awk '{print $1}')
+
+if [ -z "$SERVICE" ]; then
+    echo "Aucun service systemd trouvé automatiquement pour le PID $PID."
+    echo "Vérification manuelle possible avec :"
+    echo "  systemctl status <nom_du_service>"
+    echo "ou recherche dans /etc/systemd/system/"
+else
+    echo "Service systemd détecté : $SERVICE"
+    echo ""
+    echo "Statut du service :"
+    systemctl status $SERVICE
+fi
+```
+
+
+
+###  Utilisation :
+
+1. Enregistre ce script dans un fichier, par exemple `recherche_service_port.sh`
+2. Rends-le exécutable :
+
+```bash
+chmod +x recherche_service_port.sh
+```
+
+3. Exécute-le :
+
+```bash
+./recherche_service_port.sh
+```
+
+
+
+###  Ce que vous avez appris :
+* Comment lier un port à un processus (`lsof`)
+* Comment remonter au service via `systemctl` et `grep`
+* Comment automatiser un diagnostic réseau en Bash
 

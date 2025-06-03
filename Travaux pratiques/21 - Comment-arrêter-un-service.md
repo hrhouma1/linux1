@@ -4,6 +4,15 @@
 # Prérequis:
 
 - Avoir un site wikijs en cours d'exécution (Regardez le document suivant : 18 - Mini projet-1 Installer Wikijs - version Postgres.md)
+- Avoir nginx
+
+```bash
+apt update
+apt install nginx
+sytemctl start nginx
+systemctl enable nginx
+systemctl status nginx
+```
   
 ## Contexte
 

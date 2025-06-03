@@ -67,6 +67,9 @@ Commandes utilisées :
 
 ```bash
 systemctl list-units --type=service
+systemctl list-units --type=service --state=exited
+systemctl list-units --type=service --state==running
+systemctl list-units --type=service --state=running | grep -i wiki
 ls -l --sort=time /etc/systemd/system/
 ```
 

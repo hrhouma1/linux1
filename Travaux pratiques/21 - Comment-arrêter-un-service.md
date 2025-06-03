@@ -70,8 +70,15 @@ systemctl list-units --type=service
 systemctl list-units --type=service --state=exited
 systemctl list-units --type=service --state==running
 systemctl list-units --type=service --state=running | grep -i wiki
+```
+
+Ou encore
+
+```bash
 ls -l --sort=time /etc/systemd/system/
 ```
+
+![image](https://github.com/user-attachments/assets/c93e94bf-226c-4291-b1a1-aa608c288cb7)
 
 Mais aucun service ne montre directement une correspondance avec le port 3000.
 

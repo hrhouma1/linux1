@@ -93,6 +93,16 @@ systemctl | grep node
 
 Une hypothèse se confirme : un service appelé `wikijs.service` semble être responsable du processus.
 
+<br/>
+
+# Les commandes gagnantes
+
+```bash
+systemctl list-units --type=service --state=running | grep -i wiki
+ls -l /etc/systemd/system/ | grep wiki
+ps aux | grep node
+systemctl | grep node
+```
 
 
 ## Étape 4 – Vérification de la corrélation entre processus, port et service

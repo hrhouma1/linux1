@@ -62,6 +62,8 @@ ls -l /var/www
 sudo chown -R wikijs:wikijs /var/www/wikijs
 ls -l /var/www
 sudo usermod -s /bin/bash wikijs
+sudo usermod -aG sudo wikijs
+sudo passwd wikijs
 ```
 
 ---

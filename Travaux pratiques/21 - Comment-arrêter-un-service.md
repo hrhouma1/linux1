@@ -182,9 +182,28 @@ ls /sys/fs/cgroup/system.slice/ | grep wiki
 ps -ef | grep wiki
 ```
 
+```bash
+systemd-cgls
+```
 
 ![image](https://github.com/user-attachments/assets/2aca1c63-6eaf-4ae6-932e-eb081ac5a6f2)
+
+```bash
+systemd-cgls
+systemd-cgls | grep -i wiki
+systemd-cgls | grep -i postgres
+systemd-cgls | grep -i nginx
+systemd-cgls /system.slice/wikijs.service
+ls /sys/fs/cgroup/system.slice/ | grep wiki
+ps -ef | grep wiki
+```
+
 ![image](https://github.com/user-attachments/assets/204dd907-104d-4709-a539-be0615ee5287)
+
+```bash
+ls /sys/fs/cgroup/system.slice/ | grep wiki
+```
+
 ![image](https://github.com/user-attachments/assets/7e55a15d-b8c9-4807-a50b-23c580402532)
 
 

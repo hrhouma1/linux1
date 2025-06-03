@@ -58,7 +58,9 @@ GRANT ALL PRIVILEGES ON DATABASE wikidb TO wikidb_user;
 ```bash
 sudo adduser --system --group wikijs
 sudo mkdir -p /var/www/wikijs
+ls -l /var/www
 sudo chown -R wikijs:wikijs /var/www/wikijs
+ls -l /var/www
 sudo usermod -s /bin/bash wikijs
 ```
 

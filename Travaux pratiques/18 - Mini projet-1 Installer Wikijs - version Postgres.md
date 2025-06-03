@@ -127,6 +127,7 @@ wikijs : wikijs sudo
 
 ```yaml
 port: 3000
+bindIP: 0.0.0.0
 db:
   type: postgres
   host: localhost

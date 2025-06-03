@@ -251,6 +251,8 @@ Cela montre directement :
 ### 5. **Utiliser `netstat` avec `--program` (si disponible)**
 
 ```bash
+sudo apt update
+sudo apt install net-tools
 sudo netstat -tulnp | grep 3000
 ```
 

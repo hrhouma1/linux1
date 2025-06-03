@@ -182,6 +182,12 @@ ls /sys/fs/cgroup/system.slice/ | grep wiki
 ps -ef | grep wiki
 ```
 
+
+![image](https://github.com/user-attachments/assets/2aca1c63-6eaf-4ae6-932e-eb081ac5a6f2)
+![image](https://github.com/user-attachments/assets/204dd907-104d-4709-a539-be0615ee5287)
+![image](https://github.com/user-attachments/assets/7e55a15d-b8c9-4807-a50b-23c580402532)
+
+
 Tu peux ensuite chercher le PID du processus, et voir à quel service il est rattaché.
 
 

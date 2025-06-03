@@ -62,8 +62,6 @@ ls -l /var/www
 sudo chown -R wikijs:wikijs /var/www/wikijs
 ls -l /var/www
 sudo usermod -s /bin/bash wikijs
-sudo usermod -aG sudo wikijs
-sudo passwd wikijs
 ```
 
 ---
@@ -71,6 +69,8 @@ sudo passwd wikijs
 ## <h2 id="install-wikijs">5. Installation de Wiki.js</h2>
 
 ```bash
+sudo usermod -aG sudo wikijs
+sudo passwd wikijs
 sudo su - wikijs
 cd /var/www/wikijs
 wget https://github.com/Requarks/wiki/releases/latest/download/wiki-js.tar.gz
